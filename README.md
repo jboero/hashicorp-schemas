@@ -22,3 +22,4 @@ For VS Code, configure json schemas in the settings.json file:
     ],
 }
 ```
+![VS Code Nomad Demo](content/vscode.gif)
