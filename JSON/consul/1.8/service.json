@@ -1,0 +1,185 @@
+{
+    "title": "Service",
+    "name": "service",
+    "type": "object",
+    "properties": {
+        "id": {
+            "type": "string"
+        },
+        "name": {
+            "type": "string"
+        },
+        "tags": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
+        },
+        "address": {
+            "type": "string",
+            "default": "http://example.service.format:8000"
+        },
+        "meta": {
+            "type": "object"
+        },
+        "tagged_addresses": {
+            "type": "object",
+            "properties": {
+                "lan": {
+                    "type": "object",
+                    "properties": {
+                        "address": {
+                            "type": "string",
+                            "default" "192.168.0.55"
+                        },
+                        "port": {
+                            "type": "number",
+                            "default": 80
+                        }
+                    }
+                },
+                "wan": {
+                    "type": "object",
+                    "properties": {
+                        "address": {
+                            "type": "string",
+                            "default" "192.168.0.55"
+                        },
+                        "port": {
+                            "type": "number",
+                            "default": 80
+                        }
+                    }
+                }
+            }
+        },
+        "port": {
+            "type": "number",
+            "default": 8000
+        },
+        "enable_tag_override": {
+            "type": "boolean",
+            "default": "false"
+        },
+        "checks": {
+            "type": "array",
+            "items": {
+                "type": "object"
+            }
+        },
+        "kind": {
+            "type": "string",
+            "default": "connect-proxy",
+            "enum": [
+                "connct-proxy",
+                "other_TODO"
+            ]
+        },
+        "proxy_destination": {
+            "type": "string"
+        },
+        "proxy": {
+            "type": "object",
+            "properties": {
+                "destination_service_name": {
+                    "type": "string"
+                },
+                "destination_service_id": {
+                    "type": "string"
+                },
+                "local_service_address": {
+                    "type": "string"
+                },
+                "local_service_address": {
+                    "type": "string"
+                },
+                "local_service_port": {
+                    "type": "number",
+                    "default": 9090
+                },
+                "config": {
+                    "type": "object"
+                },
+                "upstreams": {
+                    "type": "array"
+                },
+                "mesh_gateway": {
+                    "type": "object",
+                    "properties": {
+                        "mode": {
+                            "type": "string",
+                            "default": "local",
+                            "enum": [
+                                "local"
+                            ]
+                        }
+                    }
+                },
+                "expose": {
+                    "type": "object",
+                    "properties": {
+                        "checks": {
+                            "type": "boolean",
+                            "default": "false"
+                        },
+                        "paths": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "path": {
+                                        "type": "string"
+                                    },
+                                    "local_path_port": {
+                                        "type": "number",
+                                        "default": 8080
+                                    },
+                                    "listener_port": {
+                                        "type": "number",
+                                        "default": 21500
+                                    },
+                                    "protocol": {
+                                        "type": "string",
+                                        "default": "http2",
+                                        "enum": ["http1", "http2", "http3"]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "connect": {
+            "type": "object",
+            "properties": {
+                "native": {
+                    "type": "boolean",
+                    "default": "false"
+                },
+                "sidecar_service": {
+                    "type": "object"
+                }
+            }
+        },
+        "weights": {
+            "type": "object",
+            "properties": {
+                "passing": {
+                    "type": "number",
+                    "default": 5
+                },
+                "warning": {
+                    "type": "number",
+                    "default": 1
+                }
+            }
+        },
+        "token": {
+            "type": "string"
+        },
+        "namespace": {
+            "type": "string"
+        }
+    }
+}
