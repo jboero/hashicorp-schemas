@@ -1,0 +1,253 @@
+{
+    "title": "Job",
+    "name": "Job",
+    "type": "object",
+    "properties": {
+        "Name": {
+            "type": "string",
+            "description": "Job name.",
+            "default": "example"
+        },
+        "ID": {
+            "type": "string",
+            "default": "example"
+        },
+        "Priority": {
+            "type": "number",
+            "title": "Priority",
+            "default": 50
+        },
+        "Type": {
+            "type": "string",
+            "default": "service",
+            "enum": [
+                "service",
+                "system",
+                "batch"
+            ]
+        },
+        "Datacenters": {
+            "type": "array",
+            "items": {
+                "type": "string",
+                "default": "dc1"
+            }
+        },
+        "TaskGroups": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "Name": {
+                        "type": "string",
+                        "default": "taskgroup"
+                    },
+                    "Count": {
+                        "type": "number",
+                        "description": "How many of these would you like allocated?",
+                        "default": 1,
+                        "minimum": 0
+                    },
+                    "Migrate": {
+                        "type" : "string",
+                        "default": "TODO",
+                        "description": "Haven't bothered with this yet."
+                    },
+                    "Tasks": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "Name": {
+                                    "type": "string",
+                                    "default": "task"
+                                },
+                                "Driver": {
+                                    "type": "string",
+                                    "default": "docker",
+                                    "enum": [
+                                        "docker",
+                                        "exec",
+                                        "raw_exec",
+                                        "java",
+                                        "qemu",
+                                        "rkt",
+                                        "podman",
+                                        "Singularity",
+                                        "jail-task-driver",
+                                        "pot",
+                                        "firecracker-task-driver",
+                                        "nspawn"
+                                    ]
+                                },
+                                "User": {
+                                    "type": "string",
+                                    "default": ""
+                                },
+                                "Config": {
+                                    "type": "object",
+                                    "properties": {
+                                        "image": {
+                                            "type": "string"
+                                        },
+                                        "port_map": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object"
+                                            }
+                                        }
+                                    }
+                                },
+                                "Services": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "Meta": {
+                                                "type": "object"
+                                            },
+                                            "PortLabel": {
+                                                "type": "string"
+                                            },
+                                            "AddressMode": {
+                                                "type": "string"
+                                            },
+                                            "Checks": {
+                                                "type": "array",
+                                                "items": {
+                                                    "Type": {
+                                                        "type": "string",
+                                                        "enum": [
+                                                            "tcp"
+                                                        ]
+                                                    },
+                                                    "TODO": {
+                                                        "type": "string",
+                                                        "default": "TODO objects.."
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                "Resources": {
+                                    "type": "object",
+                                    "properties": {
+                                        "CPU": {
+                                            "type": "number",
+                                            "description": "CPU MHZ shares to reserve.",
+                                            "default": 100
+                                        },
+                                        "MemoryMB": {
+                                            "type": "number",
+                                            "default": 256
+                                        },
+                                        "Networks": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "Device": {
+                                                        "type": "string"
+                                                    },
+                                                    "CIDR": {
+                                                        "type": "string"
+                                                    },
+                                                    "IP": {
+                                                        "type": "string",
+                                                        "default": "127.0.0.1"
+                                                    },
+                                                    "DynamicPorts": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "Label": {
+                                                                "type": "string"
+                                                            },
+                                                            "Value": {
+                                                                "type": "number",
+                                                                "defualt": 0
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                "Leader": {
+                                    "type": "boolean",
+                                    "default": false
+                                }
+                            }
+                        }
+                    }
+                },
+                "RestartPolicy": {
+                    "Attempts": {
+                        "type": "number",
+                        "description": "Number of times to attempt restarts after failure.",
+                        "default": 3
+                    },
+                    "Delay": {
+                        "type": "number",
+                        "description": "Delay between restarts in milliseconds er whatever.",
+                        "default": 30000000000
+                    },
+                    "DelayFunction": {
+                        "type": "string",
+                        "default": "exponential",
+                        "enum":[
+                            "exponential"
+                        ]
+                    },
+                    "Interval": {
+                        "type": "number",
+                        "default": 0
+                    },
+                    "MaxDelay": {
+                        "type": "number",
+                        "default": 3600000000000
+                    },
+                    "Unlimited": {
+                        "type": "boolean",
+                        "default": false
+                    }
+                },
+                "EphemeralDisk": {
+                    "type": "object",
+                    "properties": {
+                        "SizeMB": {
+                            "type": "number",
+                            "default": 100
+                        }
+                    }
+                }
+            }
+        },
+        "Update": {
+            "type": "object",
+            "properties": {
+                "MaxParallel": {
+                    "type": "number",
+                    "default": 1
+                },
+                "MinHealthyTime": {
+                    "type": "number",
+                    "default": 10000000000
+                },
+                "HealthyDeadline": {
+                    "type": "number",
+                    "default": 18000000000
+                },
+                "AutoRevert": {
+                    "type": "boolean",
+                    "default": false
+                },
+                "Canary": {
+                    "type": "number",
+                    "default": 0
+                }
+            }
+        }
+    }
+}
