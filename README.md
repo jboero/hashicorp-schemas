@@ -18,6 +18,12 @@ For VS Code, configure json schemas in the settings.json file:
                 "./job/*.json"
             ],
             "url": "https://github.com/jboero/hashicorp-schemas/raw/master/JSON/nomad/1.11/job.json"
+        },
+        {
+            "fileMatch": [
+                "./services/*.json"
+            ],
+            "url": "https://github.com/jboero/hashicorp-schemas/raw/master/JSON/consul/1.8/service.json"
         }
     ],
 }
