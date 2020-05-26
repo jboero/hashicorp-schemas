@@ -1,0 +1,332 @@
+{
+    "title": "Vault Config",
+    "name": "vault_config",
+    "type": "object",
+    "properties": {
+        "storage": {
+            "type": "object",
+            "oneOf": {
+                "file": {
+                    "type": "object",
+                    "properties": {
+                        "path": {
+                            "type": "string",
+                            "description": "Filesystem path used for storage.  Requires RW perms by Vault process.",
+                            "default": "/var/lib/vault"
+                        }
+                    }
+                },
+                "consul": {
+                    "type": "object",
+                    "properties": {
+
+                    }
+                }
+            }
+        },
+        "ui": {
+            "type": "boolean",
+            "description": "True if Vault should expose the UI via the  listener.  Defaults to false.",
+            "default": true
+        },
+        "disable_mlock": {
+            "type": "boolean",
+            "description": "Should Vault disable swapping memory to disk?  Highly recommend true for this value.",
+            "default": true
+        },
+        "seal": {
+            "type": "object",
+            "anyOf": [{
+                "awskms": {
+                    "type": "object",
+                    "description": "Auto uneal using AWS KMS.",
+                    "properties": {
+                        "access_key": {
+                            "type" : "string"
+                        },
+                        "secret_key": {
+                            "type" : "string"
+                        },
+                        "kms_key_id": {
+                            "type" : "string"
+                        },
+                        "region": {
+                            "type" : "string"
+                        }
+                    }
+                }
+            },{
+                "alicloudkms": {
+                    "type": "object",
+                    "description": "Auto uneal using AliCloud.",
+                    "properties": {
+                        "region": {
+                            "type" : "string"
+                        },
+                        "access_key": {
+                            "type" : "string"
+                        },
+                        "secret_key": {
+                            "type" : "string"
+                        },
+                        "kms_key_id": {
+                            "type" : "string"
+                        }
+                    }
+                }
+            },{
+                "azurekeyvault": {
+                    "type": "object",
+                    "description": "Auto uneal using Azure.",
+                    "properties": {
+                        "tenant_id": {
+                            "type" : "string"
+                        },
+                        "client_id": {
+                            "type" : "string"
+                        },
+                        "client_secret": {
+                            "type" : "string"
+                        },
+                        "vault_name": {
+                            "type" : "string"
+                        },
+                        "key_name": {
+                            "type" : "string"
+                        }
+                    }
+                }
+            },{
+                "gcpckms": {
+                    "type": "object",
+                    "description": "Auto uneal using GCP.",
+                    "properties": {
+                        "credentials": {
+                            "type" : "string",
+                            "default": "/path/to/your/creds.json"
+                        },
+                        "project": {
+                            "type" : "string"
+                        },
+                        "region": {
+                            "type" : "string"
+                        },
+                        "key_ring": {
+                            "type" : "string"
+                        },
+                        "crypto_key": {
+                            "type" : "string"
+                        }
+                    }
+                }
+            },{
+                "ocikms": {
+                    "type": "object",
+                    "description": "Auto uneal using Oracle Cloud.",
+                    "properties": {
+                        "tenant_id": {
+                            "type" : "string"
+                        },
+                        "client_id": {
+                            "type" : "string"
+                        },
+                        "client_secret": {
+                            "type" : "string"
+                        },
+                        "vault_name": {
+                            "type" : "string"
+                        },
+                        "key_name": {
+                            "type" : "string"
+                        }
+                    }
+                }
+            },{
+                "pkcs11": {
+                    "type": "object",
+                    "description": "Auto uneal using PKCS#11 HSM.",
+                    "required": ["lib", "slot", "token_label", "pin", "key_label", "hmac_key_label"],
+                    "properties": {
+                        "lib": {
+                            "type" : "string",
+                            "description": "The path to the PKCS#11 library shared object file. May also be specified by the VAULT_HSM_LIB environment variable. Note: Depending on your HSM, this may be either a binary or a dynamic library, and its use may require other libraries depending on which system the Vault binary is currently running on (e.g.: a Linux system may require other libraries to interpret Windows .dll files).",
+                            "default": "/usr/vault/lib/libCryptoki2_64.so"
+                        },
+                        "slot": {
+                            "type" : "string",
+                            "description": "The slot number to use, specified as a string (e.g. '0'). May also be specified by the VAULT_HSM_SLOT environment variable.",
+                            "default": "0"
+                        },
+                        "token_label": {
+                            "type": "string",
+                            "description": "The slot token label to use. May also be specified by the VAULT_HSM_TOKEN_LABEL environment variable."
+                        },
+                        "pin": {
+                            "type" : "string",
+                            "description": "The PIN for login. May also be specified by the VAULT_HSM_PIN environment variable. If set via the environment variable, Vault will obfuscate the environment variable after reading it, and it will need to be re-set if Vault is restarted.",
+                            "default": "AAAA-BBBB-CCCC-DDDD"
+                        },
+                        "key_label": {
+                            "type" : "string",
+                            "description": "The label of the key to use. If the key does not exist and generation is enabled, this is the label that will be given to the generated key. May also be specified by the VAULT_HSM_KEY_LABEL environment variable.",
+                            "default": "vault-hsm-key"
+                        },
+                        "hmac_key_label": {
+                            "type" : "string"
+                        },
+                        "default_hmac_key_label": {
+                            "type" : "string"
+                        },
+                        "mechanism": {
+                            "type" : "string",
+                            "description": "The encryption/decryption mechanism to use, specified as a decimal or hexadecimal (prefixed by 0x) string. May also be specified by the VAULT_HSM_MECHANISM environment variable. 0x1085 CKM_AES_CBC_PAD (HMAC mechanism required), 0x1082 CKM_AES_CBC (HMAC mechanism required), 0x1087 CKM_AES_GCM, 0x0009 CKM_RSA_PKCS_OAEP, 0x0001 CKM_RSA_PKCS",
+                            "default": "",
+                            "enum": ["0x0001", "0x0009", "0x1087", "0x1082", "0x1085"]
+                        },
+                        "hmac_mechanism": {
+                            "type": "string",
+                            "description": "The encryption/decryption mechanism to use, specified as a decimal or hexadecimal (prefixed by 0x) string. Currently only 0x0251 (corresponding to CKM_SHA256_HMAC from the specification) is supported. May also be specified by the VAULT_HSM_HMAC_MECHANISM environment variable. This value is only required for specific mechanisms.",
+                            "default": "0x0251",
+                            "enum": ["0x0251"]
+                        },
+                        "generate_key": {
+                            "type": "string",
+                            "description": "If no existing key with the label specified by key_label can be found at Vault initialization time, instructs Vault to generate a key. This is a boolean expressed as a string (e.g. 'true'). May also be specified by the VAULT_HSM_GENERATE_KEY environment variable. Vault may not be able to successfully generate keys in all circumstances, such as if proprietary vendor extensions are required to create keys of a suitable type.",
+                            "default": "false"
+                        }
+                    }
+                }
+            },{
+                "transit": {
+                    "type": "object",
+                    "description": "The Transit seal configures Vault to use Vault's Transit Secret Engine as the autoseal mechanism.",
+                    "required": ["address", "token", "key_name", "mount_path"],
+                    "properties": {
+                        "address": {
+                            "type": "string",
+                            "description": "The full address to the Vault cluster. This may also be specified by the VAULT_ADDR environment variable.",
+                            "default": "https://vault:8200"
+                        },
+                        "token": {
+                            "type": "string",
+                            "description": "The Vault token to use. This may also be specified by the VAULT_TOKEN environment variable."
+                        },
+                        "key_name": {
+                            "type": "string",
+                            "description": "The transit key to use for encryption and decryption. This may also be supplied using the VAULT_TRANSIT_SEAL_KEY_NAME environment variable."
+                        },
+                        "mount_path": {
+                            "type": "string",
+                            "description": "The mount path to the transit secret engine. This may also be supplied using the VAULT_TRANSIT_SEAL_MOUNT_PATH environment variable.",
+                            "default": "secret/unsealkey"
+                        },
+                        "namespace": {
+                            "type": "string",
+                            "description": "The namespace path to the transit secret engine. This may also be supplied using the VAULT_NAMESPACE environment variable.",
+                            "default": "default"
+                        },
+                        "disable_renewal": {
+                            "type": "string",
+                            "description": "Disables the automatic renewal of the token in case the lifecycle of the token is managed with some other mechanism outside of Vault, such as Vault Agent. This may also be specified using the VAULT_TRANSIT_SEAL_DISABLE_RENEWAL environment variable.",
+                            "default": "false"
+                        },
+                        "tls_ca_cert": {
+                            "type": "string",
+                            "description": "Specifies the path to the CA certificate file used for communication with the Vault server. This may also be specified using the VAULT_CA_CERT environment variable.",
+                            "default": "/path/to/your/ca.pem"
+                        },
+                        "tls_client_cert": {
+                            "type": "string",
+                            "description": "Specifies the path to the client certificate for communication with the Vault server. This may also be specified using the VAULT_CLIENT_CERT environment variable.",
+                            "default": "/path/to/your/client-cert.pem"
+                        },
+                        "tls_client_key": {
+                            "type": "string",
+                            "description": "Specifies the path to the private key for communication with the Vault server. This may also be specified using the VAULT_CLIENT_KEY environment variable.",
+                            "default": "/path/to/your/client-key.pem"
+                        },
+                        "tls_server_name": {
+                            "type": "string",
+                            "description": "Name to use as the SNI host when connecting to the Vault server via TLS. This may also be specified via the VAULT_TLS_SERVER_NAME environment variable.",
+                            "default": "default"
+                        },
+                        "tls_skip_verify": {
+                            "type": "boolean",
+                            "description": "Disable verification of TLS certificates. Using this option is highly discouraged and decreases the security of data transmissions to and from the Vault server. This may also be specified using the VAULT_SKIP_VERIFY environment variable.",
+                            "default": false
+                        }
+                    }
+                }
+            }]
+        },
+        "listener": {
+            "type": "object",
+            "properties": {
+                "tcp": {
+                    "type": "object",
+                    "description": "Standard TLS listener.  https://www.vaultproject.io/docs/configuration/listener/tcp",
+                    "properties": {
+                        "address": {
+                            "type": "string",
+                            "description": "Listener IP:PORT, supports IPv4 and IPv6.",
+                            "default": "127.0.0.1:8200"
+                        },
+                        "tls_disable": {
+                            "type": "number",
+                            "description": "A shameful shameful flag for those not using valid TLS certs on Vault. 1 for disable TLS, 0 for enable.",
+                            "default": 0
+                        }
+                    }
+                }
+            }
+        },
+        "cluster_cipher_suites": {
+            "type": "string",
+            "description": "CSV list of supported ciphers.",
+            "default": "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA"
+        },
+        "telemetry": {
+            "type": "object"
+        },
+        "max_lease_ttl": {
+            "type": "string",
+            "description": "Specifies the maximum possible lease duration for tokens and secrets. This is specified using a label suffix like '30s' or '1h'.",
+            "default": "768h"
+        },
+        "default_lease_ttl": {
+            "type": "string",
+            "description": "Specifies the default lease duration for tokens and secrets. This is specified using a label suffix like '30s' or '1h'.",
+            "default": "30m"
+        },
+        "default_max_request_duration": {
+            "type": "string",
+            "description": "Specifies the default maximum request duration allowed before Vault cancels the request. This can be overridden per listener via the max_request_duration value.",
+            "default": "90s"
+        },
+        "pid_file": {
+            "type": "string",
+            "description": "Path to the file in which the Vault server's Process ID (PID) should be stored.",
+            "default": "/var/run/vault.pid"
+        },
+        "api_addr": {
+            "type": "string",
+            "description": "Specifies the address (full URL) to advertise to other Vault servers in the cluster for client redirection. This value is also used for plugin backends. This can also be provided via the environment variable VAULT_API_ADDR. In general this should be set as a full URL that points to the value of the listener address.",
+            "default": "http(s)://HOST:PORT"
+        },
+        "cluster_addr": {
+            "type": "string",
+            "description": "",
+            "default": "127.0.0.1:8200"
+        },
+        "cluster_name": {
+            "type": "string",
+            "description": "Cluster name.",
+            "default": "my-cluster"
+        },
+        "raw_storage_endpoint": {
+            "type": "boolean",
+            "description": "",
+            "default": false
+        }
+    }
+}

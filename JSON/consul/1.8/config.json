@@ -1,0 +1,116 @@
+{
+    "title": "Vault Config",
+    "name": "vault_config",
+    "type": "object",
+    "properties": {
+        "server": {
+            "type": "boolean",
+            "description": "True if this process should run a Consul Server. Default false. Server and Agent modes may both be enabled.",
+            "default": "false"
+        },
+        "ui": {
+            "type": "boolean",
+            "description": "Should the UI be made available on the listener socket?  Default false.",
+            "default": false
+        },
+        "node_name": {
+            "type": "string",
+            "description": "Name as shown in Consul members.  May or may not be FQDN."
+        },
+        "datacenter": {
+            "type": "string",
+            "description": "Consul DC (or cloud) as labeled with peers.",
+            "default": "dc1"
+        },
+        "data_dir": {
+            "type": "string",
+            "description": "Storage path on local disk for Consul's state. Requires RW access by Consul process.",
+            "default": "/var/lib/consul"
+        },
+        "leave_on_terminate": {
+            "type": "boolean",
+            "description": "Should Consul leave the cluster when it terminates?",
+            "default": true
+        },
+        "advertise_addr": {
+            "type": "string",
+            "description": "What external address should we tell the cluster we should be contacted on?",
+            "default": "127.0.0.1"
+        },
+        "retry_join": {
+            "type": "array",
+            "items": {
+                "type": "string",
+                "description": "What server IPs should we try to join the cluster via?",
+                "default": "127.0.0.1"
+            }
+        },
+        "client_addr": {
+            "type": "string",
+            "description": "The address to which Consul will bind client interfaces, including the HTTP and DNS servers. By default, this is "127.0.0.1", allowing only loopback connections. In Consul 1.0 and later this can be set to a space-separated list of addresses to bind to, or a template that can potentially resolve to multiple addresses.",
+            "default": "127.0.0.1"
+        },
+        "log_level": {
+            "type": "string",
+            "description": "What level of output log should the process generate: TRACE, DEBUG, INFO, WARN, or ERR? Default INFO.",
+            "default": "info",
+            "enum": ["trace", "debug", "info", "warn", "err"]
+        },
+        "enable_syslog": {
+            "type": "boolean",
+            "description": "Should Consul processes use syslog for stderr, stdout?",
+            "default": true
+        },
+        "acl_enforce_version_8": {
+            "type": "boolean",
+            "description": "Should we use legacy ACL support? https://www.consul.io/docs/acl/acl-legacy.html#version_8_acls",
+            "default": false
+        },
+        "bootstrap_expect": {
+            "type": "number",
+            "description": "For bootstrapping, how many servers should we consider quorum?",
+            "default": 3
+        },
+        "watches": {
+            "type": "array",
+            "description": "What healthcheck script(s) should the process use? Array of {type, handler} pairs.",
+            "items": {
+                "object": {
+                    "type": {
+                        "type": "string",
+                        "default": "service",
+                        "enum": ["key", "keyprefix", "services", "nodes", "service", "checks", "event"]
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "key": {
+                        "type": "string"
+                    },
+                    "args": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "prefix": {
+                        "type": "string"
+                    },
+                    "services": {
+                        "type": "array"
+                    },
+                    "state": {
+                        "type": "string",
+                        "enum": ["passing"]
+                    },
+                    "tag": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
