@@ -213,21 +213,26 @@
                     "properties": {
                         "lib": {
                             "type" : "string",
+                            "description": "The path to the PKCS11 library shared object file. May also be specified by the VAULT_HSM_LIB environment variable.",
                             "default": "/usr/vault/lib/libCryptoki2_64.so"
                         },
                         "slot": {
                             "type" : "string",
+                            "description": "The slot number to use, specified as a string (e.g. '0'). May also be specified by the VAULT_HSM_SLOT environment variable.",
                             "default": "0"
                         },
                         "token_label": {
                             "type": "string",
+                            "description": "The slot token label to use. May also be specified by the VAULT_HSM_TOKEN_LABEL environment variable."
                         },
                         "pin": {
                             "type" : "string",
+                            "description": "The PIN for login. May also be specified by the VAULT_HSM_PIN environment variable.",
                             "default": "AAAA-BBBB-CCCC-DDDD"
                         },
                         "key_label": {
                             "type" : "string",
+                            "description": "The label of the key to use. See VAULT_HSM_KEY_LABEL.",
                             "default": "vault-hsm-key"
                         },
                         "hmac_key_label": {
@@ -238,11 +243,13 @@
                         },
                         "mechanism": {
                             "type" : "string",
+                            "description": "The encryption/decryption mechanism to use. 0x1085 CKM_AES_CBC_PAD, 0x1082 CKM_AES_CBC, 0x1087 CKM_AES_GCM, 0x0009 CKM_RSA_PKCS_OAEP, 0x0001 CKM_RSA_PKCS",
                             "default": "",
                             "enum": ["0x0001", "0x0009", "0x1087", "0x1082", "0x1085"]
                         },
                         "hmac_mechanism": {
                             "type": "string",
+                            "description": "The encryption/decryption mechanism to use. Currently only 0x0251 (corresponding to CKM_SHA256_HMAC from the specification)",
                             "default": "0x0251",
                             "enum": ["0x0251"]
                         },
