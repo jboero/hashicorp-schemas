@@ -180,7 +180,7 @@
                         },
                         "tls_ca_cert": {
                             "type": "string",
-                            "description": "Specifies the path to the CA certificate file used for communication with the Vault server. This may also be specified using the VAULT_CA_CERT environment variable.",
+                            "description": "Specifies the path to the CA certificate file used for communication with the Vault server. See VAULT_CA_CERT.",
                             "default": "/path/to/your/ca.pem"
                         },
                         "tls_client_cert": {
@@ -210,6 +210,7 @@
                 "pkcs11": {
                     "type": "object",
                     "description": "Auto uneal using PKCS11 HSM.",
+                    "required": ["lib", "slot", "token_label", "pin", "key_label", "hmac_key_label"],
                     "properties": {
                         "lib": {
                             "type" : "string",
