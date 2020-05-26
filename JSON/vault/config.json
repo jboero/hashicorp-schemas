@@ -5,7 +5,7 @@
     "properties": {
         "storage": {
             "type": "object",
-            "oneOf": {
+            "oneOf": [{
                 "file": {
                     "type": "object",
                     "properties": {
@@ -17,12 +17,9 @@
                     }
                 },
                 "consul": {
-                    "type": "object",
-                    "properties": {
-
-                    }
+                    "type": "object"
                 }
-            }
+            }]
         },
         "ui": {
             "type": "boolean",
@@ -36,7 +33,8 @@
         },
         "seal": {
             "type": "object",
-            "anyOf": [{
+            "oneOf": [{
+                "properties": {
                 "awskms": {
                     "type": "object",
                     "description": "Auto uneal using AWS KMS.",
@@ -54,8 +52,9 @@
                             "type" : "string"
                         }
                     }
-                }
+                }}
             },{
+                "properties": {
                 "alicloudkms": {
                     "type": "object",
                     "description": "Auto uneal using AliCloud.",
@@ -73,8 +72,9 @@
                             "type" : "string"
                         }
                     }
-                }
+                }}
             },{
+                "properties": {
                 "azurekeyvault": {
                     "type": "object",
                     "description": "Auto uneal using Azure.",
@@ -95,8 +95,9 @@
                             "type" : "string"
                         }
                     }
-                }
+                }}
             },{
+                "properties": {
                 "gcpckms": {
                     "type": "object",
                     "description": "Auto uneal using GCP.",
@@ -118,8 +119,9 @@
                             "type" : "string"
                         }
                     }
-                }
+                }}
             },{
+                "properties": {
                 "ocikms": {
                     "type": "object",
                     "description": "Auto uneal using Oracle Cloud.",
@@ -140,8 +142,9 @@
                             "type" : "string"
                         }
                     }
-                }
+                }}
             },{
+                "properties": {
                 "pkcs11": {
                     "type": "object",
                     "description": "Auto uneal using PKCS#11 HSM.",
@@ -195,8 +198,9 @@
                             "default": "false"
                         }
                     }
-                }
+                }}
             },{
+                "properties": {
                 "transit": {
                     "type": "object",
                     "description": "The Transit seal configures Vault to use Vault's Transit Secret Engine as the autoseal mechanism.",
@@ -256,7 +260,7 @@
                             "default": false
                         }
                     }
-                }
+                }}
             }]
         },
         "listener": {
