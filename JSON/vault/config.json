@@ -175,7 +175,7 @@
                         },
                         "disable_renewal": {
                             "type": "string",
-                            "description": "Disables the automatic renewal of the token in case the lifecycle of the token is managed with some other mechanism outside of Vault, such as Vault Agent. This may also be specified using the VAULT_TRANSIT_SEAL_DISABLE_RENEWAL environment variable.",
+                            "description": "Disables the automatic renewal of the token. See VAULT_TRANSIT_SEAL_DISABLE_RENEWAL.",
                             "default": "false"
                         },
                         "tls_ca_cert": {
@@ -200,7 +200,7 @@
                         },
                         "tls_skip_verify": {
                             "type": "boolean",
-                            "description": "Disable verification of TLS certificates. Using this option is highly discouraged and decreases the security of data transmissions to and from the Vault server. This may also be specified using the VAULT_SKIP_VERIFY environment variable.",
+                            "description": "Disable verification of TLS certificates. Using this option is highly discouraged. See VAULT_SKIP_VERIFY.",
                             "default": false
                         }
                     }
