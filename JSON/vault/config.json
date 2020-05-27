@@ -5,7 +5,7 @@
     "properties": {
         "storage": {
             "type": "object",
-            "oneOf": [{
+            "properties": {
                 "file": {
                     "type": "object",
                     "properties": {
@@ -17,9 +17,273 @@
                     }
                 },
                 "consul": {
-                    "type": "object"
+                    "type": "object",
+                    "descriptionp": "YES high availability support. Consul is the recommended storage and supports Enterprise.",
+                    "properties": {
+                        "address": {
+                            "type": "string",
+                            "description": "Consul address in the form of '127.0.0.1:8500'",
+                            "default": "127.0.0.1:8500"
+                        },
+                        "path": {
+                            "type": "string",
+                            "description": "Path within Consul KV to store Vault data.",
+                            "default": "vault"
+                        },
+                        "check_timeout": {
+                            "type": "string",
+                            "description": "Specifies the check interval used to send health check information back to Consul. This is specified using a label suffix like '30s' or '1h'.",
+                            "default": "5s"
+                        },
+                        "consistency_mode": {
+                            "type": "string",
+                            "description": "Specifies the Consul consistency mode. Possible values are 'default' or 'strong'.",
+                            "enum": ["default", "strong"],
+                            "default": "default"
+                        },
+                        "disable_registration": {
+                            "type": "string",
+                            "description": "Specifies whether Vault should register itself with Consul. Bool as string.",
+                            "default": "false",
+                            "enum": ["true", "false"]
+                        },
+                        "max_pallel": {
+                            "type": "string",
+                            "description": "Specifies the maximum number of concurrent requests to Consul. Make sure that your Consul agents are configured to support this level of parallelism, see http_max_conns_per_client. Number as string.",
+                            "default": "128"
+                        },
+                        "scheme": {
+                            "type": "string",
+                            "description": "Specifies the scheme to use when communicating with Consul. This can be set to 'http' or 'https'. It is highly recommended you communicate with Consul over https over non-local connections. When communicating over a unix socket, this option is ignored.",
+                            "enum": ["http", "https"],
+                            "default": "https"
+                        },
+                        "service": {
+                            "type": "string",
+                            "description": "Specifies the name of the service to register in Consul.",
+                            "default": "vault"
+                        },
+                        "service_tags": {
+                            "type": "string",
+                            "description": "Specifies a comma-separated list of tags to attach to the service registration in Consul.",
+                            "default": "tag1,tag2,etc"
+                        },
+                        "service_address": {
+                            "type": "string",
+                            "description": "Specifies a service-specific address to set on the service registration in Consul. If unset, Vault will use what it knows to be the HA redirect address - which is usually desirable. Setting this parameter to '' will tell Consul to leverage the configuration of the node the service is registered on dynamically. This could be beneficial if you intend to leverage Consul's translate_wan_addrs parameter."
+                        },
+                        "token": {
+                            "type": "string",
+                            "description": "Specifies the Consul ACL token with permission to read and write from the path in Consul's key-value store. This is not a Vault token. This can also be provided via the environment variable CONSUL_HTTP_TOKEN. See the ACL section below for help."
+                        },
+                        "session_ttl": {
+                            "type": "string",
+                            "description": "Specifies the minimum allowed session TTL. Consul server has a lower limit of 10s on the session TTL by default. The value of session_ttl here cannot be lesser than 10s unless the session_ttl_min on the consul server's configuration has a lesser value.",
+                            "default": "15s"
+                        },
+                        "lock_wait_time": {
+                            "type": "string",
+                            "description": "Specifies the wait time before a lock acquisition is made. This affects the minimum time it takes to cancel a lock acquisition.",
+                            "default": "15s"
+                        },
+                        "tls_ca_file": {
+                            "type": "string",
+                            "description": "Specifies the path to the CA certificate used for Consul communication. This defaults to system bundle if not specified. This should be set according to the ca_file setting in Consul.",
+                            "default": "/path/to/your/ca.pem"
+                        },
+                        "tls_cert_file": {
+                            "type": "string",
+                            "description": "(optional) – Specifies the path to the certificate for Consul communication. This should be set according to the cert_file setting in Consul.",
+                            "default": "/path/to/your/cert.pem"
+                        },
+                        "tls_key_file": {
+                            "type": "string",
+                            "description": "Specifies the path to the private key for Consul communication. This should be set according to the key_file setting in Consul.",
+                            "default": "/path/to/your/key.pem"
+                        },
+                        "tls_min_version": {
+                            "type": "string",
+                            "description": "Specifies the minimum TLS version to use. Accepted values are 'tls10', 'tls11', 'tls12' or 'tls13'.",
+                            "default": "tls12",
+                            "enum": ["tls10", "tls11", "tls12", "tls13"]
+                        },
+                        "tls_skip_verify": {
+                            "type": "string",
+                            "description": "Disable verification of TLS certificates. Using this option is highly discouraged. Bool as string.",
+                            "default": "false",
+                            "enum": ["true", "false"]
+                        }
+                    }
+                },
+                "azure": {
+                    "type": "object",
+                    "description": "NO high availability support. Azure Storage Container.  Not supported with Enterprise.",
+                    "properties": {
+                        "accountName": {
+                            "type": "string"
+                        },
+                        "accountKey": {
+                            "type": "string"
+                        },
+                        "container": {
+                            "type": "string"
+                        },
+                        "environment": {
+                            "type": "string"
+                        },
+                        "arm_endpoint": {
+                            "type": "string"
+                        },
+                        "max_parallel": {
+                            "type": "string",
+                            "description": "The maximum number of concurrent requests to Azure.  Number as string.",
+                            "default": "16"
+                        }
+                    }
+                },
+                "cassandra": {
+                    "type": "object",
+                    "description": "NO high availability support. Cassandra database.  Not supported with Enterprise."
+                },
+                "cockroachdb": {
+                    "type": "object",
+                    "description": "NO high availability support. Not supported with Enterprise.",
+                    "properties": {
+                        "connection_url": {
+                            "type": "string",
+                            "default": "postgres://user123:secret123!@localhost:5432/vault"
+                        }
+                    }
+                },
+                "couchdb": {
+                    "type": "object",
+                    "description": "NO HIGH AVAILABILITY. Not supported with Enterprise."
+                },
+                "dynamodb": {
+                    "type": "object",
+                    "description": "YES HIGH AVAILABILITY. Not supported with Enterprise."
+                },
+                "etcd": {
+                    "type": "object",
+                    "description": "YES HIGH AVAILABILITY. Not supported with Enterprise."
+                },
+                "foundationdb": {
+                    "type": "object",
+                    "description": "YES HIGH AVAILABILITY. Not supported with Enterprise."
+                },
+                "spanner": {
+                    "type": "object",
+                    "description": "YES HIGH AVAILABILITY. Google Cloud Spanner. Not supported with Enterprise."
+                },
+                "gcs": {
+                    "type": "object",
+                    "description": "YES HIGH AVAILABILITY. Google Cloud Storage. Not supported with Enterprise."
+                },
+                "inmem": {
+                    "type": "object",
+                    "description": "NO HIGH AVAILABILITY. Used in -dev mode. Not supported with Enterprise."
+                },
+                "manta": {
+                    "type": "object",
+                    "description": "NO HIGH AVAILABILITY. Not supported with Enterprise."
+                },
+                "mssql": {
+                    "type": "object",
+                    "description": "NO HIGH AVAILABILITY. Not supported with Enterprise."
+                },
+                "mysql": {
+                    "type": "object",
+                    "description": "YES HIGH AVAILABILITY. Not supported with Enterprise."
+                },
+                "oci": {
+                    "type": "object",
+                    "description": "YES HIGH AVAILABILITY. Not supported with Enterprise."
+                },
+                "postgresql": {
+                    "type": "object",
+                    "description": "YES HIGH AVAILABILITY. Not supported with Enterprise.",
+                    "properties": {
+                        "connection_url": {
+                            "type": "string",
+                            "default": "postgres://user123:secret123!@localhost:5432/vault"
+                        }
+                    }
+                    
+                },
+                "raft": {
+                    "type": "object",
+                    "description": "YES HIGH AVAILABILITY. Supports Enterprise.",
+                    "properties": {
+                        "path": {
+                            "type": "string",
+                            "description": "The file system path where all the Vault data gets stored. This value can be overridden by setting the VAULT_RAFT_PATH environment variable.",
+                            "default": "/var/lib/vault"
+                        },
+                        "node_id": {
+                            "type": "string",
+                            "description": "The identifier for the node in the Raft cluster. This value can be overridden by setting the VAULT_RAFT_NODE_ID environment variable."
+                        },
+                        "performance_multiplier": {
+                            "type": "integer",
+                            "description": "An integer multiplier used by servers to scale key Raft timing parameters. Tuning this affects the time it takes Vault to detect leader failures and to perform leader elections, at the expense of requiring more network and CPU resources for better performance. Omitting this value or setting it to 0 uses default timing described below. Lower values are used to tighten timing and increase sensitivity while higher values relax timings and reduce sensitivity.",
+                            "default": 0,
+                            "minimum": 0,
+                            "maximum": 10
+                        },
+                        "trailing_logs": {
+                            "type": "integer",
+                            "description": "This controls how many log entries are left in the log store on disk after a snapshot is made. This should only be adjusted when followers cannot catch up to the leader due to a very large snapshot size and high write throughput causing log truncation before a snapshot can be fully installed. If you need to use this to recover a cluster, consider reducing write throughput or the amount of data stored on Vault. The default value is 10000 which is suitable for all normal workloads.",
+                            "default": 10000
+                        },
+                        "snapshot_threshold": {
+                            "type": "integer",
+                            "description": "This controls the minimum number of raft commit entries between snapshots that are saved to disk. This is a low-level parameter that should rarely need to be changed. Very busy clusters experiencing excessive disk IO may increase this value to reduce disk IO and minimize the chances of all servers taking snapshots at the same time. Increasing this trades off disk IO for disk space since the log will grow much larger and the space in the raft.db file can't be reclaimed till the next snapshot. Servers may take longer to recover from crashes or failover if this is increased significantly as more logs will need to be replayed.",
+                            "default": "8192"
+                        },
+                        "retry_join": {
+                            "type": "array",
+                            "description": "There can be one or more retry_join stanzas. When the raft cluster is getting bootstrapped, if the connection details of all the nodes are known beforehand, then specifying this config stanzas enables the nodes to automatically join a raft cluster. All the nodes would mention all other nodes that they could join using this config. When one of the nodes is initialized, it becomes the leader and all the other nodes will join the leader node to form the cluster. When using Shamir seal, the joined nodes will still need to be unsealed manually. See the section below that describes the parameters accepted by the retry_join stanza.",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "leader_api_addr": {
+                                        "type": "string",
+                                        "description": "Address of a possible leader node.",
+                                        "default": "http://127.0.0.1:8200"
+                                    },
+                                    "leader_ca_cert": {
+                                        "type": "string",
+                                        "description": "Path to CA cert of the possible leader node (PEM format).",
+                                        "default": "/path/to/you/ca.pem"
+                                    },
+                                    "leader_client_cert": {
+                                        "type": "string",
+                                        "description": "Path to client cert of the possible leader node (PEM format).",
+                                        "default": "/path/to/you/client.pem"
+                                    },
+                                    "leader_client_key": {
+                                        "type": "string",
+                                        "description": "Path to client key of the possible leader node (PEM format).",
+                                        "default": "/path/to/you/key.pem"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "s3": {
+                    "type": "object",
+                    "description": "NO HIGH AVAILABILITY. Not supported with Enterprise."
+                },
+                "swift": {
+                    "type": "object",
+                    "description": "NO HIGH AVAILABILITY. Not supported with Enterprise."
+                },
+                "zookeeper": {
+                    "type": "object",
+                    "description": "YES HIGH AVAILABILITY. Not supported with Enterprise."
                 }
-            }]
+            }
         },
         "ui": {
             "type": "boolean",
@@ -34,232 +298,244 @@
         "seal": {
             "type": "object",
             "oneOf": [{
+                "type": "object",
                 "properties": {
-                "awskms": {
-                    "type": "object",
-                    "description": "Auto uneal using AWS KMS.",
-                    "properties": {
-                        "access_key": {
-                            "type" : "string"
-                        },
-                        "secret_key": {
-                            "type" : "string"
-                        },
-                        "kms_key_id": {
-                            "type" : "string"
-                        },
-                        "region": {
-                            "type" : "string"
+                    "awskms": {
+                        "type": "object",
+                        "description": "Auto uneal using AWS KMS.",
+                        "properties": {
+                            "access_key": {
+                                "type" : "string"
+                            },
+                            "secret_key": {
+                                "type" : "string"
+                            },
+                            "kms_key_id": {
+                                "type" : "string"
+                            },
+                            "region": {
+                                "type" : "string"
+                            }
                         }
                     }
-                }}
+                }
             },{
+                "type": "object",
                 "properties": {
-                "alicloudkms": {
-                    "type": "object",
-                    "description": "Auto uneal using AliCloud.",
-                    "properties": {
-                        "region": {
-                            "type" : "string"
-                        },
-                        "access_key": {
-                            "type" : "string"
-                        },
-                        "secret_key": {
-                            "type" : "string"
-                        },
-                        "kms_key_id": {
-                            "type" : "string"
+                    "alicloudkms": {
+                        "type": "object",
+                        "description": "Auto uneal using AliCloud.",
+                        "properties": {
+                            "region": {
+                                "type" : "string"
+                            },
+                            "access_key": {
+                                "type" : "string"
+                            },
+                            "secret_key": {
+                                "type" : "string"
+                            },
+                            "kms_key_id": {
+                                "type" : "string"
+                            }
                         }
                     }
-                }}
+                }
             },{
+                "type": "object",
                 "properties": {
-                "azurekeyvault": {
-                    "type": "object",
-                    "description": "Auto uneal using Azure.",
-                    "properties": {
-                        "tenant_id": {
-                            "type" : "string"
-                        },
-                        "client_id": {
-                            "type" : "string"
-                        },
-                        "client_secret": {
-                            "type" : "string"
-                        },
-                        "vault_name": {
-                            "type" : "string"
-                        },
-                        "key_name": {
-                            "type" : "string"
+                    "azurekeyvault": {
+                        "type": "object",
+                        "description": "Auto uneal using Azure.",
+                        "properties": {
+                            "tenant_id": {
+                                "type" : "string"
+                            },
+                            "client_id": {
+                                "type" : "string"
+                            },
+                            "client_secret": {
+                                "type" : "string"
+                            },
+                            "vault_name": {
+                                "type" : "string"
+                            },
+                            "key_name": {
+                                "type" : "string"
+                            }
                         }
                     }
-                }}
+                }
             },{
+                "type": "object",
                 "properties": {
-                "gcpckms": {
-                    "type": "object",
-                    "description": "Auto uneal using GCP.",
-                    "properties": {
-                        "credentials": {
-                            "type" : "string",
-                            "default": "/path/to/your/creds.json"
-                        },
-                        "project": {
-                            "type" : "string"
-                        },
-                        "region": {
-                            "type" : "string"
-                        },
-                        "key_ring": {
-                            "type" : "string"
-                        },
-                        "crypto_key": {
-                            "type" : "string"
+                    "gcpckms": {
+                        "type": "object",
+                        "description": "Auto uneal using GCP.",
+                        "properties": {
+                            "credentials": {
+                                "type" : "string",
+                                "default": "/path/to/your/creds.json"
+                            },
+                            "project": {
+                                "type" : "string"
+                            },
+                            "region": {
+                                "type" : "string"
+                            },
+                            "key_ring": {
+                                "type" : "string"
+                            },
+                            "crypto_key": {
+                                "type" : "string"
+                            }
                         }
                     }
-                }}
+                }
             },{
+                "type": "object",
                 "properties": {
-                "ocikms": {
-                    "type": "object",
-                    "description": "Auto uneal using Oracle Cloud.",
-                    "properties": {
-                        "tenant_id": {
-                            "type" : "string"
-                        },
-                        "client_id": {
-                            "type" : "string"
-                        },
-                        "client_secret": {
-                            "type" : "string"
-                        },
-                        "vault_name": {
-                            "type" : "string"
-                        },
-                        "key_name": {
-                            "type" : "string"
+                    "ocikms": {
+                        "type": "object",
+                        "description": "Auto uneal using Oracle Cloud.",
+                        "properties": {
+                            "tenant_id": {
+                                "type" : "string"
+                            },
+                            "client_id": {
+                                "type" : "string"
+                            },
+                            "client_secret": {
+                                "type" : "string"
+                            },
+                            "vault_name": {
+                                "type" : "string"
+                            },
+                            "key_name": {
+                                "type" : "string"
+                            }
                         }
                     }
-                }}
+                }
             },{
+                "type": "object",
                 "properties": {
-                "transit": {
-                    "type": "object",
-                    "description": "The Transit seal configures Vault to use Vault's Transit Secret Engine as the autoseal mechanism.",
-                    "required": ["address", "token", "key_name", "mount_path"],
-                    "properties": {
-                        "address": {
-                            "type": "string",
-                            "description": "The full address to the Vault cluster. This may also be specified by the VAULT_ADDR environment variable.",
-                            "default": "https://vault:8200"
-                        },
-                        "token": {
-                            "type": "string",
-                            "description": "The Vault token to use. This may also be specified by the VAULT_TOKEN environment variable."
-                        },
-                        "key_name": {
-                            "type": "string",
-                            "description": "The transit key to use for encryption and decryption. This may also be supplied using the VAULT_TRANSIT_SEAL_KEY_NAME environment variable."
-                        },
-                        "mount_path": {
-                            "type": "string",
-                            "description": "The mount path to the transit secret engine. This may also be supplied using the VAULT_TRANSIT_SEAL_MOUNT_PATH environment variable.",
-                            "default": "secret/unsealkey"
-                        },
-                        "namespace": {
-                            "type": "string",
-                            "description": "The namespace path to the transit secret engine. This may also be supplied using the VAULT_NAMESPACE environment variable.",
-                            "default": "default"
-                        },
-                        "disable_renewal": {
-                            "type": "string",
-                            "description": "Disables the automatic renewal of the token. See VAULT_TRANSIT_SEAL_DISABLE_RENEWAL.",
-                            "default": "false"
-                        },
-                        "tls_ca_cert": {
-                            "type": "string",
-                            "description": "Specifies the path to the CA certificate file used for communication with the Vault server. See VAULT_CA_CERT.",
-                            "default": "/path/to/your/ca.pem"
-                        },
-                        "tls_client_cert": {
-                            "type": "string",
-                            "description": "Specifies the path to the client certificate for communication with the Vault server. This may also be specified using the VAULT_CLIENT_CERT environment variable.",
-                            "default": "/path/to/your/client-cert.pem"
-                        },
-                        "tls_client_key": {
-                            "type": "string",
-                            "description": "Specifies the path to the private key for communication with the Vault server. This may also be specified using the VAULT_CLIENT_KEY environment variable.",
-                            "default": "/path/to/your/client-key.pem"
-                        },
-                        "tls_server_name": {
-                            "type": "string",
-                            "description": "Name to use as the SNI host when connecting to the Vault server via TLS. This may also be specified via the VAULT_TLS_SERVER_NAME environment variable.",
-                            "default": "default"
-                        },
-                        "tls_skip_verify": {
-                            "type": "boolean",
-                            "description": "Disable verification of TLS certificates. Using this option is highly discouraged. See VAULT_SKIP_VERIFY.",
-                            "default": false
+                    "transit": {
+                        "type": "object",
+                        "description": "The Transit seal configures Vault to use Vault's Transit Secret Engine as the autoseal mechanism.",
+                        "properties": {
+                            "address": {
+                                "type": "string",
+                                "description": "REQUIRED. The full address to the Vault cluster. This may also be specified by the VAULT_ADDR environment variable.",
+                                "default": "https://vault:8200"
+                            },
+                            "token": {
+                                "type": "string",
+                                "description": "The Vault token to use. This may also be specified by the VAULT_TOKEN environment variable."
+                            },
+                            "key_name": {
+                                "type": "string",
+                                "description": "The transit key to use for encryption and decryption. This may also be supplied using the VAULT_TRANSIT_SEAL_KEY_NAME environment variable."
+                            },
+                            "mount_path": {
+                                "type": "string",
+                                "description": "The mount path to the transit secret engine. This may also be supplied using the VAULT_TRANSIT_SEAL_MOUNT_PATH environment variable.",
+                                "default": "secret/unsealkey"
+                            },
+                            "namespace": {
+                                "type": "string",
+                                "description": "The namespace path to the transit secret engine. This may also be supplied using the VAULT_NAMESPACE environment variable.",
+                                "default": "default"
+                            },
+                            "disable_renewal": {
+                                "type": "string",
+                                "description": "Disables the automatic renewal of the token. See VAULT_TRANSIT_SEAL_DISABLE_RENEWAL.",
+                                "default": "false"
+                            },
+                            "tls_ca_cert": {
+                                "type": "string",
+                                "description": "Specifies the path to the CA certificate file used for communication with the Vault server. See VAULT_CA_CERT.",
+                                "default": "/path/to/your/ca.pem"
+                            },
+                            "tls_client_cert": {
+                                "type": "string",
+                                "description": "Specifies the path to the client certificate for communication with the Vault server. This may also be specified using the VAULT_CLIENT_CERT environment variable.",
+                                "default": "/path/to/your/client-cert.pem"
+                            },
+                            "tls_client_key": {
+                                "type": "string",
+                                "description": "Specifies the path to the private key for communication with the Vault server. This may also be specified using the VAULT_CLIENT_KEY environment variable.",
+                                "default": "/path/to/your/client-key.pem"
+                            },
+                            "tls_server_name": {
+                                "type": "string",
+                                "description": "Name to use as the SNI host when connecting to the Vault server via TLS. This may also be specified via the VAULT_TLS_SERVER_NAME environment variable.",
+                                "default": "default"
+                            },
+                            "tls_skip_verify": {
+                                "type": "boolean",
+                                "description": "Disable verification of TLS certificates. Using this option is highly discouraged. See VAULT_SKIP_VERIFY.",
+                                "default": false
+                            }
                         }
                     }
-                }}
+                }
             },{
+                "type": "object",
                 "properties": {
-                "pkcs11": {
-                    "type": "object",
-                    "description": "Auto uneal using PKCS11 HSM.",
-                    "required": ["lib", "slot", "token_label", "pin", "key_label", "hmac_key_label"],
-                    "properties": {
-                        "lib": {
-                            "type" : "string",
-                            "description": "The path to the PKCS11 library shared object file. May also be specified by the VAULT_HSM_LIB environment variable.",
-                            "default": "/usr/vault/lib/libCryptoki2_64.so"
-                        },
-                        "slot": {
-                            "type" : "string",
-                            "description": "The slot number to use, specified as a string (e.g. '0'). May also be specified by the VAULT_HSM_SLOT environment variable.",
-                            "default": "0"
-                        },
-                        "token_label": {
-                            "type": "string",
-                            "description": "The slot token label to use. May also be specified by the VAULT_HSM_TOKEN_LABEL environment variable."
-                        },
-                        "pin": {
-                            "type" : "string",
-                            "description": "The PIN for login. May also be specified by the VAULT_HSM_PIN environment variable.",
-                            "default": "AAAA-BBBB-CCCC-DDDD"
-                        },
-                        "key_label": {
-                            "type" : "string",
-                            "description": "The label of the key to use. See VAULT_HSM_KEY_LABEL.",
-                            "default": "vault-hsm-key"
-                        },
-                        "hmac_key_label": {
-                            "type" : "string"
-                        },
-                        "default_hmac_key_label": {
-                            "type" : "string"
-                        },
-                        "mechanism": {
-                            "type" : "string",
-                            "description": "The encryption/decryption mechanism to use. 0x1085 CKM_AES_CBC_PAD, 0x1082 CKM_AES_CBC, 0x1087 CKM_AES_GCM, 0x0009 CKM_RSA_PKCS_OAEP, 0x0001 CKM_RSA_PKCS",
-                            "default": "",
-                            "enum": ["0x0001", "0x0009", "0x1087", "0x1082", "0x1085"]
-                        },
-                        "hmac_mechanism": {
-                            "type": "string",
-                            "description": "The encryption/decryption mechanism to use. Currently only 0x0251 (corresponding to CKM_SHA256_HMAC from the specification)",
-                            "default": "0x0251",
-                            "enum": ["0x0251"]
-                        },
-                        "generate_key": {
-                            "type": "string",
-                            "default": "false"
+                    "pkcs11": {
+                        "type": "object",
+                        "description": "Auto uneal using PKCS11 HSM.",
+                        "properties": {
+                            "lib": {
+                                "type" : "string",
+                                "description": "The path to the PKCS11 library shared object file. May also be specified by the VAULT_HSM_LIB environment variable.",
+                                "default": "/usr/vault/lib/libCryptoki2_64.so"
+                            },
+                            "slot": {
+                                "type" : "string",
+                                "description": "The slot number to use, specified as a string (e.g. '0'). May also be specified by the VAULT_HSM_SLOT environment variable.",
+                                "default": "0"
+                            },
+                            "token_label": {
+                                "type": "string",
+                                "description": "The slot token label to use. May also be specified by the VAULT_HSM_TOKEN_LABEL environment variable."
+                            },
+                            "pin": {
+                                "type" : "string",
+                                "description": "The PIN for login. May also be specified by the VAULT_HSM_PIN environment variable.",
+                                "default": "AAAA-BBBB-CCCC-DDDD"
+                            },
+                            "key_label": {
+                                "type" : "string",
+                                "description": "The label of the key to use. See VAULT_HSM_KEY_LABEL.",
+                                "default": "vault-hsm-key"
+                            },
+                            "hmac_key_label": {
+                                "type" : "string"
+                            },
+                            "default_hmac_key_label": {
+                                "type" : "string"
+                            },
+                            "mechanism": {
+                                "type" : "string",
+                                "description": "The encryption/decryption mechanism to use. 0x1085 CKM_AES_CBC_PAD, 0x1082 CKM_AES_CBC, 0x1087 CKM_AES_GCM, 0x0009 CKM_RSA_PKCS_OAEP, 0x0001 CKM_RSA_PKCS",
+                                "default": "",
+                                "enum": ["0x0001", "0x0009", "0x1087", "0x1082", "0x1085"]
+                            },
+                            "hmac_mechanism": {
+                                "type": "string",
+                                "description": "The encryption/decryption mechanism to use. Currently only 0x0251 (corresponding to CKM_SHA256_HMAC from the specification)",
+                                "default": "0x0251",
+                                "enum": ["0x0251"]
+                            },
+                            "generate_key": {
+                                "type": "string",
+                                "default": "false"
+                            }
                         }
                     }
-                }}
+                }
             }]
         },
         "listener": {

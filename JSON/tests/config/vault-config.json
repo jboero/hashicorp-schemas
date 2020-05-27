@@ -1,8 +1,39 @@
 {
+    "$schema": "https://github.com/jboero/hashicorp-schemas/raw/master/JSON/vault/config.json",
+
     "api_addr": "http(s)://HOST:PORT",
+    "cluster_addr": "127.0.0.1:8200",
+    "cluster_cipher_suites": "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA",
+    "cluster_name": "my-cluster",
+    "default_lease_ttl": "30m",
+    "default_max_request_duration": "90s",
+    "disable_mlock": true,
+    "listener": {
+        "tcp": {
+            "address": "127.0.0.1:8200",
+            "tls_disable": 0
+        }
+    },
+    "max_lease_ttl": "768h",
+    "pid_file": "/var/run/vault.pid",
+    "raw_storage_endpoint": false,
     "seal": {
         "pkcs11": {
-            
+            "lib": "/usr/vault/lib/libCryptoki2_64.so"
+        }
+    },
+    "storage": {
+        "raft": {
+            "node_id": "",
+            "path": "/var/lib/vault",
+            "retry_join": [
+                {
+                    "leader_api_addr": "http://127.0.0.1:8200",
+                    "leader_ca_cert": "/path/to/you/ca.pem",
+                    "leader_client_cert": "/path/to/you/client.pem",
+                    "leader_client_key": "/path/to/you/key.pem"
+                }
+            ]
         }
     }
 }

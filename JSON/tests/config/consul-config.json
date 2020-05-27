@@ -1,0 +1,7 @@
+{
+    "$schema": "https://github.com/jboero/hashicorp-schemas/raw/master/JSON/consul/1.8/config.json",
+
+    "server": "false",
+    "datacenter": "dc1",
+    "data_dir": "/var/lib/consul"
+}
