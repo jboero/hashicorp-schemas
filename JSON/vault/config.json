@@ -292,8 +292,8 @@
         },
         "disable_mlock": {
             "type": "boolean",
-            "description": "Should Vault disable swapping memory to disk?  Highly recommend true for this value.",
-            "default": true
+            "description": "Should Vault enable swapping memory to disk?  Highly recommend false for this value.",
+            "default": false
         },
         "seal": {
             "type": "object",

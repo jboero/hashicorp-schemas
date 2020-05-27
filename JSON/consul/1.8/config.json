@@ -6,7 +6,7 @@
         "server": {
             "type": "boolean",
             "description": "True if this process should run a Consul Server. Default false. Server and Agent modes may both be enabled.",
-            "default": "false"
+            "default": false
         },
         "ui": {
             "type": "boolean",
