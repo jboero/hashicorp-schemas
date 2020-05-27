@@ -4,6 +4,7 @@ Hashicorp schemas and unofficial specs for payload validation and autocompletion
 ```
 {
     "$schema": "https://github.com/jboero/hashicorp-schemas/raw/master/JSON/vault/config.json",
+    [CTRL-SPACE]
 }
 ```
 
