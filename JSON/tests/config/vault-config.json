@@ -10,16 +10,10 @@
     "storage": {
         "raft": {
             "path": "/var/lib/vault",
-            "retry_join": [
-                {
-                    "leader_api_addr": "http://127.0.0.1:8200",
-                    "leader_ca_cert": "/path/to/you/ca.pem",
-                    "leader_client_cert": "/path/to/you/client.pem",
-                    "leader_client_key": "/path/to/you/key.pem"
-                }
-            ]
+            "node_id": "node_X"
         }
     },
+    "cluster_addr": "http://node_ip:8201",
     "ui": true,
     "listener": {
         "tcp": {
