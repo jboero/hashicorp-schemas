@@ -173,8 +173,7 @@
                         },
                         "output_directory": {
                             "type": "string",
-                            "description": "This is the path to the directory where the resulting virtual machine will be created. This may be relative or absolute. If relative, the path is relative to the working directory when packer is executed. This directory must not exist or be empty prior to running the builder. By default this is output-BUILDNAME where 'BUILDNAME' is the name of the build.",
-                            "default": ""
+                            "description": "This is the path to the directory where the resulting virtual machine will be created. This may be relative or absolute. If relative, the path is relative to the working directory when packer is executed. This directory must not exist or be empty prior to running the builder. By default this is output-BUILDNAME where 'BUILDNAME' is the name of the build."
                         },
                         "qemuargs": {
                             "type": "array",
@@ -1485,21 +1484,6 @@
                     "type": "object",
                     "properties": {
                         "type": {
-                            "description": "Type is .",
-                            "default": "",
-                            "enum": [""]
-                        },
-                        "": {
-                            "type": "string",
-                            "description": "",
-                            "default": ""
-                        },
-                        "$ref": "#/definitions/todo"
-                    }
-                },{
-                    "type": "object",
-                    "properties": {
-                        "type": {
                             "description": "Type is Parallels Desktop for Mac ISO.",
                             "default": "parallels-iso",
                             "enum": ["parallels-iso"]
@@ -1523,16 +1507,6 @@
                             "description": "Type is ProfitBricks.",
                             "default": "profitbricks",
                             "enum": ["profitbricks"]
-                        },
-                        "$ref": "#/definitions/todo"
-                    }
-                },{
-                    "type": "object",
-                    "properties": {
-                        "type": {
-                            "description": "Type is .",
-                            "default": "",
-                            "enum": [""]
                         },
                         "$ref": "#/definitions/todo"
                     }
