@@ -163,7 +163,7 @@
                         "memory": {
                             "type": "integer",
                             "description": "The amount of memory to use when building the VM in megabytes. This defaults to 512 megabytes.",
-                            "default": "512"
+                            "default": 512
                         },
                         "net_device": {
                             "type": "string",
@@ -370,6 +370,7 @@
                     }
                 },{
                     "type": "object",
+                    "required": ["commit", "discard", "export_path", "image", "message"],
                     "properties": {
                         "type": {
                             "description": "Type is Docker.",
