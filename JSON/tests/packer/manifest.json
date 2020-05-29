@@ -1,0 +1,6 @@
+{
+    "$schema": "https://github.com/jboero/hashicorp-schemas/raw/master/JSON/packer/manifest.json",
+    "builders": [
+        
+    ]
+}

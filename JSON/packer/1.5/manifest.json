@@ -1,0 +1,1698 @@
+{
+    "title": "Packer Manifest",
+    "name": "packer",
+    "type": "object",
+    "definitions": {
+        "todo": {
+            "type": "string",
+            "description": "This part isn't complete.  Please feel free to contribute at https://github.com/jboero/hashicorp-schemas/blob/master/JSON/packer/1.5/manifest.json",
+            "default": "https://github.com/jboero/hashicorp-schemas/blob/master/JSON/packer/1.5/manifest.json"
+        },
+        "aws_region": {
+            "type": "string",
+            "default": "us-east-1",
+            "enum": ["us-east-1", "us-east-2", "us-west-1", "us-west-2", 
+                "af-south-1", "ap-east-1", "ap-south-1", "ap-northeast-3", 
+                "ap-northeast-2", "ap-southeast-1", "ap-southeast-2", 
+                "ap-northeast-1", "ca-central1", "cn-north-1", "cn-northwest-1", 
+                "eu-central-1", "eu-west-1", "eu-west-2", "eu-south-1", 
+                "eu-west-3", "eu-north-1", "me-south-1", "sa-east-1", 
+                "us-gov-east-1", "us-gov-west-1"]
+        },
+        "aws_dev_mapping": {
+            "type": "array",
+            "description": "Add one or more block device mappings to the AMI. These will be attached when booting a new instance from your AMI. To add a block device during the Packer build see launch_block_device_mappings below. Your options here may vary depending on the type of VM you use. See the BlockDevices documentation for fields.",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "device_name": {
+                        "type": "string",
+                        "default": "/dev/sda1"
+                    },
+                    "encrypted": {
+                        "type": "boolean",
+                        "default": true
+                    },
+                    "iops": {
+                        "type": "integer"
+                    },
+                    "no_device": {
+                        "type": "boolean"
+                    },
+                    "snapshot_id": {
+                        "type": "string"
+                    },
+                    "virtual_name": {
+                        "type": "string"
+                    },
+                    "volume_type": {
+                        "type": "string"
+                    },
+                    "volume_size": {
+                        "type": "integer"
+                    },
+                    "kms_key_id": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    },
+    "properties": {
+        "variables": {
+            "type": "array",
+            "default": [{"key": ""}]
+        },
+        "builders": {
+            "default": [{"type": ""}],
+            "type": "array",
+            "items": {
+                "anyOf": [{
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "description": "Type is qemu.",
+                            "default": "qemu",
+                            "enum": ["qemu"]
+                        },
+                        "iso_skip_cache": {
+                            "type": "boolean",
+                            "description": "Use iso from provided url. Qemu must support curl block device. This defaults to false.",
+                            "default": false
+                        },
+                        "accelerator": {
+                            "type": "string",
+                            "description": "The accelerator type to use when running the VM. This may be none, kvm, tcg, hax, hvf, whpx, or xen. The appropriate software must have already been installed on your build machine to use the accelerator you specified. When no accelerator is specified, Packer will try to use kvm if it is available but will default to tcg otherwise.",
+                            "default": "kvm",
+                            "enum": ["none", "kvm", "tcg", "hax", "hvf", "whpx", "xen"]
+                        },
+                        "disk_additional_size": {
+                            "type": "array",
+                            "description": "Additional disks to create. Uses vm_name as the disk name template and appends -# where # is the position in the array. # starts at 1 since 0 is the default disk. Each string represents the disk image size in bytes. Optional suffixes 'k' or 'K' (kilobyte, 1024), 'M' (megabyte, 1024k), 'G' (gigabyte, 1024M), 'T' (terabyte, 1024G), 'P' (petabyte, 1024T) and 'E' (exabyte, 1024P) are supported. 'b' is ignored. Per qemu-img documentation. Each additional disk uses the same disk parameters as the default disk. Unset by default.",
+                            "items": {"type": "string"}
+                        },
+                        "cpus": {
+                            "type": "integer",
+                            "description": "The number of cpus to use when building the VM. The default is 1 CPU.",
+                            "default": 1
+                        },
+                        "disk_interface": {
+                            "type": "string",
+                            "description": "(string) - The interface to use for the disk. Allowed values include any of ide, scsi, virtio or virtio-scsi^*. Note also that any boot commands or kickstart type scripts must have proper adjustments for resulting device names. The Qemu builder uses virtio by default.",
+                            "default": "virtio",
+                            "enum": ["ide", "scsi", "virtio", "virtio-scsi"]
+                        },
+                        "disk_size": {
+                            "type": "string",
+                            "description": "The size in bytes of the hard disk of the VM. Suffix with the first letter of common byte types. Use 'k or 'K' for kilobytes, 'M' for megabytes, G for gigabytes, and T for terabytes. If no value is provided for disk_size, Packer uses a default of 40960M (40 GB). If a disk_size number is provided with no units, Packer will default to Megabytes.",
+                            "default": "40960M"
+                        },
+                        "disk_cache": {
+                            "type": "string",
+                            "description": "The cache mode to use for disk. Allowed values include any of writethrough,",
+                            "default": "writeback",
+                            "enum": ["writethrough", "writeback", "none", "unsafe", "directsync"]
+                        },
+                        "disk_discard": {
+                            "type": "string",
+                            "description": "The discard mode to use for disk. Allowed values include any of unmap or ignore. By default, this is set to ignore.",
+                            "default": "ignore"
+                        },
+                        "disk_detect_zeroes": {
+                            "type": "string",
+                            "description": "The detect-zeroes mode to use for disk. Allowed values include any of unmap, on or off. Defaults to off. When the value is 'off' we don't set the flag in the qemu command, so that Packer still works with old versions of QEMU that don't have this option.",
+                            "default": "off",
+                            "enum": ["on", "off"]
+                        },
+                        "skip_compaction": {
+                            "type": "boolean",
+                            "description": "Packer compacts the QCOW2 image using qemu-img convert. Set this option to true to disable compacting. Defaults to false.",
+                            "default": false
+                        },
+                        "disk_compression": {
+                            "type": "boolean",
+                            "description": "Apply compression to the QCOW2 disk file using qemu-img convert. Defaults to false.",
+                            "default": false
+                        },
+                        "format": {
+                            "type": "string",
+                            "description": "Either qcow2 or raw, this specifies the output format of the virtual machine image. This defaults to qcow2.",
+                            "default": "qcow2",
+                            "enum": ["qcow2", "raw"]
+                        },
+                        "headless": {
+                            "type": "boolean",
+                            "description": "acker defaults to building QEMU virtual machines by launching a GUI that shows the console of the machine being built. When this value is set to true, the machine will start without a console.",
+                            "default": false
+                        },
+                        "disk_image": {
+                            "type": "boolean",
+                            "description": "Packer defaults to building from an ISO file, this parameter controls whether the ISO URL supplied is actually a bootable QEMU image. When this value is set to true, the machine will either clone the source or use it as a backing file (if use_backing_file is true); then, it will resize the image according to disk_size and boot it.",
+                            "default": false
+                        },
+                        "use_backing_file": {
+                            "type": "boolean",
+                            "description": "Only applicable when disk_image is true and format is qcow2, set this option to true to create a new QCOW2 file that uses the file located at iso_url as a backing file. The new file will only contain blocks that have changed compared to the backing file, so enabling this option can significantly reduce disk usage.",
+                            "default": "false"
+                        },
+                        "machine_type": {
+                            "type": "string",
+                            "description": "The type of machine emulation to use. Run your qemu binary with the flags -machine help to list available types for your system. This defaults to pc.",
+                            "default": "pc"
+                        },
+                        "memory": {
+                            "type": "integer",
+                            "description": "The amount of memory to use when building the VM in megabytes. This defaults to 512 megabytes.",
+                            "default": "512"
+                        },
+                        "net_device": {
+                            "type": "string",
+                            "description": "The driver to use for the network interface. Allowed values ne2k_pci, i82551, i82557b, i82559er, rtl8139, e1000, pcnet, virtio, virtio-net, virtio-net-pci, usb-net, i82559a, i82559b, i82559c, i82550, i82562, i82557a, i82557c, i82801, vmxnet3, i82558a or i82558b. The Qemu builder uses virtio-net by default.",
+                            "default": "virtio-net",
+                            "enum": ["net2k_pci", "i82551", "i82557b", "i82559er", "rtl8139", "e1000", "pcnet", "virtio", "virtio-net", "virtio-net-pci", "usb-net", "i82559a", "i82559b", "i82559c", "i82550", "i82562", "i82557a", "i82557c", "i82801", "vmxnet3", "i82558a", "i82558b"]
+                        },
+                        "output_directory": {
+                            "type": "string",
+                            "description": "This is the path to the directory where the resulting virtual machine will be created. This may be relative or absolute. If relative, the path is relative to the working directory when packer is executed. This directory must not exist or be empty prior to running the builder. By default this is output-BUILDNAME where 'BUILDNAME' is the name of the build.",
+                            "default": ""
+                        },
+                        "qemuargs": {
+                            "type": "array",
+                            "description": "Allows complete control over the qemu command line (though not, at this time, qemu-img). Each array of strings makes up a command line switch that overrides matching default switch/value pairs. Any value specified as an empty string is ignored. All values after the switch are concatenated with no separator.",
+                            "items": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            },
+                            "default": [["-cpu", "host"]]
+                        },
+                        "qemu_binary": {
+                            "type": "string",
+                            "description": "The name of the Qemu binary to look for. This defaults to qemu-system-x86_64, but may need to be changed for some platforms. For example qemu-kvm, or qemu-system-i386 may be a better choice for some systems.",
+                            "default": "qemu-system-x86_64"
+                        },
+                        "qmp_enable": {
+                            "type": "boolean",
+                            "description": "Enable QMP socket. Location is specified by qmp_socket_path. Defaults to false.",
+                            "default": false
+                        },
+                        "qmp_socket_path": {
+                            "type": "string",
+                            "description": "QMP Socket Path when qmp_enable is true. Defaults to output_directory/vm_name.monitor.",
+                            "default": ""
+                        },
+                        "ssh_host_port_min": {
+                            "type": "integer",
+                            "description": "The minimum and maximum port to use for the SSH port on the host machine which is forwarded to the SSH port on the guest machine. Because Packer often runs in parallel, Packer will choose a randomly available port in this range to use as the host port. By default this is 2222 to 4444.",
+                            "default": 2222
+                        },
+                        "ssh_host_port_max": {
+                            "type": "integer",
+                            "description": "The minimum and maximum port to use for the SSH port on the host machine which is forwarded to the SSH port on the guest machine. Because Packer often runs in parallel, Packer will choose a randomly available port in this range to use as the host port. By default this is 2222 to 4444.",
+                            "default": 4444
+                        },
+                        "use_default_display": {
+                            "type": "boolean",
+                            "description": "If true, do not pass a -display option to qemu, allowing it to choose the default. This may be needed when running under macOS, and getting errors about sdl not being available.",
+                            "default": false
+                        },
+                        "display": {
+                            "type": "string",
+                            "description": "What QEMU -display option to use. Defaults to gtk, use none to not pass the -display option allowing QEMU to choose the default. This may be needed when running under macOS, and getting errors about sdl not being available.",
+                            "default": ""
+                        },
+                        "vnc_bind_address": {
+                            "type": "string",
+                            "description": "The IP address that should be binded to for VNC. By default packer will use 127.0.0.1 for this. If you wish to bind to all interfaces use 0.0.0.0.",
+                            "default": "127.0.0.1"
+                        },
+                        "vnc_use_password": {
+                            "type": "boolean",
+                            "description": "Whether or not to set a password on the VNC server. This option automatically enables the QMP socket. See qmp_socket_path. Defaults to false.",
+                            "default": false
+                        },
+                        "vnc_port_min": {
+                            "type": "integer",
+                            "description": "The minimum and maximum port to use for VNC access to the virtual machine. The builder uses VNC to type the initial boot_command. Because Packer generally runs in parallel, Packer uses a randomly chosen port in this range that appears available. By default this is 5900 to 6000. The minimum and maximum ports are inclusive.",
+                            "default": 5900
+                        },
+                        "vnc_port_max": {
+                            "type": "integer",
+                            "description": "The minimum and maximum port to use for VNC access to the virtual machine. The builder uses VNC to type the initial boot_command. Because Packer generally runs in parallel, Packer uses a randomly chosen port in this range that appears available. By default this is 5900 to 6000. The minimum and maximum ports are inclusive.",
+                            "default": 6000
+                        },
+                        "vm_name": {
+                            "type": "string",
+                            "description": ""
+                        },
+
+                        "iso_checksum": {
+                            "type": "string",
+                            "description": "ISO checksum for verification."
+                        },
+                        "iso_checksum_type": {
+                            "type": "string",
+                            "description": "Checksum algorithm used for verification.",
+                            "default": "none",
+                            "enum": ["", "none", "md5", "sha1", "sha256", "sha512", "file"]
+                        },
+                        "iso_url": {
+                            "type": "string",
+                            "description": "A URL to the ISO containing the installation image or virtual hard drive (VHD or VHDX) file to clone..",
+                            "default": "https://distro.com/iso/whatever.iso"
+                        },
+                        "iso_urls": {
+                            "type": "array",
+                            "description": "A list of URLs to the ISO containing the installation image or virtual hard drive (VHD or VHDX) file to clone..",
+                            "items": {
+                                "type": "string"
+                            },
+                            "default": ["https://distro.com/iso/whatever.iso"]
+                        },
+                        "iso_target_path": {
+                            "type": "string",
+                            "description": "The path where the iso should be saved after download. By default will go in the packer cache, with a hash of the original filename and checksum as its name."
+                        },
+                        "iso_target_extension": {
+                            "type": "string",
+                            "description": "The extension of the iso file after download. This defaults to iso.",
+                            "default": "iso"
+                        },
+
+                        "http_directory": {
+                            "type": "string",
+                            "description": "Path to a directory to serve using an HTTP server. The files in this directory will be available over HTTP that will be requestable from the virtual machine. This is useful for hosting kickstart files and so on. By default this is an empty string, which means no HTTP server will be started. The address and port of the HTTP server will be available as variables in boot_command.",
+                            "default": ""
+                        },
+                        "http_port_min": {
+                            "type": "integer",
+                            "description": "These are the minimum and maximum port to use for the HTTP server started to serve the http_directory. Because Packer often runs in parallel, Packer will choose a randomly available port in this range to run the HTTP server. If you want to force the HTTP server to be on one port, make this minimum and maximum port the same. By default the values are 8000 and 9000, respectively.",
+                            "default": 8000
+                        },
+                        "http_port_max": {
+                            "type": "integer",
+                            "description": "These are the minimum and maximum port to use for the HTTP server started to serve the http_directory. Because Packer often runs in parallel, Packer will choose a randomly available port in this range to run the HTTP server. If you want to force the HTTP server to be on one port, make this minimum and maximum port the same. By default the values are 8000 and 9000, respectively.",
+                            "default": 9000
+                        },
+
+                        "floppy_files": {
+                            "type": "array",
+                            "description": "A list of files to place onto a floppy disk that is attached when the VM is booted. Currently, no support exists for creating sub-directories on the floppy. Wildcard characters (\\*, ?, and []) are allowed. Directory names are also allowed, which will add all the files found in the directory to the floppy.",
+                            "items": {
+                                "type": "string"
+                            },
+                            "default": ["/path/to/flopppyfile"]
+                        },
+                        "floppy_dirs": {
+                            "type": "array",
+                            "description": "A list of directories to place onto the floppy disk recursively. This is similar to the floppy_files option except that the directory structure is preserved. This is useful for when your floppy disk includes drivers or if you just want to organize it's contents as a hierarchy. Wildcard characters (\\*, ?, and []) are allowed. The maximum summary size of all files in the listed directories are the same as in floppy_files.",
+                            "items": {
+                                "type": "string"
+                            },
+                            "default": ["/path/to/flopppydir/"]
+                        },
+                        "floppy_label": {
+                            "type": "string",
+                            "description": "Floppy Label"
+                        },
+
+                        "shutdown_command": {
+                            "type": "string",
+                            "description": "The command to use to gracefully shut down the machine once all provisioning is complete. By default this is an empty string, which tells Packer to just forcefully shut down the machine. This setting can be safely omitted if for example, a shutdown command to gracefully halt the machine is configured inside a provisioning script. If one or more scripts require a reboot it is suggested to leave this blank (since reboots may fail) and instead specify the final shutdown command in your last script.",
+                            "default": ""
+                        },
+                        "shutdown_timeout": {
+                            "type": "string",
+                            "description": "The amount of time to wait after executing the shutdown_command for the virtual machine to actually shut down. If the machine doesn't shut down in this time it is considered an error. By default, the time out is '5m' (five minutes).",
+                            "default": "1h5m2s"
+                        },
+
+                        "boot_command": {
+                            "type": "array",
+                            "description": "Boot command as described here: https://www.packer.io/docs/builders/qemu/#-1",
+                            "items": {
+                                "type": "string"
+                            },
+                            "default": ["<tab><wait>"]
+                        },
+                        "disable_vnc": {
+                            "type": "boolean",
+                            "description": "Whether to create a VNC connection or not. A boot_command cannot be used when this is true. Defaults to false.",
+                            "default": false
+                        },
+                        "boot_key_interval": {
+                            "type": "string",
+                            "description": "Time in ms to wait between each key press",
+                            "default": "1h5m2s"
+                        },
+                        "boot_keygroup_interval": {
+                            "type": "string",
+                            "description": "Time to wait after sending a group of key pressses. The value of this should be a duration. Examples are 5s and 1m30s which will cause Packer to wait five seconds and one minute 30 seconds, respectively. If this isn't specified, a sensible default value is picked depending on the builder type.",
+                            "default": "1h5m2s"
+                        },
+                        "boot_wait": {
+                            "type": "string",
+                            "description": "The time to wait after booting the initial virtual machine before typing the boot_command. The value of this should be a duration. Examples are 5s and 1m30s which will cause Packer to wait five seconds and one minute 30 seconds, respectively. If this isn't specified, the default is 10s or 10 seconds. To set boot_wait to 0s, use a negative number, such as '-1s'",
+                            "default": "10s"
+                        },
+
+                        "communicator": {
+                            "type": "string",
+                            "description": "Packer currently supports three kinds of communicators.",
+                            "default": "ssh",
+                            "enum": ["none", "ssh", "winrm"]
+                        },
+                        "pause_before_connecting": {
+                            "type": "string",
+                            "description": "We recommend that you enable SSH or WinRM as the very last step in your guest's bootstrap script, but sometimes you may have a race condition where you need Packer to wait before attempting to connect to your guest.",
+                            "default": "10m"
+                        }
+                    }
+                },{
+                    "type": "object",
+                    "required": ["commit", "discard", "export_path", "image", "message"],
+                    "properties": {
+                        "type": {
+                            "description": "Type is Docker.",
+                            "default": "docker",
+                            "enum": ["docker"]
+                        },
+                        "commit": {
+                            "type": "boolean",
+                            "description": "If true, the container will be committed to an image rather than exported.",
+                            "default": false
+                        },
+                        "discard": {
+                            "type": "boolean",
+                            "description": "Throw away the container when the build is complete. This is useful for the artifice post-processor.",
+                            "default": false
+                        },
+                        "export_path": {
+                            "type": "string",
+                            "description": "The path where the final container will be exported as a tar file."
+                        },
+                        "image": {
+                            "type": "string",
+                            "description": "The base image for the Docker container that will be started. This image will be pulled from the Docker registry if it doesn't already exist."
+                        },
+                        "message": {
+                            "type": "string",
+                            "description": "Set a message for the commit."
+                        },
+
+                        "aws_access_key": {
+                            "type": "string",
+                            "description": "The AWS access key used to communicate with AWS. Learn how to set this."
+                        },
+                        "aws_secret_key": {
+                            "type": "string",
+                            "description": "The AWS secret key used to communicate with AWS. Learn how to set this."
+                        },
+                        "aws_token": {
+                            "type": "string",
+                            "description": "The AWS access token to use. This is different from the access key and secret key. If you're not sure what this is, then you probably don't need it. This will also be read from the AWS_SESSION_TOKEN environmental variable."
+                        },
+                        "aws_profile": {
+                            "type": "string",
+                            "description": "The AWS shared credentials profile used to communicate with AWS. Learn how to set this."
+                        },
+                        "author": {
+                            "type": "string",
+                            "description": "Set the author (e-mail) of a commit.",
+                            "default": ""
+                        },
+                        "changes": {
+                            "type": "array",
+                            "description": "Dockerfile instructions to add to the commit. Example of instructions are CMD, ENTRYPOINT, ENV, and EXPOSE. Example: [ 'USER ubuntu', 'WORKDIR /app', 'EXPOSE 8080' ]",
+                            "items": {
+                                "type": "string"
+                            },
+                            "default": ["EXPOSE 8080"]
+                        },
+                        "container_dir": {
+                            "type": "string",
+                            "description": "The directory inside container to mount temp directory from host server for work file provisioner. This defaults to c:/packer-files on windows and /packer-files on other systems."
+                        },
+                        "exec_user": {
+                            "type": "string",
+                            "description": "Username (UID) to run remote commands with. You can also set the group name/ID if you want: (UID or UID:GID). You may need this if you get permission errors trying to run the shell or other provisioners."
+                        },
+                        "privileged": {
+                            "type": "boolean",
+                            "description": "If true, run the docker container with the --privileged flag. This defaults to false if not set.",
+                            "default": false
+                        },
+                        "pull": {
+                            "type": "boolean",
+                            "description": "If true, the configured image will be pulled using docker pull prior to use. Otherwise, it is assumed the image already exists and can be used. This defaults to true if not set.",
+                            "default": "true"
+                        },
+                        "run_command": {
+                            "type": "array",
+                            "description": "An array of arguments to pass to docker run in order to run the container.",
+                            "items": {
+                                "type": "string"
+                            },
+                            "default": ["-d", "-i", "-t", "--entrypoint=powershell", "--", "{{.Image}}"]
+                        },
+                        "volumes": {
+                            "type": "object",
+                            "description": "A mapping of additional volumes to mount into this container. The key of the object is the host path, the value is the container path.",
+                            "default" : {"/local/path": "/container/path"}
+                        },
+                        "fix_upload_owner": {
+                            "type": "boolean",
+                            "description": "If true, files uploaded to the container will be owned by the user the container is running as. If false, the owner will depend on the version of docker installed in the system. Defaults to true.",
+                            "default": true
+                        },
+                        "windows_container": {
+                            "type": "boolean",
+                            "description": "If 'true', tells Packer that you are building a Windows container running on a windows host. This is necessary for building Windows containers, because our normal docker bindings do not work for them.",
+                            "default": false
+                        },
+                        "login": {
+                            "type": "boolean",
+                            "description": "This is used to login to dockerhub to pull a private base container. For pushing to dockerhub, see the docker post-processors",
+                            "default": false
+                        },
+                        "login_password": {
+                            "type": "string",
+                            "description": "The password to use to authenticate to login."
+                        },
+                        "login_server": {
+                            "type": "string",
+                            "description": "The server address to login to."
+                        },
+                        "login_username": {
+                            "type": "string",
+                            "description": "The username to use to authenticate to login.",
+                            "default": ""
+                        },
+                        "ecr_login": {
+                            "type": "boolean",
+                            "description": "Defaults to false. If true, the builder will login in order to pull the image from Amazon EC2 Container Registry (ECR). The builder only logs in for the duration of the pull. If true login_server is required and login, login_username, and login_password will be ignored. For more information see the section on ECR."
+                        }
+                    }
+                },{
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "description": "Type is Amazon EBS.",
+                            "default": "amazon-ebs",
+                            "enum": ["amazon-ebs"]
+                        },
+                        "ami_block_device_mappings": {
+                            "$ref": "#/definitions/aws_dev_mapping"
+                        },
+                        "launch_block_device_mappings": {
+                            "type":"object"
+                        },
+                        "run_volume_tags": {
+                            "type": "object",
+                            "description": "Tags to apply to the volumes that are launched to create the AMI. These tags are not applied to the resulting AMI unless they're duplicated in tags. This is a template engine, see Build template data for more information.",
+                            "default": {"sampletag": "samplevalue"}
+                        },
+                        "no_ephemeral": {
+                            "type": "boolean",
+                            "description": "Relevant only to Windows guests: If you set this flag, we'll add clauses to the launch_block_device_mappings that make sure ephemeral drives don't show up in the EC2 console. If you launched from the EC2 console, you'd get this automatically, but the SDK does not provide this service. For more information, see https://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/InstanceStorage.html. Because we don't validate the OS type of your guest, it is up to you to make sure you don't set this for *nix guests; behavior may be unpredictable.",
+                            "default": false
+                        },
+
+                        "ami_name": {
+                            "type": "string",
+                            "description": "The name of the resulting AMI that will appear when managing AMIs in the AWS console or via APIs. This must be unique. To help make this unique, use a function like timestamp (see template engine for more info)."
+                        },
+                        "ami_description": {
+                            "type": "string",
+                            "description": "The description to set for the resulting AMI(s). By default this description is empty. This is a template engine, see Build template data for more information."
+                        },
+                        "ami_virtualization_type": {
+                            "type": "string",
+                            "description": "The type of virtualization for the AMI you are building. This option is required to register HVM images. Can be paravirtual (default) or hvm.",
+                            "default": "paravirtual",
+                            "enum": ["paravirtual", "hvm"]
+                        },
+                        "ami_users": {
+                            "type": "array",
+                            "description": "A list of account IDs that have access to launch the resulting AMI(s). By default no additional users other than the user creating the AMI has permissions to launch it.",
+                            "items": {
+                                "type": "string"
+                            },
+                            "default": [""]
+                        },
+                        "ami_groups": {
+                            "type": "array",
+                            "description": "A list of groups that have access to launch the resulting AMI(s). By default no groups have permission to launch the AMI. all will make the AMI publicly accessible.",
+                            "items": {
+                                "type": "string"
+                            },
+                            "default": [""]
+                        },
+                        "ami_product_codes": {
+                            "type": "array",
+                            "description": "A list of product codes to associate with the AMI. By default no product codes are associated with the AMI.",
+                            "items": {
+                                "type": "string"
+                            },
+                            "default": [""]
+                        },
+                        "ami_regions": {
+                            "type": "array",
+                            "description": "A list of regions to copy the AMI to. Tags and attributes are copied along with the AMI. AMI copying takes time depending on the size of the AMI, but will generally take many minutes.",
+                            "items": {
+                                "$ref": "#/definitions/aws_region"
+                            },
+                            "default": [""]
+                        },
+                        "skip_region_validation": {
+                            "type": "boolean",
+                            "description": "Set to true if you want to skip validation of the ami_regions configuration option. Default false.",
+                            "default": false
+                        },
+                        "tags": {
+                            "type": "object",
+                            "description": "Key/value pair tags applied to the AMI. This is a template engine, see Build template data for more information.",
+                            "default": {"YOURTAG": "YOURVALUE"}
+                        },
+                        "tag": {
+                            "type": "array",
+                            "description": "Same as tags but defined as a singular repeatable block containing a key and a value field. In HCL2 mode the dynamic_block will allow you to create those programatically.",
+                            "default": [{"key": "value"}]
+                        },
+                        "ena_support": {
+                            "type": "string",
+                            "description": "Enable enhanced networking (ENA but not SriovNetSupport) on HVM-compatible AMIs. If set, add ec2:ModifyInstanceAttribute to your AWS IAM policy.",
+                            "default": false
+                        },
+                        "sriov_support": {
+                            "type": "boolean",
+                            "description": "Enable enhanced networking (SriovNetSupport but not ENA) on HVM-compatible AMIs. If true, add ec2:ModifyInstanceAttribute to your AWS IAM policy. Note: you must make sure enhanced networking is enabled on your instance. See Amazon's documentation on enabling enhanced networking. Default false.",
+                            "default": false
+                        },
+                        "force_deregister": {
+                            "type": "boolean",
+                            "description": "Force Packer to first deregister an existing AMI if one with the same name already exists. Default false.",
+                            "default": false
+                        },
+                        "force_delete_snapshot": {
+                            "type": "boolean",
+                            "description": "Force Packer to delete snapshots associated with AMIs, which have been deregistered by force_deregister. Default false.",
+                            "default": false
+                        },
+                        "encrypt_boot": {
+                            "type": "boolean",
+                            "description": "Whether or not to encrypt the resulting AMI when copying a provisioned instance to an AMI. By default, Packer will keep the encryption setting to what it was in the source image. Setting false will result in an unencrypted image, and true will result in an encrypted one. If you have used the launch_block_device_mappings to set an encryption key and that key is the same as the one you want the image encrypted with at the end, then you don't need to set this field; leaving it empty will prevent an unnecessary extra copy step and save you some time.",
+                            "default": true
+                        },
+                        "kms_key_id": {
+                            "type": "string",
+                            "description": "ID, alias or ARN of the KMS key to use for boot volume encryption. This only applies to the main region, other regions where the AMI will be copied will be encrypted by the default EBS KMS key. For valid formats see KmsKeyId in the AWS API docs - CopyImage. This field is validated by Packer, when using an alias, you will have to prefix kms_key_id with alias/."
+                        },
+                        "region_mks_key_ids": {
+                            "type": "object",
+                            "description": "regions to copy the ami to, along with the custom kms key id (alias or arn) to use for encryption for that region. Keys must match the regions provided in ami_regions. If you just want to encrypt using a default ID, you can stick with kms_key_id and ami_regions. If you want a region to be encrypted with that region's default key ID, you can use an empty string '' instead of a key id in this map. (e.g. 'us-east-1': '') However, you cannot use default key IDs if you are using this in conjunction with snapshot_users -- in that situation you must use custom keys. For valid formats see KmsKeyId in the AWS API docs - CopyImage.",
+                            "default": {"mapkey": "value"}
+                        },
+                        "skip_save_build_region": {
+                            "type": "boolean",
+                            "description": "If true, Packer will not check whether an AMI with the ami_name exists in the region it is building in. It will use an intermediary AMI name, which it will not convert to an AMI in the build region. It will copy the intermediary AMI into any regions provided in ami_regions, then delete the intermediary AMI. Default false.",
+                            "default": false
+                        },
+                        "snapshot_tags": {
+                            "type": "object",
+                            "description": "Key/value pair tags to apply to snapshot. They will override AMI tags if already applied to snapshot. This is a template engine, see Build template data for more information.",
+                            "default": {"key": "value"}
+                        },
+                        "snapshot_tag": {
+                            "type": "array",
+                            "description": "Same as snapshot_tags but defined as a singular repeatable block containing a key and a value field. In HCL2 mode the dynamic_block will allow you to create those programatically.",
+                            "default": [{"key": "value"}]
+                        },
+                        "snapshot_users": {
+                            "type": "array",
+                            "description": "A list of account IDs that have access to create volumes from the snapshot(s). By default no additional users other than the user creating the AMI has permissions to create volumes from the backing snapshot(s).",
+                            "items": { "type": "string" },
+                            "default": [""]
+                        },
+                        "snapshot_groups": {
+                            "type": "array",
+                            "description": "A list of group IDs that have access to create volumes from the snapshot(s). By default no additional users other than the user creating the AMI has permissions to create volumes from the backing snapshot(s).",
+                            "items": { "type": "string" },
+                            "default": [""]
+                        },
+
+                        "access_key": {
+                            "type": "string",
+                            "description": "The access key used to communicate with AWS. Learn how to set this. On EBS, this is not required if you are using use_vault_aws_engine for authentication instead."
+                        },
+                        "region": {
+                            "$ref": "#/definitions/aws_region",
+                            "description": "The name of the region, such as us-east-1, in which to launch the EC2 instance to create the AMI. When chroot building, this value is guessed from environment."
+                        },
+                        "secret_key": {
+                            "type": "string",
+                            "description": "The secret key used to communicate with AWS. Learn how to set this. This is not required if you are using use_vault_aws_engine for authentication instead.",
+                            "default": ""
+                        },
+
+                        "custom_endpoint_ec2": {
+                            "type": "string",
+                            "description": "This option is useful if you use a cloud provider whose API is compatible with aws EC2. Specify another endpoint like this https://ec2.custom.endpoint.com.",
+                            "default": ""
+                        },
+                        "decode_authorization_messages": {
+                            "type": "boolean",
+                            "description": "Enable automatic decoding of any encoded authorization (error) messages using the sts:DecodeAuthorizationMessage API. Note: requires that the effective user/role have permissions to sts:DecodeAuthorizationMessage on resource *. Default false.",
+                            "default": false
+                        },
+                        "insecure_skip_tls_verify": {
+                            "type": "boolean",
+                            "description": "This allows skipping TLS verification of the AWS EC2 endpoint. The default is false.",
+                            "default": false
+                        },
+                        "max_retries": {
+                            "type": "integer",
+                            "description": "This is the maximum number of times an API call is retried, in the case where requests are being throttled or experiencing transient failures. The delay between the subsequent API calls increases exponentially."
+                        },
+                        "mfa_code": {
+                            "type": "string",
+                            "description": "The MFA TOTP code. This should probably be a user variable since it changes all the time.",
+                            "default": ""
+                        },
+                        "profile": {
+                            "type": "string",
+                            "description": "The profile to use in the shared credentials file for AWS. See Amazon's documentation on specifying profiles for more details.",
+                            "default": ""
+                        },
+                        "skip_meatadata_api_check": {
+                            "type": "boolean",
+                            "description": "Skip Metadata Api Check",
+                            "default": false
+                        },
+                        "token": {
+                            "type": "string",
+                            "description": "The access token to use. This is different from the access key and secret key. If you're not sure what this is, then you probably don't need it. This will also be read from the AWS_SESSION_TOKEN environmental variable."
+                        },
+                        "vault_aws_engine": {
+                            "type": "object",
+                            "description": "Get credentials from Hashicorp Vault's aws secrets engine. You must already have created a role to use. For more information about generating credentials via the Vault engine, see the Vault docs. If you set this flag, you must also set the below options:"
+                        },
+
+                        "instance_type": {
+                            "type": "string",
+                            "description": "The EC2 instance type to use while building the AMI, such as t2.small.",
+                            "default": "t2.small"
+                        },
+                        "source_ami": {
+                            "type": "string",
+                            "description": "The source AMI whose root volume will be copied and provisioned on the currently running instance. This must be an EBS-backed AMI with a root volume snapshot that you have access to. Note: this is not used when from_scratch is set to true."
+                        },
+
+                        "associate_public_ip_address": {
+                            "type": "boolean",
+                            "description": "If using a non-default VPC, public IP addresses are not provided by default. If this is true, your new instance will get a Public IP. default: false",
+                            "default": false
+                        },
+                        "availability_zone": {
+                            "type": "string",
+                            "description": "Destination availability zone to launch instance in. Leave this empty to allow Amazon to auto-assign."
+                        },
+                        "block_duration_minutes": {
+                            "type": "integer",
+                            "description": "Requires spot_price to be set. The required duration for the Spot Instances (also known as Spot blocks). This value must be a multiple of 60 (60, 120, 180, 240, 300, or 360). You can't specify an Availability Zone group or a launch group if you specify a duration."
+                        },
+                        "disable_stop_instance": {
+                            "type": "boolean",
+                            "description": "Packer normally stops the build instance after all provisioners have run. For Windows instances, it is sometimes desirable to run Sysprep which will stop the instance for you. If this is set to true, Packer will not stop the instance but will assume that you will send the stop signal yourself through your final provisioner. You can do this with a windows-shell provisioner. Note that Packer will still wait for the instance to be stopped, and failing to send the stop signal yourself, when you have set this flag to true, will cause a timeout. Example of a valid shutdown command:",
+                            "default": false
+                        },
+                        "ebs_optimized": {
+                            "type": "boolean",
+                            "description": "Mark instance as EBS Optimized. Default false.",
+                            "default": false
+                        },
+                        "enable_t2_unlimited": {
+                            "type": "boolean",
+                            "description": "Enabling T2 Unlimited allows the source instance to burst additional CPU beyond its available CPU Credits for as long as the demand exists. This is in contrast to the standard configuration that only allows an instance to consume up to its available CPU Credits. See the AWS documentation for T2 Unlimited and the T2 Unlimited Pricing section of the Amazon EC2 On-Demand Pricing document for more information. By default this option is disabled and Packer will set up a T2 Standard instance instead.",
+                            "default": false
+                        },
+                        "iam_instance_profile": {
+                            "type": "string",
+                            "description": "The name of an IAM instance profile to launch the EC2 instance with.",
+                            "default": ""
+                        },
+                        "skip_profile_validation": {
+                            "type": "boolean",
+                            "description": "Whether or not to check if the IAM instance profile exists. Defaults to false",
+                            "default": false
+                        },
+                        "temporary_iam_instance_profile_policy_document": {
+                            "type": "object",
+                            "description": "Temporary IAM instance profile policy document If IamInstanceProfile is specified it will be used instead. https://www.packer.io/docs/builders/amazon-ebs#temporary_iam_instance_profile_policy_document"
+                        },
+                        "shutdown_behavior": {
+                            "type": "string",
+                            "description": "Automatically terminate instances on shutdown in case Packer exits ungracefully. Possible values are stop and terminate. Defaults to stop.",
+                            "default": "stop",
+                            "enum": ["stop", "terminate"]
+                        },
+                        "security_group_filter": {
+                            "type": "object",
+                            "description": "https://www.packer.io/docs/builders/amazon-ebs#security_group_filter"
+                        },
+                        "run_tags": {
+                            "type": "object",
+                            "description": "Key/value pair tags to apply to the instance that is that is launched to create the EBS volumes. This is a template engine, see Build template data for more information.",
+                            "default": {"key": "value"}
+                        },
+                        "run_tag": {
+                            "type": "array",
+                            "description": "Key/value pair tags to apply to the instance that is that is launched to create the EBS volumes. This is a template engine, see Build template data for more information.",
+                            "default": [{"key": "value"}]
+                        },
+                        "security_group_id": {
+                            "type": "string",
+                            "description": "The ID (not the name) of the security group to assign to the instance. By default this is not set and Packer will automatically create a new temporary security group to allow SSH access. Note that if this is specified, you must be sure the security group allows access to the ssh_port given below."
+                        },
+                        "security_group_ids": {
+                            "type": "array",
+                            "description": "The IDs (not the name) of the security group to assign to the instance. By default this is not set and Packer will automatically create a new temporary security group to allow SSH access. Note that if this is specified, you must be sure the security group allows access to the ssh_port given below.",
+                            "items": {"type": "string"},
+                            "default": [""]
+                        },
+                        "source_ami_filter": {
+                            "type": "object",
+                            "description": "https://www.packer.io/docs/builders/amazon-ebs#source_ami_filter"
+                        },
+                        "spot_instance_types": {
+                            "type": "array",
+                            "description": "A list of acceptable instance types to run your build on. We will request a spot instance using the max price of spot_price and the allocation strategy of 'lowest price'. Your instance will be launched on an instance type of the lowest available price that you have in your list. This is used in place of instance_type. You may only set either spot_instance_types or instance_type, not both. This feature exists to help prevent situations where a Packer build fails because a particular availability zone does not have capacity for the specific instance_type requested in instance_type.",
+                            "items": {"type": "string"},
+                            "default": [""]
+                        },
+                        "spot_price": {
+                            "type": "string",
+                            "description": "With Spot Instances, you pay the Spot price that's in effect for the time period your instances are running. Spot Instance prices are set by Amazon EC2 and adjust gradually based on long-term trends in supply and demand for Spot Instance capacity."
+                        },
+                        "spot_price_auto_product": {
+                            "type": "string",
+                            "description": "Required if spot_price is set to auto. This tells Packer what sort of AMI you're launching to find the best spot price. This must be one of: Linux/UNIX, SUSE Linux, Windows, Linux/UNIX (Amazon VPC), SUSE Linux (Amazon VPC), Windows (Amazon VPC)",
+                            "default": "Linux/UNIX",
+                            "enum": ["Linux/UNIX", "SUSE Linux", "Windows", "Linux/UNIX (Amazon VPC)", "SUSE Linux (Amazon VPC)", "Windows (Amazon VPC)"]
+                        },
+                        "spot_tags": {
+                            "type": "object",
+                            "description": "Requires spot_price to be set. Key/value pair tags to apply tags to the spot request that is issued.",
+                            "default": {"tagkey": "value"}
+                        },
+                        "spot_tag": {
+                            "type": "array",
+                            "description": "Same as spot_tags but defined as a singular repeatable block containing a key and a value field. In HCL2 mode the dynamic_block will allow you to create those programatically.",
+                            "default": [{"tagkey": "value"}]
+                        },
+                        "subnet_filter": {
+                            "type": "object",
+                            "description": "https://www.packer.io/docs/builders/amazon-ebs#subnet_filter"
+                        },
+                        "subnet_id": {
+                            "type": "string",
+                            "description": "If using VPC, the ID of the subnet, such as subnet-12345def, where Packer will launch the EC2 instance. This field is required if you are using an non-default VPC."
+                        },
+                        "temporary_key_pair_name": {
+                            "type": "string",
+                            "description": "The name of the temporary key pair to generate. By default, Packer generates a name that looks like packer_<UUID>, where <UUID> is a 36 character unique identifier.",
+                            "default": ""
+                        },
+                        "temporary_security_group_souce_cidrs": {
+                            "type": "array",
+                            "description": "A list of IPv4 CIDR blocks to be authorized access to the instance, when packer is creating a temporary security group.",
+                            "items": {"type": "string"},
+                            "default": [""]
+                        },
+                        "user_data": {
+                            "type": "string",
+                            "description": "User data to apply when launching the instance. Note that you need to be careful about escaping characters due to the templates being JSON. It is often more convenient to use user_data_file, instead. Packer will not automatically wait for a user script to finish before shutting down the instance this must be handled in a provisioner."
+                        },
+                        "user_data_file": {
+                            "type": "string",
+                            "description": "Path to a file that will be used for the user data when launching the instance."
+                        },
+                        "vpc_filter": {
+                            "type": "object",
+                            "description": "https://www.packer.io/docs/builders/amazon-ebs#vpc_filter"
+                        },
+                        "vpc_id": {
+                            "type": "string",
+                            "description": "If launching into a VPC subnet, Packer needs the VPC ID in order to create a temporary security group within the VPC. Requires subnet_id to be set. If this field is left blank, Packer will try to get the VPC ID from the subnet_id."
+                        },
+                        "windows_password_timeout": {
+                            "type": "string",
+                            "description": "The timeout for waiting for a Windows password for Windows instances. Defaults to 20 minutes. Example value: 10m",
+                            "default": "20m"
+                        },
+                        "ssh_interface": {
+                            "type": "string",
+                            "description": "One of public_ip, private_ip, public_dns, or private_dns. If set, either the public IP address, private IP address, public DNS name or private DNS name will be used as the host for SSH. The default behaviour if inside a VPC is to use the public IP address if available, otherwise the private IP address will be used. If not in a VPC the public DNS name will be used. Also works for WinRM.",
+                            "default": "public_ip",
+                            "enum": ["public_ip", "private_ip", "public_dns", "private_dns"]
+                        },
+
+                        "delete_on_termination": {
+                            "type": "boolean",
+                            "description": "Indicates whether the EBS volume is deleted on instance termination. Default false. NOTE: If this value is not explicitly set to true and volumes are not cleaned up by an alternative method, additional volumes will accumulate after every build.",
+                            "default": false
+                        },
+                        "device_name": {
+                            "type": "string",
+                            "description": "The device name exposed to the instance (for example, /dev/sdh or xvdh). Required for every device in the block device mapping.",
+                            "default": "/dev/sdh"
+                        },
+                        "encrypted": {
+                            "type": "boolean",
+                            "description": "Indicates whether or not to encrypt the volume. By default, Packer will keep the encryption setting to what it was in the source image. Setting false will result in an unencrypted device, and true will result in an encrypted one.",
+                            "default": true
+                        },
+                        "iops": {
+                            "type": "integer",
+                            "description": "The number of I/O operations per second (IOPS) that the volume supports. See the documentation on IOPs for more information",
+                            "default": ""
+                        },
+                        "no_device": {
+                            "type": "boolean",
+                            "description": "Suppresses the specified device included in the block device mapping of the AMI.",
+                            "default": false
+                        },
+                        "snapshot_id": {
+                            "type": "string",
+                            "description": "The ID of the snapshot."
+                        },
+                        "virtual_name": {
+                            "type": "string",
+                            "description": "The virtual device name. See the documentation on Block Device Mapping for more information."
+                        },
+                        "volume_name": {
+                            "type": "string",
+                            "description": "The virtual device name. See the documentation on Block Device Mapping for more information."
+                        },
+                        "volume_type": {
+                            "type": "string",
+                            "description": "The volume type. gp2 for General Purpose (SSD) volumes, io1 for Provisioned IOPS (SSD) volumes, st1 for Throughput Optimized HDD, sc1 for Cold HDD, and standard for Magnetic volumes.",
+                            "default": "standard",
+                            "enum": ["gp2", "st1", "sc1", "standard"]
+                        },
+                        "volume_size": {
+                            "type": "integer",
+                            "description": "The size of the volume, in GiB. Required if not specifying a snapshot_id.",
+                            "default": 10
+                        },
+
+                        "communicator": {
+                            "type": "string",
+                            "description": " Packer currently supports three kinds of communicators.",
+                            "default": "ssh",
+                            "enum": ["none", "ssh", "winrm"]
+                        },
+                        "pause_before_connecting": {
+                            "type": "string",
+                            "description": "We recommend that you enable SSH or WinRM as the very last step in your guest's bootstrap script, but sometimes you may have a race condition where you need Packer to wait before attempting to connect to your guest.",
+                            "default": "10m"
+                        },
+                        "ssh_host": {
+                            "type": "string",
+                            "description": "The address to SSH to. This usually is automatically configured by the builder."
+                        },
+                        "ssh_port": {
+                            "type": "integer",
+                            "description": "The port to connect to SSH. This defaults to 22.",
+                            "default": 22
+                        },
+                        "ssh_password": {
+                            "type": "string",
+                            "description": "A plaintext password (!) to use to authenticate with SSH."
+                        },
+                        "ssh_keypair_name": {
+                            "type": "string",
+                            "description": "If specified, this is the key that will be used for SSH with the machine. The key must match a key pair name loaded up into the remote. By default, this is blank, and Packer will generate a temporary keypair unless ssh_password is used. ssh_private_key_file or ssh_agent_auth must be specified when ssh_keypair_name is utilized.",
+                            "default": ""
+                        },
+                        "ssh_clear_authorized_keys": {
+                            "type": "boolean",
+                            "description": "If true, Packer will attempt to remove its temporary key from ~/.ssh/authorized_keys and /root/.ssh/authorized_keys. This is a mostly cosmetic option, since Packer will delete the temporary private key from the host system regardless of whether this is set to true (unless the user has set the -debug flag). Defaults to false; currently only works on guests with sed installed.",
+                            "default": false
+                        },
+                        "ssh_private_key_file": {
+                            "type": "string",
+                            "description": "Path to a PEM encoded private key file to use to authenticate with SSH. The ~ can be used in path and will be expanded to the home directory of current user.",
+                            "default": ""
+                        },
+                        "ssh_pty": {
+                            "type": "boolean",
+                            "description": "If true, a PTY will be requested for the SSH connection. This defaults to false.",
+                            "default": false
+                        },
+                        "ssh_timeout": {
+                            "type": "string",
+                            "description": "The time to wait for SSH to become available. Packer uses this to determine when the machine has booted so this is usually quite long. Example value: 10m.",
+                            "default": "10m"
+                        },
+                        "ssh_agent_auth": {
+                            "type": "boolean",
+                            "description": "If true, the local SSH agent will be used to authenticate connections to the source instance. No temporary keypair will be created, and the values of ssh_password and ssh_private_key_file will be ignored. The environment variable SSH_AUTH_SOCK must be set for this option to work properly.",
+                            "default": false
+                        },
+                        "ssh_disable_agent_forwarding": {
+                            "type": "boolean",
+                            "description": "If true, SSH agent forwarding will be disabled. Defaults to false.",
+                            "default": false
+                        },
+                        "ssh_handshake_attempts": {
+                            "type": "integer",
+                            "description": "The number of handshakes to attempt with SSH once it can connect. This defaults to 10.",
+                            "default": 10
+                        },
+                        "ssh_bastion_host": {
+                            "type": "string",
+                            "description": "A bastion host to use for the actual SSH connection."
+                        },
+                        "ssh_bastion_port": {
+                            "type": "integer",
+                            "description": "The port of the bastion host. Defaults to 22.",
+                            "default": 22
+                        },
+                        "ssh_bastion_agent_auth": {
+                            "type": "boolean",
+                            "description": "If true, the local SSH agent will be used to authenticate with the bastion host. Defaults to false.",
+                            "default": false
+                        },
+                        "ssh_bastion_username": {
+                            "type": "string",
+                            "description": "The username to connect to the bastion host."
+                        },
+                        "ssh_bastion_password": {
+                            "type": "string",
+                            "description": "The password to use to authenticate with the bastion host."
+                        },
+                        "ssh_bastion_interactive": {
+                            "type": "boolean",
+                            "description": "If true, the keyboard-interactive used to authenticate with bastion host.",
+                            "default": false
+                        },
+                        "ssh_bastion_private_key_file": {
+                            "type": "string",
+                            "description": "Path to a PEM encoded private key file to use to authenticate with the bastion host. The ~ can be used in path and will be expanded to the home directory of current user.",
+                            "default": "~/.ssh/id_packer.key"
+                        },
+                        "ssh_file_transfer_method": {
+                            "type": "string",
+                            "description": "How to transfer files, Secure copy (default) or SSH File Transfer Protocol.",
+                            "default": "scp",
+                            "enum": ["sftp", "scp"]
+                        },
+                        "ssh_proxy_host": {
+                            "type": "string",
+                            "description": "A SOCKS proxy host to use for SSH connection"
+                        },
+                        "ssh_proxy_port": {
+                            "type": "integer",
+                            "description": "A port of the SOCKS proxy. Defaults to 1080.",
+                            "default": 1080
+                        },
+                        "ssh_proxy_username": {
+                            "type": "string",
+                            "description": "The optional username to authenticate with the proxy server."
+                        },
+                        "ssh_proxy_password": {
+                            "type": "string",
+                            "description": "The optional password to use to authenticate with the proxy server."
+                        },
+                        "ssh_keep_alive_interval": {
+                            "type": "string",
+                            "description": "How often to send 'keep alive' messages to the server. Set to a negative value (-1s) to disable. Example value: 10s. Defaults to 5s.",
+                            "default": "5s"
+                        },
+                        "ssh_read_write_timeout": {
+                            "type": "string",
+                            "description": "The amount of time to wait for a remote command to end. This might be useful if, for example, packer hangs on a connection after a reboot. Example: 5m. Disabled by default.",
+                            "default": "5s"
+                        },
+                        "ssh_remote_tunnels": {
+                            "type": "array",
+                            "items": {"type": "string"},
+                            "default": [""]
+                        },
+                        "ssh_public_key": {
+                            "type": "array"
+                        },
+                        "ssh_private_key": {
+                            "type": "array"
+                        }
+                    }
+                },{
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "description": "Type is Amazon Instance.",
+                            "default": "amazon-instance",
+                            "enum": ["amazon-instance"]
+                        },
+                        "$ref": "#/definitions/todo"
+                    }
+                },{
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "description": "Type is Amazon Chroot.",
+                            "default": "amazon-chroot",
+                            "enum": ["amazon-chroot"]
+                        },
+                        "$ref": "#/definitions/todo"
+                    }
+                },{
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "description": "Type is Amazon EBS Surrogate.",
+                            "default": "amazon-ebssurrogate",
+                            "enum": ["amazon-ebssurrogate"]
+                        },
+                        "$ref": "#/definitions/todo"
+                    }
+                },{
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "description": "Type is Alicloud ECS.",
+                            "default": "alicloud-ecs",
+                            "enum": ["alicloud-ecs"]
+                        },
+                        "$ref": "#/definitions/todo"
+                    }
+                },{
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "description": "Type is Azure ARM.",
+                            "default": "azure-arm",
+                            "enum": ["azure-arm"]
+                        },
+                        "$ref": "#/definitions/todo"
+                    }
+                },{
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "description": "Type is Azure Chroot.",
+                            "default": "azure-chroot",
+                            "enum": ["azure-chroot"]
+                        },
+                        "$ref": "#/definitions/todo"
+                    }
+                },{
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "description": "Type is CloudStack.",
+                            "default": "cloudstack",
+                            "enum": ["cloudstack"]
+                        },
+                        "$ref": "#/definitions/todo"
+                    }
+                },{
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "description": "Type is DigitalOcean.",
+                            "default": "digitalocean",
+                            "enum": ["digitalocean"]
+                        },
+                        "$ref": "#/definitions/todo"
+                    }
+                },{
+                    "type": "object",
+                    "required": ["target"],
+                    "properties": {
+                        "type": {
+                            "description": "Type is file.",
+                            "default": "file",
+                            "enum": ["file"]
+                        },
+                        "target": {
+                            "type": "string",
+                            "description": "The path for a file which will be copied as the artifact."
+                        },
+                        "source": {
+                            "type": "string",
+                            "description": "The path for a file which will be copied as the artifact."
+                        },
+                        "content": {
+                            "type": "string",
+                            "description": "The content that will be put into the artifact."
+                        }
+                    }
+                },{
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "description": "Type is Google Compute.",
+                            "default": "googlecompute",
+                            "enum": ["googlecompute"]
+                        },
+                        "$ref": "#/definitions/todo"
+                    }
+                },{
+                    "type": "object",
+                    "required": ["token", "image", "location", "server_type"],
+                    "properties": {
+                        "type": {
+                            "description": "Type is Hetzner Cloud.",
+                            "default": "hcloud",
+                            "enum": ["hcloud"]
+                        },
+                        "token": {
+                            "type": "string",
+                            "description": "ID or name of image to launch server from. Alternatively you can use image_filter."
+                        },
+                        "image": {
+                            "type": "string",
+                            "description": "ID or name of image to launch server from. Alternatively you can use image_filter."
+                        },
+                        "location": {
+                            "type": "string",
+                            "description": "The name of the location to launch the server in."
+                        },
+                        "server_type": {
+                            "type": "string",
+                            "description": "ID or name of the server type this server should be created with."
+                        },
+
+                        "endpoint": {
+                            "type": "string",
+                            "description": "",
+                            "default": ""
+                        },
+                        "image_filter": {
+                            "type": "object",
+                            "description": "Filters used to populate the filter field. https://www.packer.io/docs/builders/hetzner-cloud/#image_filter"
+                        },
+                        "server_name": {
+                            "type": "string",
+                            "description": "",
+                            "default": ""
+                        },
+                        "snapshot_name": {
+                            "type": "string",
+                            "description": "",
+                            "default": ""
+                        },
+                        "$ref": "#/definitions/todo"
+                    }
+                },{
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "description": "Type is HyperOne.",
+                            "default": "hyperone",
+                            "enum": ["hyperone"]
+                        },
+                        "$ref": "#/definitions/todo"
+                    }
+                },{
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "description": "Type is Hyper-V ISO.",
+                            "default": "hyperv-iso",
+                            "enum": ["hyperv-iso"]
+                        },
+                        "$ref": "#/definitions/todo"
+                    }
+                },{
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "description": "Type is Hyper-V VMCX.",
+                            "default": "hyperv-vmcx",
+                            "enum": ["hyperv-vmcx"]
+                        },
+                        "$ref": "#/definitions/todo"
+                    }
+                },{
+                    "type": "object",
+                    "required": ["linode_token", "image", "region", "instance_type"],
+                    "properties": {
+                        "type": {
+                            "description": "Type is Linode.",
+                            "default": "linode",
+                            "enum": ["linode"]
+                        },
+                        "linode_token": {
+                            "type": "string",
+                            "description": "The client TOKEN to use to access your account."
+                        },
+                        "image": {
+                            "type": "string",
+                            "description": "An Image ID to deploy the Disk from. Official Linode Images start with linode/, while user Images start with private/. See images for more information on the Images available for use. Examples are linode/debian9, linode/fedora28, linode/ubuntu18.04, linode/arch, and private/12345."
+                        },
+                        "region": {
+                            "type": "string",
+                            "description": "The id of the region to launch the Linode instance in. Images are available in all regions, but there will be less delay when deploying from the region where the image was taken. Examples are us-east, us-central, us-west, ap-south, ca-east, ap-northeast, eu-central, and eu-west.",
+                            "default": "us-east",
+                            "enum": ["us-east", "us-central", "us-west", "ap-south", "ca-east", "ap-northeast", "eu-central", "eu-west"]
+                        },
+                        "instance_type": {
+                            "type": "string",
+                            "description": "The Linode type defines the pricing, CPU, disk, and RAM specs of the instance. Examples are g6-nanode-1, g6-standard-2, g6-highmem-16, and g6-dedicated-16.",
+                            "default": "g6-standard-2"
+                        },
+
+                        "instance_label": {
+                            "type": "string",
+                            "description": "The name assigned to the Linode Instance."
+                        },
+                        "instance_tags": {
+                            "type": "array",
+                            "description": "Tags to apply to the instance when it is created.",
+                            "items": {"type": "string"},
+                            "default": [""]
+                        },
+                        "swap_size": {
+                            "type": "integer",
+                            "description": "The disk size (MiB) allocated for swap space.",
+                            "default": 0
+                        },
+                        "image_label": {
+                            "type": "string",
+                            "description": "The name of the resulting image that will appear in your account. Defaults to packer-{{timestamp}} (see configuration templates for more info)."
+                        },
+                        "image_description": {
+                            "type": "string",
+                            "description": "The description of the resulting image that will appear in your account. Defaults to ''."
+                        },
+                        "state_timeout": {
+                            "type": "string",
+                            "description": "The time to wait, as a duration string, for the Linode instance to enter a desired state (such as 'running') before timing out. The default state timeout is '5m'.",
+                            "default": "5m"
+                        }
+                    }
+                },{
+                    "type": "object",
+                    "required": ["config_file", "template_name", "template_environment_vars"],
+                    "properties": {
+                        "type": {
+                            "description": "Type is lxc.",
+                            "default": "lxc",
+                            "enum": ["lxc"]
+                        },
+                        "config_file": {
+                            "type": "string",
+                            "description": "The path to the lxc configuration file.",
+                            "default": "/path/to/config"
+                        },
+                        "template_name": {
+                            "type": "string",
+                            "description": "The LXC template name to use.",
+                            "default": ""
+                        },
+                        "template_environment_vars": {
+                            "type": "array",
+                            "description": "Environmental variables to use to build the template with.",
+                            "items": {"type": "string"}
+                        },
+
+                        "target_runlevel": {
+                            "type": "integer",
+                            "description": "If you're using runlevels instead of SystemD targets, specify it here.",
+                            "minimum": 1,
+                            "maximum": 5,
+                            "default": 3
+                        },
+                        "output_directory": {
+                            "type": "string",
+                            "description": "The directory in which to save the exported tar.gz. Defaults to output-<BuildName> in the current directory."
+                        },
+                        "container_name": {
+                            "type": "string",
+                            "description": "The name of the LXC container. Usually stored in /var/lib/lxc/containers/<container_name>. Defaults to packer-<BuildName>.",
+                            "default": "packer-BUILDNAME"
+                        },
+                        "command_wrapper": {
+                            "type": "string",
+                            "description": "Allows you to specify a wrapper command, such as ssh so you can execute packer builds on a remote host. Defaults to Empty.",
+                            "default": ""
+                        },
+                        "init_timeout": {
+                            "type": "string",
+                            "description": "The timeout in seconds to wait for the the container to start. Defaults to 20 seconds.",
+                            "default": "20s"
+                        },
+                        "template_parameters": {
+                            "type": "array",
+                            "description": "Options to pass to the given lxc-template command, usually located in /usr/share/lxc/templates/lxc-<template_name>. Note: This gets passed as ARGV to the template command. Ensure you have an array of strings, as a single string with spaces probably won't work. Defaults to [].",
+                            "items": {"type": "string"},
+                            "default": [""]
+                        },
+                        "create_options": {
+                            "type": "array",
+                            "description": "Options to pass to lxc-create. For instance, you can specify a custom LXC container configuration file with ['-f', '/path/to/lxc.conf']. Defaults to []. See man 1 lxc-create for available options.",
+                            "items": {"type": "string"},
+                            "default": [""]
+                        },
+                        "start_options": {
+                            "type": "array",
+                            "description": "Options to pass to lxc-start. For instance, you can override parameters from the LXC container configuration file via ['--define', 'KEY=VALUE']. Defaults to []. See man 1 lxc-start for available options.",
+                            "items": {"type": "string"},
+                            "default": [""]
+                        },
+                        "attach_options": {
+                            "type": "array",
+                            "description": "Options to pass to lxc-attach. For instance, you can prevent the container from inheriting the host machine's environment by specifying [\"--clear-env\"]. Defaults to []. See man 1 lxc-attach for available options.",
+                            "items": {"type": "string"},
+                            "default": [""]
+                        }
+                    }
+                },{
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "description": "Type is LXD.",
+                            "default": "lxd",
+                            "enum": ["lxd"]
+                        },
+                        "$ref": "#/definitions/todo"
+                    }
+                },{
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "description": "Type is Naver Cloud Platform.",
+                            "default": "ncloud",
+                            "enum": ["ncloud"]
+                        },
+                        "$ref": "#/definitions/todo"
+                    }
+                },{
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "description": "Type is NULL.",
+                            "default": "null",
+                            "enum": ["null"]
+                        },
+                        "$ref": "#/definitions/todo"
+                    }
+                },{
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "description": "Type is 1&1.",
+                            "default": "oneandone",
+                            "enum": ["oneandone"]
+                        },
+                        "$ref": "#/definitions/todo"
+                    }
+                },{
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "description": "Type is OpenStack.",
+                            "default": "openstack",
+                            "enum": ["openstack"]
+                        },
+                        "$ref": "#/definitions/todo"
+                    }
+                },{
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "description": "Type is Oracle Classic.",
+                            "default": "oracle-classic",
+                            "enum": ["oracle-classic"]
+                        },
+                        "$ref": "#/definitions/todo"
+                    }
+                },{
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "description": "Type is Oracle OCI.",
+                            "default": "oracle-oci",
+                            "enum": ["oracle-oci"]
+                        },
+                        "$ref": "#/definitions/todo"
+                    }
+                },{
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "description": "Type is Outscale BSU.",
+                            "default": "osc-bsu",
+                            "enum": ["osc-bsu"]
+                        },
+                        "$ref": "#/definitions/todo"
+                    }
+                },{
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "description": "Type is Outscale Chroot.",
+                            "default": "osc-chroot",
+                            "enum": ["osc-chroot"]
+                        },
+                        "$ref": "#/definitions/todo"
+                    }
+                },{
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "description": "Type is Outscale BSU Surrogate.",
+                            "default": "osc-bsusurrogate",
+                            "enum": ["osc-bsusurrogate"]
+                        },
+                        "$ref": "#/definitions/todo"
+                    }
+                },{
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "description": "Type is Outscale BSU Volume.",
+                            "default": "osc-bsuvolume",
+                            "enum": ["osc-bsuvolume"]
+                        },
+                        "$ref": "#/definitions/todo"
+                    }
+                },{
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "description": "Type is .",
+                            "default": "",
+                            "enum": [""]
+                        },
+                        "": {
+                            "type": "string",
+                            "description": "",
+                            "default": ""
+                        },
+                        "$ref": "#/definitions/todo"
+                    }
+                },{
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "description": "Type is Parallels Desktop for Mac ISO.",
+                            "default": "parallels-iso",
+                            "enum": ["parallels-iso"]
+                        },
+                        "$ref": "#/definitions/todo"
+                    }
+                },{
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "description": "Type is Parallels Desktop for Mac PVM.",
+                            "default": "parallels-pvm",
+                            "enum": ["parallels-pvm"]
+                        },
+                        "$ref": "#/definitions/todo"
+                    }
+                },{
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "description": "Type is ProfitBricks.",
+                            "default": "profitbricks",
+                            "enum": ["profitbricks"]
+                        },
+                        "$ref": "#/definitions/todo"
+                    }
+                },{
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "description": "Type is .",
+                            "default": "",
+                            "enum": [""]
+                        },
+                        "$ref": "#/definitions/todo"
+                    }
+                },{
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "description": "Type is ProxMox.",
+                            "default": "proxmox",
+                            "enum": ["proxmox"]
+                        },
+                        "": {
+                            "type": "string",
+                            "description": "",
+                            "default": ""
+                        },
+                        "$ref": "#/definitions/todo"
+                    }
+                },{
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "description": "Type is Scaleway.",
+                            "default": "scaleway",
+                            "enum": ["scaleway"]
+                        },
+                        "$ref": "#/definitions/todo"
+                    }
+                },{
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "description": "Type is Tencent.",
+                            "default": "tencentcloud-cvm",
+                            "enum": ["tencentcloud-cvm"]
+                        },
+                        "$ref": "#/definitions/todo"
+                    }
+                },{
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "description": "Type is JDCloud.",
+                            "default": "jdcloud",
+                            "enum": ["jdcloud"]
+                        },
+                        "$ref": "#/definitions/todo"
+                    }
+                },{
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "description": "Type is Triton.",
+                            "default": "triton",
+                            "enum": ["triton"]
+                        },
+                        "$ref": "#/definitions/todo"
+                    }
+                },{
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "description": "Type is UCloud.",
+                            "default": "ucloud-uhost",
+                            "enum": ["ucloud-uhost"]
+                        },
+                        "$ref": "#/definitions/todo"
+                    }
+                },{
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "description": "Type is Vagrant.",
+                            "default": "vagrant",
+                            "enum": ["vagrant"]
+                        },
+                        "$ref": "#/definitions/todo"
+                    }
+                },{
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "description": "Type is VirtualBox ISO",
+                            "default": "virtualbox-iso",
+                            "enum": ["virtualbox-iso"]
+                        },
+                        "$ref": "#/definitions/todo"
+                    }
+                },{
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "description": "Type is VirtualBox OVF",
+                            "default": "virtualbox-ovf",
+                            "enum": ["virtualbox-ovf"]
+                        },
+                        "$ref": "#/definitions/todo"
+                    }
+                },{
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "description": "Type is VirtualBox VM",
+                            "default": "virtualbox-vm",
+                            "enum": ["virtualbox-vm"]
+                        },
+                        "$ref": "#/definitions/todo"
+                    }
+                },{
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "description": "Type is VMWare ISO",
+                            "default": "vmware-iso",
+                            "enum": ["vmware-iso"]
+                        },
+                        "$ref": "#/definitions/todo"
+                    }
+                },{
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "description": "Type is VMWare VMX",
+                            "default": "vmware-vmx",
+                            "enum": ["vmware-vmx"]
+                        },
+                        "$ref": "#/definitions/todo"
+                    }
+                },{
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "description": "Type is VSphere ISO",
+                            "default": "vsphere-iso",
+                            "enum": ["vshpere-iso"]
+                        },
+                        "$ref": "#/definitions/todo"
+                    }
+                },{
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "description": "Type is VSphere Clone",
+                            "default": "vsphere-clone",
+                            "enum": ["vsphere-clone"]
+                        },
+                        "$ref": "#/definitions/todo"
+                    }
+                },{
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "description": "Type is Yandex Compute",
+                            "default": "yandex",
+                            "enum": ["yandex"]
+                        },
+                        "$ref": "#/definitions/todo"
+                    }
+                }]
+            }
+        }
+    }
+}

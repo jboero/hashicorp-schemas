@@ -595,7 +595,7 @@
         "cluster_addr": {
             "type": "string",
             "description": "The URL advertised to other Vault nodes for cluster communication.  Must be accessible by other nodes and Vault will ignore the schema to use HTTPS with its own certs.",
-            "default": "https://127.0.0.1:8201"
+            "default": "https://[THISHOST]:8201"
         },
         "cluster_name": {
             "type": "string",
