@@ -1056,7 +1056,9 @@
                             "default": "amazon-instance",
                             "enum": ["amazon-instance"]
                         },
-                        "$ref": "#/definitions/todo"
+                        "todo": {
+                            "$ref": "#/definitions/todo"
+                        }
                     }
                 },{
                     "type": "object",
@@ -1066,7 +1068,9 @@
                             "default": "amazon-chroot",
                             "enum": ["amazon-chroot"]
                         },
-                        "$ref": "#/definitions/todo"
+                        "todo": {
+                            "$ref": "#/definitions/todo"
+                        }
                     }
                 },{
                     "type": "object",
@@ -1076,7 +1080,9 @@
                             "default": "amazon-ebssurrogate",
                             "enum": ["amazon-ebssurrogate"]
                         },
-                        "$ref": "#/definitions/todo"
+                        "todo": {
+                            "$ref": "#/definitions/todo"
+                        }
                     }
                 },{
                     "type": "object",
@@ -1086,7 +1092,9 @@
                             "default": "alicloud-ecs",
                             "enum": ["alicloud-ecs"]
                         },
-                        "$ref": "#/definitions/todo"
+                        "todo": {
+                            "$ref": "#/definitions/todo"
+                        }
                     }
                 },{
                     "type": "object",
@@ -1096,7 +1104,9 @@
                             "default": "azure-arm",
                             "enum": ["azure-arm"]
                         },
-                        "$ref": "#/definitions/todo"
+                        "todo": {
+                            "$ref": "#/definitions/todo"
+                        }
                     }
                 },{
                     "type": "object",
@@ -1106,7 +1116,9 @@
                             "default": "azure-chroot",
                             "enum": ["azure-chroot"]
                         },
-                        "$ref": "#/definitions/todo"
+                        "todo": {
+                            "$ref": "#/definitions/todo"
+                        }
                     }
                 },{
                     "type": "object",
@@ -1116,7 +1128,9 @@
                             "default": "cloudstack",
                             "enum": ["cloudstack"]
                         },
-                        "$ref": "#/definitions/todo"
+                        "todo": {
+                            "$ref": "#/definitions/todo"
+                        }
                     }
                 },{
                     "type": "object",
@@ -1126,7 +1140,9 @@
                             "default": "digitalocean",
                             "enum": ["digitalocean"]
                         },
-                        "$ref": "#/definitions/todo"
+                        "todo": {
+                            "$ref": "#/definitions/todo"
+                        }
                     }
                 },{
                     "type": "object",
@@ -1152,13 +1168,275 @@
                     }
                 },{
                     "type": "object",
+                    "required": ["project_id", "source_image", "source_image_family", "zone"],
                     "properties": {
                         "type": {
                             "description": "Type is Google Compute.",
                             "default": "googlecompute",
                             "enum": ["googlecompute"]
                         },
-                        "$ref": "#/definitions/todo"
+                        "project_id": {
+                            "type": "string",
+                            "description": "The project ID that will be used to launch instances and store images."
+                        },
+                        "source_image": {
+                            "type": "string",
+                            "description": "",
+                            "default": "debian-8-jessie-v20161027"
+                        },
+                        "source_image_family": {
+                            "type": "string",
+                            "description": "The source image to use to create the new image from. You can also specify source_image_family instead. If both source_image and source_image_family are specified, source_image takes precedence.",
+                            "default": "debian-8"
+                        },
+                        "zone": {
+                            "type": "string",
+                            "description": "The zone in which to launch the instance used to create the image.",
+                            "default": "us-central1-a",
+                            "enum": [
+                                "asia-east1-a", "asia-east1-b", "asia-east1-c", 
+                                "asia-east2-a", "asia-east2-b", "asia-east2-c",
+                                "asia-northeast1-a", "asia-northeast1-b", "asia-northeast1-c", 
+                                "asia-northeast2-a", "asia-northeast2-b", "asia-northeast2-c", 
+                                "asia-northeast3-a", "asia-northeast3-b", "asia-northeast3-c", 
+                                "asia-south1-a", "asia-south1-b", "asia-south1-c", 
+                                "asia-southeast1-a", "asia-southeast1-b", "asia-southeast1-c", 
+                                "australia-southeast1-a", "australia-southeast1-b", "australia-southeast1-c", 
+                                "europe-north1-", "europe-north1-", "europe-north1-", 
+                                "europe-west1-b", "europe-west1-c", "europe-west1-d", 
+                                "europe-west2-a", "europe-west2-b", "europe-west2-c", 
+                                "europe-west3-a", "europe-west3-b", "europe-west3-c", 
+                                "europe-west4-a", "europe-west4-b", "europe-west4-c", 
+                                "europe-west6-a", "europe-west6-b", "europe-west6-c", 
+                                "northamerica-northeast1-a", "northamerica-northeast1-b", "northamerica-northeast1-c", 
+                                "southamerica-east1-a", "southamerica-east1-b", "southamerica-east1-c", 
+                                "us-central1-a", "us-central1-b", "us-central1-c", "us-central1-f", 
+                                "us-east1-b", "us-east1-c", "us-east1-d", 
+                                "us-east4-a", "us-east4-b", "us-east4-c", 
+                                "us-west1-a", "us-west1-b", "us-west1-c", 
+                                "us-west2-a", "us-west2-b", "us-west2-c", 
+                                "us-west3-a", "us-west3-b", "us-west3-c", 
+                                "us-west4-a", "us-west4-b", "us-west4-c"
+                            ]
+                        },
+
+                        "account_file": {
+                            "type": "string",
+                            "description": "The JSON file containing your account credentials. Not required if you run Packer on a GCE instance with a service account. Instructions for creating the file or using service accounts are above."
+                        },
+                        "accelerator_type": {
+                            "type": "string",
+                            "description": "Full or partial URL of the guest accelerator type. GPU accelerators can only be used with \"on_host_maintenance\": \"TERMINATE\" option set.",
+                            "default": "projects/project_id/zones/europe-west1-b/acceleratorTypes/nvidia-tesla-k80"
+                        },
+                        "accelerator_count": {
+                            "type": "integer",
+                            "description": "Number of guest accelerator cards to add to the launched instance.",
+                            "default": 0
+                        },
+                        "address": {
+                            "type": "string",
+                            "description": "The name of a pre-allocated static external IP address. Note, must be the name and not the actual IP address."
+                        },
+                        "disable_default_service_account": {
+                            "type": "boolean",
+                            "description": "If true, the default service account will not be used if service_account_email is not specified. Set this value to true and omit service_account_email to provision a VM with no service account.",
+                            "default": false
+                        },
+                        "disk_name": {
+                            "type": "string",
+                            "description": "The name of the disk, if unset the instance name will be used."
+                        },
+                        "disk_size": {
+                            "type": "integer",
+                            "description": "The size of the disk in GB. This defaults to 10, which is 10GB.",
+                            "default": 10
+                        },
+                        "disk_type": {
+                            "type": "string",
+                            "description": "Type of disk used to back your instance, like pd-ssd or pd-standard. Defaults to pd-standard.",
+                            "default": "pd-standard",
+                            "enum": ["pd-standard", "pd-ssd"]
+                        },
+                        "enable_secure_boot": {
+                            "type": "boolean",
+                            "description": "Create a Shielded VM image with Secure Boot enabled. It helps ensure that the system only runs authentic software by verifying the digital signature of all boot components, and halting the boot process if signature verification fails.",
+                            "default": true
+                        },
+                        "enable_vtpm": {
+                            "type": "boolean",
+                            "description": "Create a Shielded VM image with virtual trusted platform module Measured Boot enabled. A vTPM is a virtualized trusted platform module, which is a specialized computer chip you can use to protect objects, like keys and certificates, that you use to authenticate access to your system.",
+                            "default": true
+                        },
+                        "enable_integrity_monitoring": {
+                            "type": "boolean",
+                            "description": "Integrity monitoring helps you understand and make decisions about the state of your VM instances. Note: integrity monitoring relies on having vTPM enabled.",
+                            "default": true
+                        },
+                        "image_name": {
+                            "type": "string",
+                            "description": "The unique name of the resulting image. Defaults to packer-{{timestamp}}.",
+                            "default": "packer-TIMESTAMP"
+                        },
+                        "image_description": {
+                            "type": "string",
+                            "description": "The description of the resulting image.",
+                            "default": ""
+                        },
+                        "image_encryption_key": {
+                            "type": "object",
+                            "description": "Image encryption key to apply to the created image.",
+                            "properties":{
+                                "oneOf": [{
+                                    "hmsKeyName": {
+                                        "type": "string",
+                                        "default": "projects/${project}/locations/${region}/keyRings/computeEngine/cryptoKeys/computeEngine/cryptoKeyVersions/4"
+                                    },
+                                    "RawKey": {
+                                        "type": "string",
+                                        "default": "[YOUR 256 BIT KEY in base64]"
+                                    }
+                                }]
+                            },
+                            "default": {"hmsKeyName": "projects/${project}/locations/${region}/keyRings/computeEngine/cryptoKeys/computeEngine/cryptoKeyVersions/4"}
+                        },
+                        "image_family": {
+                            "type": "string",
+                            "description": " The name of the image family to which the resulting image belongs. You can create disks by specifying an image family instead of a specific image name. The image family always returns its latest image that is not deprecated."
+                        },
+                        "image_labels": {
+                            "type": "object",
+                            "description": "Map of key/value pair labels to apply to the created image.",
+                            "default": {"key": "value"}
+                        },
+                        "image_licenses": {
+                            "type": "array",
+                            "description": "Licenses to apply to the created image.",
+                            "items": {
+                                "type": "string"
+                            },
+                            "default": ["YOURLICENSE1"]
+                        },
+                        "instance_name": {
+                            "type": "string",
+                            "description": "A name to give the launched instance. Beware that this must be unique. Defaults to packer-{{uuid}}.",
+                            "default": "packer-UUID"
+                        },
+                        "labels": {
+                            "type": "object",
+                            "description": "Map key/value pair labels to apply to the launched instance.",
+                            "default": {"key": "value"}
+                        },
+                        "machine_type": {
+                            "type": "string",
+                            "description": "The machine type. Defaults to \"n1-standard-1\".",
+                            "default": "n1-standard-1"
+                        },
+                        "metadata": {
+                            "type": "object",
+                            "description": "Metadata applied to the launched instance.",
+                            "default": {"key": "value"}
+                        },
+                        "metadata_files": {
+                            "type": "object",
+                            "description": "Metadata applied to the launched instance. Values are files.",
+                            "default": {"key": "/path/to/your/metdata"}
+                        },
+                        "min_cpu_platform": {
+                            "type": "string",
+                            "description": "",
+                            "default": ""
+                        },
+                        "min_cpu_platform": {
+                            "type": "string",
+                            "description": "A Minimum CPU Platform for VM Instance. Availability and default CPU platforms vary across zones, based on the hardware available in each GCP zone. Details",
+                            "default": "Intel Skylake",
+                            "enum": ["Intel Skylake", "Intel Sandy Bridge", "Intel Ivy Bridge", "Intel Haswell", "Intel Broadwell", "Intel Cascade Lake"]
+                        },
+                        "network": {
+                            "type": "string",
+                            "description": "The Google Compute network id or URL to use for the launched instance. Defaults to \"default\". If the value is not a URL, it will be interpolated to projects/((network_project_id))/global/networks/((network)). This value is not required if a subnet is specified.",
+                            "default": "default"
+                        },
+                        "network_project_id": {
+                            "type": "string",
+                            "description": "The project ID for the network and subnetwork to use for launched instance. Defaults to project_id.",
+                            "default": "project_id"
+                        },
+                        "omit_external_ip": {
+                            "type": "boolean",
+                            "description": "If true, the instance will not have an external IP. use_internal_ip must be true if this property is true.",
+                            "default": false
+                        },
+                        "on_host_maintenance": {
+                            "type": "string",
+                            "description": "Sets Host Maintenance Option. Valid choices are MIGRATE and TERMINATE. Please see GCE Instance Scheduling Options, as not all machine_types support MIGRATE (i.e. machines with GPUs). If preemptible is true this can only be TERMINATE. If preemptible is false, it defaults to MIGRATE",
+                            "default": "MIGRATE",
+                            "enum": ["MIGRATE", "TERMINATE"]
+                        },
+                        "preemptible": {
+                            "type": "boolean",
+                            "description": "If true, launch a preemptible instance.",
+                            "default": false
+                        },
+                        "state_timeout": {
+                            "type": "string",
+                            "description": "The time to wait for instance state changes. Defaults to \"5m\".",
+                            "default": "5m"
+                        },
+                        "region": {
+                            "type": "string",
+                            "description": "The region in which to launch the instance. Defaults to the region hosting the specified zone.",
+                            "default": "us-west1",
+                            "enum": ["asia-east1", "asia-east2", "asia-northeast1", "asia-northeast-2", "asia-northeast3", "asia-south1", 
+                                "asia-southeast1", "australia-southeast1", "europe-north1", "europe-west1", "europe-west2", "europe-west3", "europe-west4",
+                                "europe-west6", "northamerica-northeast1", "southamerica-east1", "us-central1", "us-east1",
+                                "us-east4", "us-west1", "us-west2", "us-west3", "us-west4"]
+                        },
+                        "scopes": {
+                            "type": "array",
+                            "description": "The service account scopes for launched instance.",
+                            "default": [
+                                "https://www.googleapis.com/auth/userinfo.email",
+                                "https://www.googleapis.com/auth/compute",
+                                "https://www.googleapis.com/auth/devstorage.full_control"
+                              ]                              
+                        },
+                        "service_account_email": {
+                            "type": "string",
+                            "description": "The service account to be used for launched instance. Defaults to the project's default service account unless disable_default_service_account is true.",
+                            "default": "default"
+                        },
+                        "source_image_project_id": {
+                            "type": "array",
+                            "description": "A list of project IDs to search for the source image. Packer will search the first project ID in the list first, and fall back to the next in the list, until it finds the source image.",
+                            "default": ["project-id"]
+                        },
+                        "startup_script_file": {
+                            "type": "string",
+                            "description": "The path to a startup script to run on the VM from which the image will be made.",
+                            "default": "/path/inside/VM/script.sh"
+                        },
+                        "subnetwork": {
+                            "type": "string",
+                            "description": "The Google Compute subnetwork id or URL to use for the launched instance. Only required if the network has been created with custom subnetting. Note, the region of the subnetwork must match the region or zone in which the VM is launched. If the value is not a URL, it will be interpolated to projects/((network_project_id))/regions/((region))/subnetworks/((subnetwork))",
+                            "default": "/projects/project_id/regions/region/subnetworks/subnetwork"
+                        },
+                        "tags": {
+                            "type": "array",
+                            "description": "Assign network tags to apply firewall rules to VM instance.",
+                            "default": ["sample-tag"]
+                        },
+                        "use_internal_ip": {
+                            "type": "boolean",
+                            "description": "If true, use the instance's internal IP instead of its external IP during building.",
+                            "default": true
+                        },
+                        "vault_gcp_oauth_engine": {
+                            "type": "string",
+                            "description": "Can be set instead of account_file. If set, this builder will use HashiCorp Vault to generate an Oauth token for authenticating against Google's cloud. The value should be the path of the token generator within vault. For information on how to configure your Vault + GCP engine to produce Oauth tokens, see https://www.vaultproject.io/docs/auth/gcp You must have the environment variables VAULT_ADDR and VAULT_TOKEN set, along with any other relevant variables for accessing your vault instance. For more information, see the Vault docs: https://www.vaultproject.io/docs/commands/#environment-variables",
+                            "default": "vault_gcp_oauth_engine"
+                        }
                     }
                 },{
                     "type": "object",
@@ -1205,7 +1483,9 @@
                             "description": "",
                             "default": ""
                         },
-                        "$ref": "#/definitions/todo"
+                        "todo": {
+                            "$ref": "#/definitions/todo"
+                        }
                     }
                 },{
                     "type": "object",
@@ -1215,7 +1495,9 @@
                             "default": "hyperone",
                             "enum": ["hyperone"]
                         },
-                        "$ref": "#/definitions/todo"
+                        "todo": {
+                            "$ref": "#/definitions/todo"
+                        }
                     }
                 },{
                     "type": "object",
@@ -1225,7 +1507,9 @@
                             "default": "hyperv-iso",
                             "enum": ["hyperv-iso"]
                         },
-                        "$ref": "#/definitions/todo"
+                        "todo": {
+                            "$ref": "#/definitions/todo"
+                        }
                     }
                 },{
                     "type": "object",
@@ -1235,7 +1519,9 @@
                             "default": "hyperv-vmcx",
                             "enum": ["hyperv-vmcx"]
                         },
-                        "$ref": "#/definitions/todo"
+                        "todo": {
+                            "$ref": "#/definitions/todo"
+                        }
                     }
                 },{
                     "type": "object",
@@ -1379,7 +1665,9 @@
                             "default": "lxd",
                             "enum": ["lxd"]
                         },
-                        "$ref": "#/definitions/todo"
+                        "todo": {
+                            "$ref": "#/definitions/todo"
+                        }
                     }
                 },{
                     "type": "object",
@@ -1389,7 +1677,9 @@
                             "default": "ncloud",
                             "enum": ["ncloud"]
                         },
-                        "$ref": "#/definitions/todo"
+                        "todo": {
+                            "$ref": "#/definitions/todo"
+                        }
                     }
                 },{
                     "type": "object",
@@ -1399,7 +1689,9 @@
                             "default": "null",
                             "enum": ["null"]
                         },
-                        "$ref": "#/definitions/todo"
+                        "todo": {
+                            "$ref": "#/definitions/todo"
+                        }
                     }
                 },{
                     "type": "object",
@@ -1409,7 +1701,9 @@
                             "default": "oneandone",
                             "enum": ["oneandone"]
                         },
-                        "$ref": "#/definitions/todo"
+                        "todo": {
+                            "$ref": "#/definitions/todo"
+                        }
                     }
                 },{
                     "type": "object",
@@ -1419,7 +1713,9 @@
                             "default": "openstack",
                             "enum": ["openstack"]
                         },
-                        "$ref": "#/definitions/todo"
+                        "todo": {
+                            "$ref": "#/definitions/todo"
+                        }
                     }
                 },{
                     "type": "object",
@@ -1429,7 +1725,9 @@
                             "default": "oracle-classic",
                             "enum": ["oracle-classic"]
                         },
-                        "$ref": "#/definitions/todo"
+                        "todo": {
+                            "$ref": "#/definitions/todo"
+                        }
                     }
                 },{
                     "type": "object",
@@ -1439,7 +1737,9 @@
                             "default": "oracle-oci",
                             "enum": ["oracle-oci"]
                         },
-                        "$ref": "#/definitions/todo"
+                        "todo": {
+                            "$ref": "#/definitions/todo"
+                        }
                     }
                 },{
                     "type": "object",
@@ -1449,7 +1749,9 @@
                             "default": "osc-bsu",
                             "enum": ["osc-bsu"]
                         },
-                        "$ref": "#/definitions/todo"
+                        "todo": {
+                            "$ref": "#/definitions/todo"
+                        }
                     }
                 },{
                     "type": "object",
@@ -1459,7 +1761,9 @@
                             "default": "osc-chroot",
                             "enum": ["osc-chroot"]
                         },
-                        "$ref": "#/definitions/todo"
+                        "todo": {
+                            "$ref": "#/definitions/todo"
+                        }
                     }
                 },{
                     "type": "object",
@@ -1469,7 +1773,9 @@
                             "default": "osc-bsusurrogate",
                             "enum": ["osc-bsusurrogate"]
                         },
-                        "$ref": "#/definitions/todo"
+                        "todo": {
+                            "$ref": "#/definitions/todo"
+                        }
                     }
                 },{
                     "type": "object",
@@ -1479,7 +1785,9 @@
                             "default": "osc-bsuvolume",
                             "enum": ["osc-bsuvolume"]
                         },
-                        "$ref": "#/definitions/todo"
+                        "todo": {
+                            "$ref": "#/definitions/todo"
+                        }
                     }
                 },{
                     "type": "object",
@@ -1494,7 +1802,9 @@
                             "description": "",
                             "default": ""
                         },
-                        "$ref": "#/definitions/todo"
+                        "todo": {
+                            "$ref": "#/definitions/todo"
+                        }
                     }
                 },{
                     "type": "object",
@@ -1504,7 +1814,9 @@
                             "default": "parallels-iso",
                             "enum": ["parallels-iso"]
                         },
-                        "$ref": "#/definitions/todo"
+                        "todo": {
+                            "$ref": "#/definitions/todo"
+                        }
                     }
                 },{
                     "type": "object",
@@ -1514,7 +1826,9 @@
                             "default": "parallels-pvm",
                             "enum": ["parallels-pvm"]
                         },
-                        "$ref": "#/definitions/todo"
+                        "todo": {
+                            "$ref": "#/definitions/todo"
+                        }
                     }
                 },{
                     "type": "object",
@@ -1524,7 +1838,9 @@
                             "default": "profitbricks",
                             "enum": ["profitbricks"]
                         },
-                        "$ref": "#/definitions/todo"
+                        "todo": {
+                            "$ref": "#/definitions/todo"
+                        }
                     }
                 },{
                     "type": "object",
@@ -1534,7 +1850,9 @@
                             "default": "",
                             "enum": [""]
                         },
-                        "$ref": "#/definitions/todo"
+                        "todo": {
+                            "$ref": "#/definitions/todo"
+                        }
                     }
                 },{
                     "type": "object",
@@ -1549,7 +1867,9 @@
                             "description": "",
                             "default": ""
                         },
-                        "$ref": "#/definitions/todo"
+                        "todo": {
+                            "$ref": "#/definitions/todo"
+                        }
                     }
                 },{
                     "type": "object",
@@ -1559,7 +1879,9 @@
                             "default": "scaleway",
                             "enum": ["scaleway"]
                         },
-                        "$ref": "#/definitions/todo"
+                        "todo": {
+                            "$ref": "#/definitions/todo"
+                        }
                     }
                 },{
                     "type": "object",
@@ -1569,7 +1891,9 @@
                             "default": "tencentcloud-cvm",
                             "enum": ["tencentcloud-cvm"]
                         },
-                        "$ref": "#/definitions/todo"
+                        "todo": {
+                            "$ref": "#/definitions/todo"
+                        }
                     }
                 },{
                     "type": "object",
@@ -1579,7 +1903,9 @@
                             "default": "jdcloud",
                             "enum": ["jdcloud"]
                         },
-                        "$ref": "#/definitions/todo"
+                        "todo": {
+                            "$ref": "#/definitions/todo"
+                        }
                     }
                 },{
                     "type": "object",
@@ -1589,7 +1915,9 @@
                             "default": "triton",
                             "enum": ["triton"]
                         },
-                        "$ref": "#/definitions/todo"
+                        "todo": {
+                            "$ref": "#/definitions/todo"
+                        }
                     }
                 },{
                     "type": "object",
@@ -1599,7 +1927,9 @@
                             "default": "ucloud-uhost",
                             "enum": ["ucloud-uhost"]
                         },
-                        "$ref": "#/definitions/todo"
+                        "todo": {
+                            "$ref": "#/definitions/todo"
+                        }
                     }
                 },{
                     "type": "object",
@@ -1609,7 +1939,9 @@
                             "default": "vagrant",
                             "enum": ["vagrant"]
                         },
-                        "$ref": "#/definitions/todo"
+                        "todo": {
+                            "$ref": "#/definitions/todo"
+                        }
                     }
                 },{
                     "type": "object",
@@ -1619,7 +1951,9 @@
                             "default": "virtualbox-iso",
                             "enum": ["virtualbox-iso"]
                         },
-                        "$ref": "#/definitions/todo"
+                        "todo": {
+                            "$ref": "#/definitions/todo"
+                        }
                     }
                 },{
                     "type": "object",
@@ -1629,7 +1963,9 @@
                             "default": "virtualbox-ovf",
                             "enum": ["virtualbox-ovf"]
                         },
-                        "$ref": "#/definitions/todo"
+                        "todo": {
+                            "$ref": "#/definitions/todo"
+                        }
                     }
                 },{
                     "type": "object",
@@ -1639,7 +1975,9 @@
                             "default": "virtualbox-vm",
                             "enum": ["virtualbox-vm"]
                         },
-                        "$ref": "#/definitions/todo"
+                        "todo": {
+                            "$ref": "#/definitions/todo"
+                        }
                     }
                 },{
                     "type": "object",
@@ -1649,7 +1987,9 @@
                             "default": "vmware-iso",
                             "enum": ["vmware-iso"]
                         },
-                        "$ref": "#/definitions/todo"
+                        "todo": {
+                            "$ref": "#/definitions/todo"
+                        }
                     }
                 },{
                     "type": "object",
@@ -1659,7 +1999,9 @@
                             "default": "vmware-vmx",
                             "enum": ["vmware-vmx"]
                         },
-                        "$ref": "#/definitions/todo"
+                        "todo": {
+                            "$ref": "#/definitions/todo"
+                        }
                     }
                 },{
                     "type": "object",
@@ -1669,7 +2011,9 @@
                             "default": "vsphere-iso",
                             "enum": ["vshpere-iso"]
                         },
-                        "$ref": "#/definitions/todo"
+                        "todo": {
+                            "$ref": "#/definitions/todo"
+                        }
                     }
                 },{
                     "type": "object",
@@ -1679,7 +2023,9 @@
                             "default": "vsphere-clone",
                             "enum": ["vsphere-clone"]
                         },
-                        "$ref": "#/definitions/todo"
+                        "todo": {
+                            "$ref": "#/definitions/todo"
+                        }
                     }
                 },{
                     "type": "object",
@@ -1689,7 +2035,9 @@
                             "default": "yandex",
                             "enum": ["yandex"]
                         },
-                        "$ref": "#/definitions/todo"
+                        "todo": {
+                            "$ref": "#/definitions/todo"
+                        }
                     }
                 }]
             }
