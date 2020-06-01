@@ -9,4 +9,4 @@ Note that some objects have a "requires" property which helpfully tells you when
     [CTRL-SPACE]
 }
 ```
-![VS Code Packer Demo](content/packer.gif)
+![VS Code Packer Demo](/content/packer.gif)
