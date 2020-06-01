@@ -8,7 +8,7 @@ Hashicorp schemas and unofficial specs for payload validation and autocompletion
 }
 ```
 
-For VS Code, enable a schema by defining the "$schema" value at the root of any new JSON file or configure json schemas for directory matching in the settings.json file:
+For VS Code, enable a schema by defining the "$schema" value at the root of any new JSON file or configure json schemas for directory matching in the settings.json file.  Note that some objects have a "requires" property which helpfully tells you when some missing attributes are required. Unfortunately in VS Code autocompletion the validation on new objects fails as they don't contain the required properties. Sometimes you won't find the object in your "type" autocompletion list. Just type it anyway and Code will figure out the schema after you do.:
 ```
 {
     "editor.suggestSelection": "first",
