@@ -1,5 +1,5 @@
 {
-    "$schema": "/home/jboero/code/hashicorp-schemas/JSON/packer/1.5/manifest.json",
+    "$schema": "https://github.com/jboero/hashicorp-schemas/raw/master/JSON/packer/1.5/manifest.json",
     "builders": [
         {
             "type": "amazon-ebs",
@@ -27,8 +27,12 @@
             "disk_interface": "virtio",
             "net_device": "e1000"
         },{
-            "type": "googlecompute"
-            
+            "type": "googlecompute",
+            "zone": "europe-west4-a",
+            "image_description": "",
+            "project_id": "my-project",
+            "source_image": "rhel-8",
+            "source_image_family": "rhel-8"
         }
     ]
 }
