@@ -25,7 +25,42 @@
             "boot_wait": "10s",
             "disk_discard": "ignore",
             "disk_interface": "virtio",
-            "net_device": "e1000"
+            "net_device": "e1000",
+            "provisioners": [
+                {
+                    "type": "breakpoint",
+                    "inline": [
+                        "echo foo"
+                    ]
+                }
+            ]
+        },{
+            "type": "qemu",
+            "accelerator": "kvm",
+            "boot_command": [
+                "<tab><wait>"
+            ],
+            "provisioners": [
+                {
+                    "type": "shell",
+                    "inline": [
+                        "echo foo"
+                    ],
+                    "binary": false,
+                    "max_retries": 2,
+                    "environment_vars": [
+                        "key=value"
+                    ],
+                    "timeout": "20m"
+                },{
+                    "source": "/path/to/local/file",
+                    "type": "file",
+                    "destination": "/path/on/vm",
+                    "direction": "upload",
+                    "pause_before": "1s",
+                    "timeout": "5s"
+                }
+            ]
         },{
             "type": "googlecompute",
             "zone": "europe-west4-a",
