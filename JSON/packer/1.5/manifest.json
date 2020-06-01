@@ -163,7 +163,7 @@
                         "memory": {
                             "type": "integer",
                             "description": "The amount of memory to use when building the VM in megabytes. This defaults to 512 megabytes.",
-                            "default": "512"
+                            "default": 512
                         },
                         "net_device": {
                             "type": "string",
@@ -173,8 +173,7 @@
                         },
                         "output_directory": {
                             "type": "string",
-                            "description": "This is the path to the directory where the resulting virtual machine will be created. This may be relative or absolute. If relative, the path is relative to the working directory when packer is executed. This directory must not exist or be empty prior to running the builder. By default this is output-BUILDNAME where 'BUILDNAME' is the name of the build.",
-                            "default": ""
+                            "description": "This is the path to the directory where the resulting virtual machine will be created. This may be relative or absolute. If relative, the path is relative to the working directory when packer is executed. This directory must not exist or be empty prior to running the builder. By default this is output-BUILDNAME where 'BUILDNAME' is the name of the build."
                         },
                         "qemuargs": {
                             "type": "array",
@@ -1344,11 +1343,6 @@
                         },
                         "min_cpu_platform": {
                             "type": "string",
-                            "description": "",
-                            "default": ""
-                        },
-                        "min_cpu_platform": {
-                            "type": "string",
                             "description": "A Minimum CPU Platform for VM Instance. Availability and default CPU platforms vary across zones, based on the hardware available in each GCP zone. Details",
                             "default": "Intel Skylake",
                             "enum": ["Intel Skylake", "Intel Sandy Bridge", "Intel Ivy Bridge", "Intel Haswell", "Intel Broadwell", "Intel Cascade Lake"]
@@ -1793,23 +1787,6 @@
                     "type": "object",
                     "properties": {
                         "type": {
-                            "description": "Type is .",
-                            "default": "",
-                            "enum": [""]
-                        },
-                        "": {
-                            "type": "string",
-                            "description": "",
-                            "default": ""
-                        },
-                        "todo": {
-                            "$ref": "#/definitions/todo"
-                        }
-                    }
-                },{
-                    "type": "object",
-                    "properties": {
-                        "type": {
                             "description": "Type is Parallels Desktop for Mac ISO.",
                             "default": "parallels-iso",
                             "enum": ["parallels-iso"]
@@ -1837,18 +1814,6 @@
                             "description": "Type is ProfitBricks.",
                             "default": "profitbricks",
                             "enum": ["profitbricks"]
-                        },
-                        "todo": {
-                            "$ref": "#/definitions/todo"
-                        }
-                    }
-                },{
-                    "type": "object",
-                    "properties": {
-                        "type": {
-                            "description": "Type is .",
-                            "default": "",
-                            "enum": [""]
                         },
                         "todo": {
                             "$ref": "#/definitions/todo"
