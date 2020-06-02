@@ -8,330 +8,11 @@
             "description": "This part isn't complete.  Please feel free to contribute at https://github.com/jboero/hashicorp-schemas/blob/master/JSON/packer/1.5/manifest.json",
             "default": "https://github.com/jboero/hashicorp-schemas/blob/master/JSON/packer/1.5/manifest.json"
         },
-        "provisioners": {
-            "type": "array",
-            "items": {
-                "anyOf": [{
-                    "type": "object",
-                    "properties": {
-                        "type": {
-                            "default": "ansible-local",
-                            "enum": ["ansible-local"]
-                        },
-                        "todo": {
-                            "$ref": "#/definitions/todo"
-                        }
-                    }
-                },{
-                    "type": "object",
-                    "properties": {
-                        "type": {
-                            "default": "ansible",
-                            "enum": ["ansible"]
-                        },
-                        "todo": {
-                            "$ref": "#/definitions/todo"
-                        }
-                    }
-                },{
-                    "type": "object",
-                    "properties": {
-                        "type": {
-                            "default": "breakpoint",
-                            "enum": ["breakpoint"]
-                        },
-                        "todo": {
-                            "$ref": "#/definitions/todo"
-                        }
-                    }
-                },{
-                    "type": "object",
-                    "properties": {
-                        "type": {
-                            "default": "shell",
-                            "enum": ["shell"]
-                        },
-                        "todo": {
-                            "$ref": "#/definitions/todo"
-                        }
-                    }
-                },{
-                    "type": "object",
-                    "properties": {
-                        "type": {
-                            "default": "chef-client",
-                            "enum": ["chef-solo"]
-                        },
-                        "todo": {
-                            "$ref": "#/definitions/todo"
-                        }
-                    }
-                },{
-                    "type": "object",
-                    "properties": {
-                        "type": {
-                            "default": "converge",
-                            "enum": ["converge"]
-                        },
-                        "todo": {
-                            "$ref": "#/definitions/todo"
-                        }
-                    }
-                },{
-                    "type": "object",
-                    "required": ["source", "destination", "direction"],
-                    "properties": {
-                        "type": {
-                            "default": "file",
-                            "enum": ["file"]
-                        },
-                        "source": {
-                            "type": "string",
-                            "description": "The path to a local file or directory to upload to the machine. The path can be absolute or relative. If it is relative, it is relative to the working directory when Packer is executed. If this is a directory, the existence of a trailing slash is important. Read below on uploading directories.",
-                            "default": "/path/to/local/file"
-                        },
-                        "destination": {
-                            "type": "string",
-                            "description": "The path where the file will be uploaded to in the machine. This value must be a writable location and any parent directories must already exist. If the provisioning user (generally not root) cannot write to this directory, you will receive a \"Permission Denied\" error. If the source is a file, it's a good idea to make the destination a file as well, but if you set your destination as a directory, at least make sure that the destination ends in a trailing slash so that Packer knows to use the source's basename in the final upload path. Failure to do so may cause Packer to fail on file uploads. If the destination file already exists, it will be overwritten.",
-                            "default": "/path/on/vm"
-                        },
-                        "direction": {
-                            "type": "string",
-                            "description": "The direction of the file transfer. This defaults to \"upload\". If it is set to \"download\" then the file \"source\" in the machine will be downloaded locally to \"destination\"",
-                            "default": "upload",
-                            "enum": ["upload", "download"]
-                        },
-                        "generated": {
-                            "type": "boolean",
-                            "description": "For advanced users only. If true, check the file existence only before uploading, rather than upon pre-build validation. This allows to upload files created on-the-fly. This defaults to false. We don't recommend using this feature, since it can cause Packer to become dependent on system state. We would prefer you generate your files before the Packer run, but realize that there are situations where this may be unavoidable.",
-                            "default": false
-                        },
-                        "pause_before": {"default": "5s"},
-                        "max_retries": {"default": 0},
-                        "only": {"default": [""]},
-                        "override": {},
-                        "timeout": {"default": "20m"}
-                    }
-                },{
-                    "type": "object",
-                    "properties": {
-                        "type": {
-                            "default": "inspec",
-                            "enum": ["inspec"]
-                        },
-                        "todo": {
-                            "$ref": "#/definitions/todo"
-                        }
-                    }
-                },{
-                    "type": "object",
-                    "properties": {
-                        "type": {
-                            "default": "powershell",
-                            "enum": ["powershell"]
-                        },
-                        "todo": {
-                            "$ref": "#/definitions/todo"
-                        }
-                    }
-                },{
-                    "type": "object",
-                    "properties": {
-                        "type": {
-                            "default": "puppet-masterless",
-                            "enum": ["puppet-masterless"]
-                        },
-                        "todo": {
-                            "$ref": "#/definitions/todo"
-                        }
-                    }
-                },{
-                    "type": "object",
-                    "properties": {
-                        "type": {
-                            "default": "puppet-server",
-                            "enum": ["puppet-server"]
-                        },
-                        "todo": {
-                            "$ref": "#/definitions/todo"
-                        }
-                    }
-                },{
-                    "type": "object",
-                    "properties": {
-                        "type": {
-                            "default": "salt-masterless",
-                            "enum": ["salt-masterless"]
-                        },
-                        "todo": {
-                            "$ref": "#/definitions/todo"
-                        }
-                    }
-                },{
-                    "type": "object",
-                    "properties": {
-                        "type": {
-                            "default": "shell",
-                            "enum": ["shell"]
-                        },
-                        "oneOf": [{
-                            "inline": {
-                                "type": "array",
-                                "description": "This is an array of commands to execute. The commands are concatenated by newlines and turned into a single file, so they are all executed within the same context. This allows you to change directories in one command and use something in the directory in the next and so on. Inline scripts are the easiest way to pull off simple tasks within the machine.",
-                                "items": {"type": "string"},
-                                "default": ["your command1", "your command2"]
-                            }
-                        },{
-                            "script": {
-                                "type": "string",
-                                "description": "The path to a script to upload and execute in the machine. This path can be absolute or relative. If it is relative, it is relative to the working directory when Packer is executed.",
-                                "default": "your command"
-                            }
-                        },{
-                            "scripts": {
-                                "type": "array",
-                                "description": "An array of scripts to execute. The scripts will be uploaded and executed in the order specified. Each script is executed in isolation, so state such as variables from one script won't carry on to the next.",
-                                "items": {"type": "string"},
-                                "default": ["/path/to/your/script.sh"]
-                            }
-                        }],
-                        "binary": {
-                            "type": "boolean",
-                            "description": "If true, specifies that the script(s) are binary files, and Packer should therefore not convert Windows line endings to Unix line endings (if there are any). By default this is false.",
-                            "default": false
-                        },
-                        "valid_exit_codes": {
-                            "type": "array",
-                            "description": "Valid exit codes for the script. By default this is just 0.",
-                            "items": {"type": "integer"},
-                            "default": [0]
-                        },
-                        "environment_vars": {
-                            "type": "array",
-                            "description": "An array of key/value pairs to inject prior to the execute_command. The format should be key=value. Packer injects some environmental variables by default into the environment, as well, which are covered in the section below.",
-                            "items": {"type": "string"},
-                            "default": ["key=value"]
-                        },
-                        "env_var_format": {
-                            "type": "string",
-                            "description": "When we parse the environment_vars that you provide, this gives us a string template to use in order to make sure that we are setting the environment vars correctly. By default it is \"%s='%s' \". When used in conjunction with use_env_var_file the default is \"export %s='%s'\n\"",
-                            "default": "export %s='%s'\\n"
-                        },
-                        "use_env_var_file": {
-                            "type": "boolean",
-                            "description": "If true, Packer will write your environment variables to a tempfile and source them from that file, rather than declaring them inline in our execute_command. The default execute_command will be chmod +x {{.Path}}; . {{.EnvVarFile}} && {{.Path}}. This option is unnecessary for most cases, but if you have extra quoting in your custom execute_command, then this may be required for proper script execution. Default: false.",
-                            "default": false
-                        },
-                        "execute_command": {
-                            "type": "string",
-                            "description": "The command to use to execute the script. By default this is chmod +x {{ .Path }}; {{ .Vars }} {{ .Path }}, unless the user has set \"use_env_var_file\": true -- in that case, the default execute_command is chmod +x {{.Path}}; . {{.EnvVarFile}} && {{.Path}}. This is a template engine. Therefore, you may use user variables and template functions in this field. In addition, there are three available extra variables:"
-                        },
-                        "expect_disconnect": {
-                            "type": "boolean",
-                            "description": "Defaults to false. When true, allow the server to disconnect from Packer without throwing an error. A disconnect might happen if you restart the ssh server or reboot the host.",
-                            "default": false
-                        },
-                        "inline_shebang": {
-                            "type": "string",
-                            "description": "The shebang value to use when running commands specified by inline. By default, this is /bin/sh -e. If you're not using inline, then this configuration has no effect. Important: If you customize this, be sure to include something like the -e flag, otherwise individual steps failing won't fail the provisioner.",
-                            "default": "/bin/sh -e"
-                        },
-                        "remote_folder": {
-                            "type": "string",
-                            "description": "The folder where the uploaded script will reside on the machine. This defaults to '/tmp'.",
-                            "default": "/tmp"
-                        },
-                        "remote_file": {
-                            "type": "string",
-                            "description": "The filename the uploaded script will have on the machine. This defaults to 'script_nnn.sh'.",
-                            "default": "script_nnn.sh"
-                        },
-                        "remote_path": {
-                            "type": "string",
-                            "description": "The full path to the uploaded script will have on the machine. By default this is remote_folder/remote_file, if set this option will override both remote_folder and remote_file."
-                        },
-                        "skip_clean": {
-                            "type": "boolean",
-                            "description": "If true, specifies that the helper scripts uploaded to the system will not be removed by Packer. This defaults to false (clean scripts from the system).",
-                            "default": false
-                        },
-                        "start_retry_timeout": {
-                            "type": "string",
-                            "description": "The amount of time to attempt to start the remote process. By default this is 5m or 5 minutes. This setting exists in order to deal with times when SSH may restart, such as a system reboot. Set this to a higher value if reboots take a longer amount of time.",
-                            "default": "5m"
-                        },
-                        "pause_after": {
-                            "type": "string",
-                            "description": "Wait the amount of time after provisioning a shell script, this pause be taken if all previous steps were successful.",
-                            "default": "5m"
-                        },
-                        "pause_before": {"default": "5s"},
-                        "max_retries": {"default": 0},
-                        "only": {"default": [""]},
-                        "override": {},
-                        "timeout": {"default": "20m"}
-                    }
-                },{
-                    "type": "object",
-                    "properties": {
-                        "type": {
-                            "default": "shell-local",
-                            "enum": ["shell-local"]
-                        },
-                        "todo": {
-                            "$ref": "#/definitions/todo"
-                        }
-                    }
-                },{
-                    "type": "object",
-                    "properties": {
-                        "type": {
-                            "default": "windows-shell",
-                            "enum": ["windows-shell"]
-                        },
-                        "todo": {
-                            "$ref": "#/definitions/todo"
-                        }
-                    }
-                },{
-                    "type": "object",
-                    "properties": {
-                        "type": {
-                            "default": "windows-restart",
-                            "enum": ["windows-restart"]
-                        },
-                        "todo": {
-                            "$ref": "#/definitions/todo"
-                        }
-                    }
-                },{
-                    "type": "object",
-                    "properties": {
-                        "type": {
-                            "default": "",
-                            "enum": [""]
-                        },
-                        "todo": {
-                            "$ref": "#/definitions/todo"
-                        }
-                    }
-                },{
-                    "type": "object",
-                    "properties": {
-                        "type": {
-                            "default": "",
-                            "enum": [""]
-                        },
-                        "todo": {
-                            "$ref": "#/definitions/todo"
-                        }
-                    }
-                }]
-            },
-            "default": [{
-                "type": "shell",
-                "inline": ["echo foo"]
-            }]
+        "communicator": {
+            "type": "string",
+            "description": " Packer currently supports three kinds of communicators.",
+            "default": "ssh",
+            "enum": ["none", "ssh", "winrm"]
         },
         "aws_region": {
             "type": "string",
@@ -385,8 +66,8 @@
     },
     "properties": {
         "variables": {
-            "type": "array",
-            "default": [{"key": ""}]
+            "type": "object",
+            "default": {"key": "value"}
         },
         "builders": {
             "default": [{"type": ""}],
@@ -400,9 +81,7 @@
                             "default": "qemu",
                             "enum": ["qemu"]
                         },
-                        "provisioners": {
-                            "$ref": "#/definitions/provisioners"
-                        },
+                        "communicator": {"$ref": "#/definitions/communicator"},
                         "iso_skip_cache": {
                             "type": "boolean",
                             "description": "Use iso from provided url. Qemu must support curl block device. This defaults to false.",
@@ -683,13 +362,6 @@
                             "description": "The time to wait after booting the initial virtual machine before typing the boot_command. The value of this should be a duration. Examples are 5s and 1m30s which will cause Packer to wait five seconds and one minute 30 seconds, respectively. If this isn't specified, the default is 10s or 10 seconds. To set boot_wait to 0s, use a negative number, such as '-1s'",
                             "default": "10s"
                         },
-
-                        "communicator": {
-                            "type": "string",
-                            "description": "Packer currently supports three kinds of communicators.",
-                            "default": "ssh",
-                            "enum": ["none", "ssh", "winrm"]
-                        },
                         "pause_before_connecting": {
                             "type": "string",
                             "description": "We recommend that you enable SSH or WinRM as the very last step in your guest's bootstrap script, but sometimes you may have a race condition where you need Packer to wait before attempting to connect to your guest.",
@@ -705,9 +377,7 @@
                             "default": "docker",
                             "enum": ["docker"]
                         },
-                        "provisioners": {
-                            "$ref": "#/definitions/provisioners"
-                        },
+                        "communicator": {"$ref": "#/definitions/communicator"},
                         "commit": {
                             "type": "boolean",
                             "description": "If true, the container will be committed to an image rather than exported.",
@@ -832,9 +502,8 @@
                             "default": "amazon-ebs",
                             "enum": ["amazon-ebs"]
                         },
-                        "provisioners": {
-                            "$ref": "#/definitions/provisioners"
-                        },
+                        "communicator": {"$ref": "#/definitions/communicator"},
+
                         "ami_block_device_mappings": {
                             "$ref": "#/definitions/aws_dev_mapping"
                         },
@@ -1240,12 +909,6 @@
                             "default": 10
                         },
 
-                        "communicator": {
-                            "type": "string",
-                            "description": " Packer currently supports three kinds of communicators.",
-                            "default": "ssh",
-                            "enum": ["none", "ssh", "winrm"]
-                        },
                         "pause_before_connecting": {
                             "type": "string",
                             "description": "We recommend that you enable SSH or WinRM as the very last step in your guest's bootstrap script, but sometimes you may have a race condition where you need Packer to wait before attempting to connect to your guest.",
@@ -1389,12 +1052,9 @@
                             "default": "amazon-instance",
                             "enum": ["amazon-instance"]
                         },
-                        "provisioners": {
-                            "$ref": "#/definitions/provisioners"
-                        },
-                        "todo": {
-                            "$ref": "#/definitions/todo"
-                        }
+                        "communicator": {"$ref": "#/definitions/communicator"},
+
+                        "todo": {"$ref": "#/definitions/todo"}
                     }
                 },{
                     "type": "object",
@@ -1404,12 +1064,9 @@
                             "default": "amazon-chroot",
                             "enum": ["amazon-chroot"]
                         },
-                        "provisioners": {
-                            "$ref": "#/definitions/provisioners"
-                        },
-                        "todo": {
-                            "$ref": "#/definitions/todo"
-                        }
+                        "communicator": {"$ref": "#/definitions/communicator"},
+
+                        "todo": {"$ref": "#/definitions/todo"}
                     }
                 },{
                     "type": "object",
@@ -1419,12 +1076,9 @@
                             "default": "amazon-ebssurrogate",
                             "enum": ["amazon-ebssurrogate"]
                         },
-                        "provisioners": {
-                            "$ref": "#/definitions/provisioners"
-                        },
-                        "todo": {
-                            "$ref": "#/definitions/todo"
-                        }
+                        "communicator": {"$ref": "#/definitions/communicator"},
+
+                        "todo": {"$ref": "#/definitions/todo"}
                     }
                 },{
                     "type": "object",
@@ -1434,12 +1088,9 @@
                             "default": "alicloud-ecs",
                             "enum": ["alicloud-ecs"]
                         },
-                        "provisioners": {
-                            "$ref": "#/definitions/provisioners"
-                        },
-                        "todo": {
-                            "$ref": "#/definitions/todo"
-                        }
+                        "communicator": {"$ref": "#/definitions/communicator"},
+
+                        "todo": {"$ref": "#/definitions/todo"}
                     }
                 },{
                     "type": "object",
@@ -1458,9 +1109,8 @@
                             "default": "azure-arm",
                             "enum": ["azure-arm"]
                         },
-                        "provisioners": {
-                            "$ref": "#/definitions/provisioners"
-                        },
+                        "communicator": {"$ref": "#/definitions/communicator"},
+
                         "subscription_id": {
                             "type": "string",
                             "description": "Subscription under which the build will be performed. The service principal specified in client_id must have full access to this subscription, unless build_resource_group_name option is specified in which case it needs to have owner access to the existing resource group specified in build_resource_group_name parameter."
@@ -1762,12 +1412,9 @@
                             "default": "azure-chroot",
                             "enum": ["azure-chroot"]
                         },
-                        "provisioners": {
-                            "$ref": "#/definitions/provisioners"
-                        },
-                        "todo": {
-                            "$ref": "#/definitions/todo"
-                        }
+                        "communicator": {"$ref": "#/definitions/communicator"},
+
+                        "todo": {"$ref": "#/definitions/todo"}
                     }
                 },{
                     "type": "object",
@@ -1777,12 +1424,9 @@
                             "default": "cloudstack",
                             "enum": ["cloudstack"]
                         },
-                        "provisioners": {
-                            "$ref": "#/definitions/provisioners"
-                        },
-                        "todo": {
-                            "$ref": "#/definitions/todo"
-                        }
+                        "communicator": {"$ref": "#/definitions/communicator"},
+
+                        "todo": {"$ref": "#/definitions/todo"}
                     }
                 },{
                     "type": "object",
@@ -1792,12 +1436,9 @@
                             "default": "digitalocean",
                             "enum": ["digitalocean"]
                         },
-                        "provisioners": {
-                            "$ref": "#/definitions/provisioners"
-                        },
-                        "todo": {
-                            "$ref": "#/definitions/todo"
-                        }
+                        "communicator": {"$ref": "#/definitions/communicator"},
+
+                        "todo": {"$ref": "#/definitions/todo"}
                     }
                 },{
                     "type": "object",
@@ -1808,9 +1449,8 @@
                             "default": "file",
                             "enum": ["file"]
                         },
-                        "provisioners": {
-                            "$ref": "#/definitions/provisioners"
-                        },
+                        "communicator": {"$ref": "#/definitions/communicator"},
+
                         "target": {
                             "type": "string",
                             "description": "The path for a file which will be copied as the artifact."
@@ -1833,9 +1473,8 @@
                             "default": "googlecompute",
                             "enum": ["googlecompute"]
                         },
-                        "provisioners": {
-                            "$ref": "#/definitions/provisioners"
-                        },
+                        "communicator": {"$ref": "#/definitions/communicator"},
+
                         "project_id": {
                             "type": "string",
                             "description": "The project ID that will be used to launch instances and store images."
@@ -2129,9 +1768,8 @@
                             "default": "hcloud",
                             "enum": ["hcloud"]
                         },
-                        "provisioners": {
-                            "$ref": "#/definitions/provisioners"
-                        },
+                        "communicator": {"$ref": "#/definitions/communicator"},
+
                         "token": {
                             "type": "string",
                             "description": "ID or name of image to launch server from. Alternatively you can use image_filter."
@@ -2168,9 +1806,7 @@
                             "description": "",
                             "default": ""
                         },
-                        "todo": {
-                            "$ref": "#/definitions/todo"
-                        }
+                        "todo": {"$ref": "#/definitions/todo"}
                     }
                 },{
                     "type": "object",
@@ -2180,12 +1816,9 @@
                             "default": "hyperone",
                             "enum": ["hyperone"]
                         },
-                        "provisioners": {
-                            "$ref": "#/definitions/provisioners"
-                        },
-                        "todo": {
-                            "$ref": "#/definitions/todo"
-                        }
+                        "communicator": {"$ref": "#/definitions/communicator"},
+
+                        "todo": {"$ref": "#/definitions/todo"}
                     }
                 },{
                     "type": "object",
@@ -2195,12 +1828,9 @@
                             "default": "hyperv-iso",
                             "enum": ["hyperv-iso"]
                         },
-                        "provisioners": {
-                            "$ref": "#/definitions/provisioners"
-                        },
-                        "todo": {
-                            "$ref": "#/definitions/todo"
-                        }
+                        "communicator": {"$ref": "#/definitions/communicator"},
+
+                        "todo": {"$ref": "#/definitions/todo"}
                     }
                 },{
                     "type": "object",
@@ -2210,12 +1840,9 @@
                             "default": "hyperv-vmcx",
                             "enum": ["hyperv-vmcx"]
                         },
-                        "provisioners": {
-                            "$ref": "#/definitions/provisioners"
-                        },
-                        "todo": {
-                            "$ref": "#/definitions/todo"
-                        }
+                        "communicator": {"$ref": "#/definitions/communicator"},
+
+                        "todo": {"$ref": "#/definitions/todo"}
                     }
                 },{
                     "type": "object",
@@ -2226,6 +1853,8 @@
                             "default": "linode",
                             "enum": ["linode"]
                         },
+                        "communicator": {"$ref": "#/definitions/communicator"},
+
                         "linode_token": {
                             "type": "string",
                             "description": "The client TOKEN to use to access your account."
@@ -2284,9 +1913,8 @@
                             "default": "lxc",
                             "enum": ["lxc"]
                         },
-                        "provisioners": {
-                            "$ref": "#/definitions/provisioners"
-                        },
+                        "communicator": {"$ref": "#/definitions/communicator"},
+
                         "config_file": {
                             "type": "string",
                             "description": "The path to the lxc configuration file.",
@@ -2362,12 +1990,9 @@
                             "default": "lxd",
                             "enum": ["lxd"]
                         },
-                        "provisioners": {
-                            "$ref": "#/definitions/provisioners"
-                        },
-                        "todo": {
-                            "$ref": "#/definitions/todo"
-                        }
+                        "communicator": {"$ref": "#/definitions/communicator"},
+
+                        "todo": {"$ref": "#/definitions/todo"}
                     }
                 },{
                     "type": "object",
@@ -2377,12 +2002,9 @@
                             "default": "ncloud",
                             "enum": ["ncloud"]
                         },
-                        "provisioners": {
-                            "$ref": "#/definitions/provisioners"
-                        },
-                        "todo": {
-                            "$ref": "#/definitions/todo"
-                        }
+                        "communicator": {"$ref": "#/definitions/communicator"},
+
+                        "todo": {"$ref": "#/definitions/todo"}
                     }
                 },{
                     "type": "object",
@@ -2392,12 +2014,8 @@
                             "default": "null",
                             "enum": ["null"]
                         },
-                        "provisioners": {
-                            "$ref": "#/definitions/provisioners"
-                        },
-                        "todo": {
-                            "$ref": "#/definitions/todo"
-                        }
+                        "communicator": {"$ref": "#/definitions/communicator"},
+                        "provisioners": {"$ref": "#/definitions/provisioners"}
                     }
                 },{
                     "type": "object",
@@ -2407,12 +2025,9 @@
                             "default": "oneandone",
                             "enum": ["oneandone"]
                         },
-                        "provisioners": {
-                            "$ref": "#/definitions/provisioners"
-                        },
-                        "todo": {
-                            "$ref": "#/definitions/todo"
-                        }
+                        "communicator": {"$ref": "#/definitions/communicator"},
+
+                        "todo": {"$ref": "#/definitions/todo"}
                     }
                 },{
                     "type": "object",
@@ -2422,12 +2037,9 @@
                             "default": "openstack",
                             "enum": ["openstack"]
                         },
-                        "provisioners": {
-                            "$ref": "#/definitions/provisioners"
-                        },
-                        "todo": {
-                            "$ref": "#/definitions/todo"
-                        }
+                        "communicator": {"$ref": "#/definitions/communicator"},
+
+                        "todo": {"$ref": "#/definitions/todo"}
                     }
                 },{
                     "type": "object",
@@ -2437,12 +2049,9 @@
                             "default": "oracle-classic",
                             "enum": ["oracle-classic"]
                         },
-                        "provisioners": {
-                            "$ref": "#/definitions/provisioners"
-                        },
-                        "todo": {
-                            "$ref": "#/definitions/todo"
-                        }
+                        "communicator": {"$ref": "#/definitions/communicator"},
+
+                        "todo": {"$ref": "#/definitions/todo"}
                     }
                 },{
                     "type": "object",
@@ -2452,12 +2061,9 @@
                             "default": "oracle-oci",
                             "enum": ["oracle-oci"]
                         },
-                        "provisioners": {
-                            "$ref": "#/definitions/provisioners"
-                        },
-                        "todo": {
-                            "$ref": "#/definitions/todo"
-                        }
+                        "communicator": {"$ref": "#/definitions/communicator"},
+
+                        "todo": {"$ref": "#/definitions/todo"}
                     }
                 },{
                     "type": "object",
@@ -2467,12 +2073,9 @@
                             "default": "osc-bsu",
                             "enum": ["osc-bsu"]
                         },
-                        "provisioners": {
-                            "$ref": "#/definitions/provisioners"
-                        },
-                        "todo": {
-                            "$ref": "#/definitions/todo"
-                        }
+                        "communicator": {"$ref": "#/definitions/communicator"},
+
+                        "todo": {"$ref": "#/definitions/todo"}
                     }
                 },{
                     "type": "object",
@@ -2482,12 +2085,9 @@
                             "default": "osc-chroot",
                             "enum": ["osc-chroot"]
                         },
-                        "provisioners": {
-                            "$ref": "#/definitions/provisioners"
-                        },
-                        "todo": {
-                            "$ref": "#/definitions/todo"
-                        }
+                        "communicator": {"$ref": "#/definitions/communicator"},
+
+                        "todo": {"$ref": "#/definitions/todo"}
                     }
                 },{
                     "type": "object",
@@ -2497,12 +2097,9 @@
                             "default": "osc-bsusurrogate",
                             "enum": ["osc-bsusurrogate"]
                         },
-                        "provisioners": {
-                            "$ref": "#/definitions/provisioners"
-                        },
-                        "todo": {
-                            "$ref": "#/definitions/todo"
-                        }
+                        "communicator": {"$ref": "#/definitions/communicator"},
+
+                        "todo": {"$ref": "#/definitions/todo"}
                     }
                 },{
                     "type": "object",
@@ -2512,12 +2109,9 @@
                             "default": "osc-bsuvolume",
                             "enum": ["osc-bsuvolume"]
                         },
-                        "provisioners": {
-                            "$ref": "#/definitions/provisioners"
-                        },
-                        "todo": {
-                            "$ref": "#/definitions/todo"
-                        }
+                        "communicator": {"$ref": "#/definitions/communicator"},
+
+                        "todo": {"$ref": "#/definitions/todo"}
                     }
                 },{
                     "type": "object",
@@ -2527,12 +2121,9 @@
                             "default": "parallels-iso",
                             "enum": ["parallels-iso"]
                         },
-                        "provisioners": {
-                            "$ref": "#/definitions/provisioners"
-                        },
-                        "todo": {
-                            "$ref": "#/definitions/todo"
-                        }
+                        "communicator": {"$ref": "#/definitions/communicator"},
+
+                        "todo": {"$ref": "#/definitions/todo"}
                     }
                 },{
                     "type": "object",
@@ -2542,12 +2133,9 @@
                             "default": "parallels-pvm",
                             "enum": ["parallels-pvm"]
                         },
-                        "provisioners": {
-                            "$ref": "#/definitions/provisioners"
-                        },
-                        "todo": {
-                            "$ref": "#/definitions/todo"
-                        }
+                        "communicator": {"$ref": "#/definitions/communicator"},
+
+                        "todo": {"$ref": "#/definitions/todo"}
                     }
                 },{
                     "type": "object",
@@ -2557,12 +2145,9 @@
                             "default": "profitbricks",
                             "enum": ["profitbricks"]
                         },
-                        "provisioners": {
-                            "$ref": "#/definitions/provisioners"
-                        },
-                        "todo": {
-                            "$ref": "#/definitions/todo"
-                        }
+                        "communicator": {"$ref": "#/definitions/communicator"},
+
+                        "todo": {"$ref": "#/definitions/todo"}
                     }
                 },{
                     "type": "object",
@@ -2572,12 +2157,9 @@
                             "default": "proxmox",
                             "enum": ["proxmox"]
                         },
-                        "provisioners": {
-                            "$ref": "#/definitions/provisioners"
-                        },
-                        "todo": {
-                            "$ref": "#/definitions/todo"
-                        }
+                        "communicator": {"$ref": "#/definitions/communicator"},
+
+                        "todo": {"$ref": "#/definitions/todo"}
                     }
                 },{
                     "type": "object",
@@ -2587,12 +2169,9 @@
                             "default": "scaleway",
                             "enum": ["scaleway"]
                         },
-                        "provisioners": {
-                            "$ref": "#/definitions/provisioners"
-                        },
-                        "todo": {
-                            "$ref": "#/definitions/todo"
-                        }
+                        "communicator": {"$ref": "#/definitions/communicator"},
+
+                        "todo": {"$ref": "#/definitions/todo"}
                     }
                 },{
                     "type": "object",
@@ -2602,12 +2181,9 @@
                             "default": "tencentcloud-cvm",
                             "enum": ["tencentcloud-cvm"]
                         },
-                        "provisioners": {
-                            "$ref": "#/definitions/provisioners"
-                        },
-                        "todo": {
-                            "$ref": "#/definitions/todo"
-                        }
+                        "communicator": {"$ref": "#/definitions/communicator"},
+
+                        "todo": {"$ref": "#/definitions/todo"}
                     }
                 },{
                     "type": "object",
@@ -2617,12 +2193,9 @@
                             "default": "jdcloud",
                             "enum": ["jdcloud"]
                         },
-                        "provisioners": {
-                            "$ref": "#/definitions/provisioners"
-                        },
-                        "todo": {
-                            "$ref": "#/definitions/todo"
-                        }
+                        "communicator": {"$ref": "#/definitions/communicator"},
+
+                        "todo": {"$ref": "#/definitions/todo"}
                     }
                 },{
                     "type": "object",
@@ -2632,12 +2205,9 @@
                             "default": "triton",
                             "enum": ["triton"]
                         },
-                        "provisioners": {
-                            "$ref": "#/definitions/provisioners"
-                        },
-                        "todo": {
-                            "$ref": "#/definitions/todo"
-                        }
+                        "communicator": {"$ref": "#/definitions/communicator"},
+
+                        "todo": {"$ref": "#/definitions/todo"}
                     }
                 },{
                     "type": "object",
@@ -2647,12 +2217,9 @@
                             "default": "ucloud-uhost",
                             "enum": ["ucloud-uhost"]
                         },
-                        "provisioners": {
-                            "$ref": "#/definitions/provisioners"
-                        },
-                        "todo": {
-                            "$ref": "#/definitions/todo"
-                        }
+                        "communicator": {"$ref": "#/definitions/communicator"},
+
+                        "todo": {"$ref": "#/definitions/todo"}
                     }
                 },{
                     "type": "object",
@@ -2662,12 +2229,9 @@
                             "default": "vagrant",
                             "enum": ["vagrant"]
                         },
-                        "provisioners": {
-                            "$ref": "#/definitions/provisioners"
-                        },
-                        "todo": {
-                            "$ref": "#/definitions/todo"
-                        }
+                        "communicator": {"$ref": "#/definitions/communicator"},
+
+                        "todo": {"$ref": "#/definitions/todo"}
                     }
                 },{
                     "type": "object",
@@ -2677,12 +2241,9 @@
                             "default": "virtualbox-iso",
                             "enum": ["virtualbox-iso"]
                         },
-                        "provisioners": {
-                            "$ref": "#/definitions/provisioners"
-                        },
-                        "todo": {
-                            "$ref": "#/definitions/todo"
-                        }
+                        "communicator": {"$ref": "#/definitions/communicator"},
+
+                        "todo": {"$ref": "#/definitions/todo"}
                     }
                 },{
                     "type": "object",
@@ -2692,12 +2253,9 @@
                             "default": "virtualbox-ovf",
                             "enum": ["virtualbox-ovf"]
                         },
-                        "provisioners": {
-                            "$ref": "#/definitions/provisioners"
-                        },
-                        "todo": {
-                            "$ref": "#/definitions/todo"
-                        }
+                        "communicator": {"$ref": "#/definitions/communicator"},
+
+                        "todo": {"$ref": "#/definitions/todo"}
                     }
                 },{
                     "type": "object",
@@ -2707,12 +2265,9 @@
                             "default": "virtualbox-vm",
                             "enum": ["virtualbox-vm"]
                         },
-                        "provisioners": {
-                            "$ref": "#/definitions/provisioners"
-                        },
-                        "todo": {
-                            "$ref": "#/definitions/todo"
-                        }
+                        "communicator": {"$ref": "#/definitions/communicator"},
+
+                        "todo": {"$ref": "#/definitions/todo"}
                     }
                 },{
                     "type": "object",
@@ -2722,12 +2277,9 @@
                             "default": "vmware-iso",
                             "enum": ["vmware-iso"]
                         },
-                        "provisioners": {
-                            "$ref": "#/definitions/provisioners"
-                        },
-                        "todo": {
-                            "$ref": "#/definitions/todo"
-                        }
+                        "communicator": {"$ref": "#/definitions/communicator"},
+
+                        "todo": {"$ref": "#/definitions/todo"}
                     }
                 },{
                     "type": "object",
@@ -2737,12 +2289,8 @@
                             "default": "vmware-vmx",
                             "enum": ["vmware-vmx"]
                         },
-                        "provisioners": {
-                            "$ref": "#/definitions/provisioners"
-                        },
-                        "todo": {
-                            "$ref": "#/definitions/todo"
-                        }
+
+                        "todo": {"$ref": "#/definitions/todo"}
                     }
                 },{
                     "type": "object",
@@ -2752,12 +2300,8 @@
                             "default": "vsphere-iso",
                             "enum": ["vshpere-iso"]
                         },
-                        "provisioners": {
-                            "$ref": "#/definitions/provisioners"
-                        },
-                        "todo": {
-                            "$ref": "#/definitions/todo"
-                        }
+
+                        "todo": {"$ref": "#/definitions/todo"}
                     }
                 },{
                     "type": "object",
@@ -2767,12 +2311,8 @@
                             "default": "vsphere-clone",
                             "enum": ["vsphere-clone"]
                         },
-                        "provisioners": {
-                            "$ref": "#/definitions/provisioners"
-                        },
-                        "todo": {
-                            "$ref": "#/definitions/todo"
-                        }
+
+                        "todo": {"$ref": "#/definitions/todo"}
                     }
                 },{
                     "type": "object",
@@ -2782,15 +2322,340 @@
                             "default": "yandex",
                             "enum": ["yandex"]
                         },
-                        "provisioners": {
-                            "$ref": "#/definitions/provisioners"
-                        },
-                        "todo": {
-                            "$ref": "#/definitions/todo"
-                        }
+
+                        "todo": {"$ref": "#/definitions/todo"}
                     }
                 }]
             }
+        },
+        "provisioners": {
+            "type": "array",
+            "items": {
+                "anyOf": [{
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "default": "ansible-local",
+                            "enum": ["ansible-local"]
+                        },
+                        "todo": {"$ref": "#/definitions/todo"}
+                    }
+                },{
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "default": "ansible",
+                            "enum": ["ansible"]
+                        },
+                        "todo": {"$ref": "#/definitions/todo"}
+                    }
+                },{
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "default": "breakpoint",
+                            "enum": ["breakpoint"]
+                        },
+                        "todo": {"$ref": "#/definitions/todo"}
+                    }
+                },{
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "default": "chef-client",
+                            "enum": ["chef-solo"]
+                        },
+                        "todo": {"$ref": "#/definitions/todo"}
+                    }
+                },{
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "default": "converge",
+                            "enum": ["converge"]
+                        },
+                        "todo": {"$ref": "#/definitions/todo"}
+                    }
+                },{
+                    "type": "object",
+                    "required": ["source", "destination", "direction"],
+                    "properties": {
+                        "type": {
+                            "default": "file",
+                            "enum": ["file"]
+                        },
+                        "source": {
+                            "type": "string",
+                            "description": "The path to a local file or directory to upload to the machine. The path can be absolute or relative. If it is relative, it is relative to the working directory when Packer is executed. If this is a directory, the existence of a trailing slash is important. Read below on uploading directories.",
+                            "default": "/path/to/local/file"
+                        },
+                        "destination": {
+                            "type": "string",
+                            "description": "The path where the file will be uploaded to in the machine. This value must be a writable location and any parent directories must already exist. If the provisioning user (generally not root) cannot write to this directory, you will receive a \"Permission Denied\" error. If the source is a file, it's a good idea to make the destination a file as well, but if you set your destination as a directory, at least make sure that the destination ends in a trailing slash so that Packer knows to use the source's basename in the final upload path. Failure to do so may cause Packer to fail on file uploads. If the destination file already exists, it will be overwritten.",
+                            "default": "/path/on/vm"
+                        },
+                        "direction": {
+                            "type": "string",
+                            "description": "The direction of the file transfer. This defaults to \"upload\". If it is set to \"download\" then the file \"source\" in the machine will be downloaded locally to \"destination\"",
+                            "default": "upload",
+                            "enum": ["upload", "download"]
+                        },
+                        "generated": {
+                            "type": "boolean",
+                            "description": "For advanced users only. If true, check the file existence only before uploading, rather than upon pre-build validation. This allows to upload files created on-the-fly. This defaults to false. We don't recommend using this feature, since it can cause Packer to become dependent on system state. We would prefer you generate your files before the Packer run, but realize that there are situations where this may be unavoidable.",
+                            "default": false
+                        },
+                        "pause_before": {"default": "5s"},
+                        "max_retries": {"default": 0},
+                        "only": {"default": [""]},
+                        "override": {},
+                        "timeout": {"default": "20m"}
+                    }
+                },{
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "default": "inspec",
+                            "enum": ["inspec"]
+                        },
+                        "todo": {"$ref": "#/definitions/todo"}
+                    }
+                },{
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "default": "powershell",
+                            "enum": ["powershell"]
+                        },
+                        "todo": {"$ref": "#/definitions/todo"}
+                    }
+                },{
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "default": "puppet-masterless",
+                            "enum": ["puppet-masterless"]
+                        },
+                        "todo": {"$ref": "#/definitions/todo"}
+                    }
+                },{
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "default": "puppet-server",
+                            "enum": ["puppet-server"]
+                        },
+                        "todo": {"$ref": "#/definitions/todo"}
+                    }
+                },{
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "default": "salt-masterless",
+                            "enum": ["salt-masterless"]
+                        },
+                        "todo": {"$ref": "#/definitions/todo"}
+                    }
+                },{
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "default": "shell",
+                            "enum": ["shell"]
+                        },
+                        "oneOf": [{
+                            "inline": {
+                                "type": "array",
+                                "description": "This is an array of commands to execute. The commands are concatenated by newlines and turned into a single file, so they are all executed within the same context. This allows you to change directories in one command and use something in the directory in the next and so on. Inline scripts are the easiest way to pull off simple tasks within the machine.",
+                                "items": {"type": "string"},
+                                "default": ["your command1", "your command2"]
+                            }
+                        },{
+                            "script": {
+                                "type": "string",
+                                "description": "The path to a script to upload and execute in the machine. This path can be absolute or relative. If it is relative, it is relative to the working directory when Packer is executed.",
+                                "default": "your command"
+                            }
+                        },{
+                            "scripts": {
+                                "type": "array",
+                                "description": "An array of scripts to execute. The scripts will be uploaded and executed in the order specified. Each script is executed in isolation, so state such as variables from one script won't carry on to the next.",
+                                "items": {"type": "string"},
+                                "default": ["/path/to/your/script.sh"]
+                            }
+                        }],
+                        "binary": {
+                            "type": "boolean",
+                            "description": "If true, specifies that the script(s) are binary files, and Packer should therefore not convert Windows line endings to Unix line endings (if there are any). By default this is false.",
+                            "default": false
+                        },
+                        "valid_exit_codes": {
+                            "type": "array",
+                            "description": "Valid exit codes for the script. By default this is just 0.",
+                            "items": {"type": "integer"},
+                            "default": [0]
+                        },
+                        "environment_vars": {
+                            "type": "array",
+                            "description": "An array of key/value pairs to inject prior to the execute_command. The format should be key=value. Packer injects some environmental variables by default into the environment, as well, which are covered in the section below.",
+                            "items": {"type": "string"},
+                            "default": ["key=value"]
+                        },
+                        "env_var_format": {
+                            "type": "string",
+                            "description": "When we parse the environment_vars that you provide, this gives us a string template to use in order to make sure that we are setting the environment vars correctly. By default it is \"%s='%s' \". When used in conjunction with use_env_var_file the default is \"export %s='%s'\n\"",
+                            "default": "export %s='%s'\\n"
+                        },
+                        "use_env_var_file": {
+                            "type": "boolean",
+                            "description": "If true, Packer will write your environment variables to a tempfile and source them from that file, rather than declaring them inline in our execute_command. The default execute_command will be chmod +x {{.Path}}; . {{.EnvVarFile}} && {{.Path}}. This option is unnecessary for most cases, but if you have extra quoting in your custom execute_command, then this may be required for proper script execution. Default: false.",
+                            "default": false
+                        },
+                        "execute_command": {
+                            "type": "string",
+                            "description": "The command to use to execute the script. By default this is chmod +x {{ .Path }}; {{ .Vars }} {{ .Path }}, unless the user has set \"use_env_var_file\": true -- in that case, the default execute_command is chmod +x {{.Path}}; . {{.EnvVarFile}} && {{.Path}}. This is a template engine. Therefore, you may use user variables and template functions in this field. In addition, there are three available extra variables:"
+                        },
+                        "expect_disconnect": {
+                            "type": "boolean",
+                            "description": "Defaults to false. When true, allow the server to disconnect from Packer without throwing an error. A disconnect might happen if you restart the ssh server or reboot the host.",
+                            "default": false
+                        },
+                        "inline_shebang": {
+                            "type": "string",
+                            "description": "The shebang value to use when running commands specified by inline. By default, this is /bin/sh -e. If you're not using inline, then this configuration has no effect. Important: If you customize this, be sure to include something like the -e flag, otherwise individual steps failing won't fail the provisioner.",
+                            "default": "/bin/sh -e"
+                        },
+                        "remote_folder": {
+                            "type": "string",
+                            "description": "The folder where the uploaded script will reside on the machine. This defaults to '/tmp'.",
+                            "default": "/tmp"
+                        },
+                        "remote_file": {
+                            "type": "string",
+                            "description": "The filename the uploaded script will have on the machine. This defaults to 'script_nnn.sh'.",
+                            "default": "script_nnn.sh"
+                        },
+                        "remote_path": {
+                            "type": "string",
+                            "description": "The full path to the uploaded script will have on the machine. By default this is remote_folder/remote_file, if set this option will override both remote_folder and remote_file."
+                        },
+                        "skip_clean": {
+                            "type": "boolean",
+                            "description": "If true, specifies that the helper scripts uploaded to the system will not be removed by Packer. This defaults to false (clean scripts from the system).",
+                            "default": false
+                        },
+                        "start_retry_timeout": {
+                            "type": "string",
+                            "description": "The amount of time to attempt to start the remote process. By default this is 5m or 5 minutes. This setting exists in order to deal with times when SSH may restart, such as a system reboot. Set this to a higher value if reboots take a longer amount of time.",
+                            "default": "5m"
+                        },
+                        "pause_after": {
+                            "type": "string",
+                            "description": "Wait the amount of time after provisioning a shell script, this pause be taken if all previous steps were successful.",
+                            "default": "5m"
+                        },
+                        "pause_before": {"default": "5s"},
+                        "max_retries": {"default": 0},
+                        "only": {"default": [""]},
+                        "override": {},
+                        "timeout": {"default": "20m"}
+                    }
+                },{
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "default": "shell-local",
+                            "enum": ["shell-local"]
+                        },
+                        "todo": {"$ref": "#/definitions/todo"}
+                    }
+                },{
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "default": "windows-shell",
+                            "enum": ["windows-shell"]
+                        },
+                        "todo": {"$ref": "#/definitions/todo"}
+                    }
+                },{
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "default": "windows-restart",
+                            "enum": ["windows-restart"]
+                        },
+                        "todo": {"$ref": "#/definitions/todo"}
+                    }
+                },{
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "default": "",
+                            "enum": [""]
+                        },
+                        "todo": {"$ref": "#/definitions/todo"}
+                    }
+                },{
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "default": "",
+                            "enum": [""]
+                        },
+                        "todo": {"$ref": "#/definitions/todo"}
+                    }
+                }]
+            },
+            "default": [{
+                "type": "shell",
+                "inline": ["echo foo"]
+            }]
+        },
+        "post-processors": {
+            "type": "array",
+            "items": {
+                "anyOf": [{
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "default": "manifest",
+                            "enum": ["manifest"]
+                        },
+                        "output": {
+                            "type": "string",
+                            "description": "The manifest will be written to this file. This defaults to packer-manifest.json.",
+                            "default": "packer-manifest.json"
+                        },
+                        "strip_path": {
+                            "type": "boolean",
+                            "description": "Write only filename without the path to the manifest file. This defaults to false.",
+                            "default": false
+                        },
+                        "strip_time": {
+                            "type": "boolean",
+                            "description": "Don't write the build_time field from the output.",
+                            "default": false
+                        },
+                        "custom_data": {
+                            "type": "object",
+                            "description": "Arbitrary data to add to the manifest. This is a template engine. Therefore, you may use user variables and template functions in this field.",
+                            "default": {"key": "value"}
+                        },
+                        "keep_input_artifact": {
+                            "type": "boolean",
+                            "description": "Unlike most other post-processors, the keep_input_artifact option will have no effect for the manifest post-processor. We will always retain the input artifact for manifest, since deleting the files we just recorded is not a behavior anyone should ever expect. keep_input_artifact will therefore always be evaluated as true, regardless of the value you enter into this field.",
+                            "default": false
+                        },
+                        "": {
+                            "type": "string",
+                            "description": "",
+                            "default": ""
+                        },
+                        "todo": {"$ref": "#/definitions/todo"}
+                    }
+                }
+            ]}
         }
     }
 }
