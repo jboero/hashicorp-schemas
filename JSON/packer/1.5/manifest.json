@@ -1053,7 +1053,6 @@
                             "enum": ["amazon-instance"]
                         },
                         "communicator": {"$ref": "#/definitions/communicator"},
-
                         "todo": {"$ref": "#/definitions/todo"}
                     }
                 },{
@@ -1065,7 +1064,6 @@
                             "enum": ["amazon-chroot"]
                         },
                         "communicator": {"$ref": "#/definitions/communicator"},
-
                         "todo": {"$ref": "#/definitions/todo"}
                     }
                 },{
@@ -1077,7 +1075,6 @@
                             "enum": ["amazon-ebssurrogate"]
                         },
                         "communicator": {"$ref": "#/definitions/communicator"},
-
                         "todo": {"$ref": "#/definitions/todo"}
                     }
                 },{
@@ -1089,7 +1086,6 @@
                             "enum": ["alicloud-ecs"]
                         },
                         "communicator": {"$ref": "#/definitions/communicator"},
-
                         "todo": {"$ref": "#/definitions/todo"}
                     }
                 },{
@@ -1413,7 +1409,6 @@
                             "enum": ["azure-chroot"]
                         },
                         "communicator": {"$ref": "#/definitions/communicator"},
-
                         "todo": {"$ref": "#/definitions/todo"}
                     }
                 },{
@@ -1425,7 +1420,6 @@
                             "enum": ["cloudstack"]
                         },
                         "communicator": {"$ref": "#/definitions/communicator"},
-
                         "todo": {"$ref": "#/definitions/todo"}
                     }
                 },{
@@ -1437,7 +1431,6 @@
                             "enum": ["digitalocean"]
                         },
                         "communicator": {"$ref": "#/definitions/communicator"},
-
                         "todo": {"$ref": "#/definitions/todo"}
                     }
                 },{
@@ -1817,7 +1810,6 @@
                             "enum": ["hyperone"]
                         },
                         "communicator": {"$ref": "#/definitions/communicator"},
-
                         "todo": {"$ref": "#/definitions/todo"}
                     }
                 },{
@@ -1829,7 +1821,6 @@
                             "enum": ["hyperv-iso"]
                         },
                         "communicator": {"$ref": "#/definitions/communicator"},
-
                         "todo": {"$ref": "#/definitions/todo"}
                     }
                 },{
@@ -1841,7 +1832,6 @@
                             "enum": ["hyperv-vmcx"]
                         },
                         "communicator": {"$ref": "#/definitions/communicator"},
-
                         "todo": {"$ref": "#/definitions/todo"}
                     }
                 },{
@@ -1991,7 +1981,6 @@
                             "enum": ["lxd"]
                         },
                         "communicator": {"$ref": "#/definitions/communicator"},
-
                         "todo": {"$ref": "#/definitions/todo"}
                     }
                 },{
@@ -2003,7 +1992,6 @@
                             "enum": ["ncloud"]
                         },
                         "communicator": {"$ref": "#/definitions/communicator"},
-
                         "todo": {"$ref": "#/definitions/todo"}
                     }
                 },{
@@ -2014,8 +2002,7 @@
                             "default": "null",
                             "enum": ["null"]
                         },
-                        "communicator": {"$ref": "#/definitions/communicator"},
-                        "provisioners": {"$ref": "#/definitions/provisioners"}
+                        "communicator": {"$ref": "#/definitions/communicator"}
                     }
                 },{
                     "type": "object",
@@ -2026,7 +2013,6 @@
                             "enum": ["oneandone"]
                         },
                         "communicator": {"$ref": "#/definitions/communicator"},
-
                         "todo": {"$ref": "#/definitions/todo"}
                     }
                 },{
@@ -2038,7 +2024,6 @@
                             "enum": ["openstack"]
                         },
                         "communicator": {"$ref": "#/definitions/communicator"},
-
                         "todo": {"$ref": "#/definitions/todo"}
                     }
                 },{
@@ -2050,7 +2035,6 @@
                             "enum": ["oracle-classic"]
                         },
                         "communicator": {"$ref": "#/definitions/communicator"},
-
                         "todo": {"$ref": "#/definitions/todo"}
                     }
                 },{
@@ -2062,7 +2046,6 @@
                             "enum": ["oracle-oci"]
                         },
                         "communicator": {"$ref": "#/definitions/communicator"},
-
                         "todo": {"$ref": "#/definitions/todo"}
                     }
                 },{
@@ -2074,7 +2057,6 @@
                             "enum": ["osc-bsu"]
                         },
                         "communicator": {"$ref": "#/definitions/communicator"},
-
                         "todo": {"$ref": "#/definitions/todo"}
                     }
                 },{
@@ -2086,7 +2068,6 @@
                             "enum": ["osc-chroot"]
                         },
                         "communicator": {"$ref": "#/definitions/communicator"},
-
                         "todo": {"$ref": "#/definitions/todo"}
                     }
                 },{
@@ -2098,7 +2079,6 @@
                             "enum": ["osc-bsusurrogate"]
                         },
                         "communicator": {"$ref": "#/definitions/communicator"},
-
                         "todo": {"$ref": "#/definitions/todo"}
                     }
                 },{
@@ -2110,7 +2090,6 @@
                             "enum": ["osc-bsuvolume"]
                         },
                         "communicator": {"$ref": "#/definitions/communicator"},
-
                         "todo": {"$ref": "#/definitions/todo"}
                     }
                 },{
@@ -2122,7 +2101,6 @@
                             "enum": ["parallels-iso"]
                         },
                         "communicator": {"$ref": "#/definitions/communicator"},
-
                         "todo": {"$ref": "#/definitions/todo"}
                     }
                 },{
@@ -2134,7 +2112,6 @@
                             "enum": ["parallels-pvm"]
                         },
                         "communicator": {"$ref": "#/definitions/communicator"},
-
                         "todo": {"$ref": "#/definitions/todo"}
                     }
                 },{
@@ -2146,7 +2123,6 @@
                             "enum": ["profitbricks"]
                         },
                         "communicator": {"$ref": "#/definitions/communicator"},
-
                         "todo": {"$ref": "#/definitions/todo"}
                     }
                 },{
@@ -2158,7 +2134,6 @@
                             "enum": ["proxmox"]
                         },
                         "communicator": {"$ref": "#/definitions/communicator"},
-
                         "todo": {"$ref": "#/definitions/todo"}
                     }
                 },{
@@ -2170,7 +2145,6 @@
                             "enum": ["scaleway"]
                         },
                         "communicator": {"$ref": "#/definitions/communicator"},
-
                         "todo": {"$ref": "#/definitions/todo"}
                     }
                 },{
@@ -2182,7 +2156,6 @@
                             "enum": ["tencentcloud-cvm"]
                         },
                         "communicator": {"$ref": "#/definitions/communicator"},
-
                         "todo": {"$ref": "#/definitions/todo"}
                     }
                 },{
@@ -2194,7 +2167,6 @@
                             "enum": ["jdcloud"]
                         },
                         "communicator": {"$ref": "#/definitions/communicator"},
-
                         "todo": {"$ref": "#/definitions/todo"}
                     }
                 },{
@@ -2206,7 +2178,6 @@
                             "enum": ["triton"]
                         },
                         "communicator": {"$ref": "#/definitions/communicator"},
-
                         "todo": {"$ref": "#/definitions/todo"}
                     }
                 },{
@@ -2218,7 +2189,6 @@
                             "enum": ["ucloud-uhost"]
                         },
                         "communicator": {"$ref": "#/definitions/communicator"},
-
                         "todo": {"$ref": "#/definitions/todo"}
                     }
                 },{
@@ -2230,7 +2200,6 @@
                             "enum": ["vagrant"]
                         },
                         "communicator": {"$ref": "#/definitions/communicator"},
-
                         "todo": {"$ref": "#/definitions/todo"}
                     }
                 },{
@@ -2242,7 +2211,6 @@
                             "enum": ["virtualbox-iso"]
                         },
                         "communicator": {"$ref": "#/definitions/communicator"},
-
                         "todo": {"$ref": "#/definitions/todo"}
                     }
                 },{
@@ -2254,7 +2222,6 @@
                             "enum": ["virtualbox-ovf"]
                         },
                         "communicator": {"$ref": "#/definitions/communicator"},
-
                         "todo": {"$ref": "#/definitions/todo"}
                     }
                 },{
@@ -2266,7 +2233,6 @@
                             "enum": ["virtualbox-vm"]
                         },
                         "communicator": {"$ref": "#/definitions/communicator"},
-
                         "todo": {"$ref": "#/definitions/todo"}
                     }
                 },{
@@ -2278,7 +2244,6 @@
                             "enum": ["vmware-iso"]
                         },
                         "communicator": {"$ref": "#/definitions/communicator"},
-
                         "todo": {"$ref": "#/definitions/todo"}
                     }
                 },{
@@ -2289,7 +2254,7 @@
                             "default": "vmware-vmx",
                             "enum": ["vmware-vmx"]
                         },
-
+                        "communicator": {"$ref": "#/definitions/communicator"},
                         "todo": {"$ref": "#/definitions/todo"}
                     }
                 },{
@@ -2300,7 +2265,7 @@
                             "default": "vsphere-iso",
                             "enum": ["vshpere-iso"]
                         },
-
+                        "communicator": {"$ref": "#/definitions/communicator"},
                         "todo": {"$ref": "#/definitions/todo"}
                     }
                 },{
@@ -2311,7 +2276,7 @@
                             "default": "vsphere-clone",
                             "enum": ["vsphere-clone"]
                         },
-
+                        "communicator": {"$ref": "#/definitions/communicator"},
                         "todo": {"$ref": "#/definitions/todo"}
                     }
                 },{
@@ -2322,7 +2287,7 @@
                             "default": "yandex",
                             "enum": ["yandex"]
                         },
-
+                        "communicator": {"$ref": "#/definitions/communicator"},
                         "todo": {"$ref": "#/definitions/todo"}
                     }
                 }]
