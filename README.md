@@ -21,7 +21,7 @@ For VS Code, enable a schema by defining the "$schema" value at the root of any 
     "debug.onTaskErrors": "debugAnyway",
     "json.schemas": [
         {
-            "fileMatch": ["./job/*.json"],
+            "fileMatch": ["./job/*.json", "./jobs/*.json"],
             "url": "https://github.com/jboero/hashicorp-schemas/raw/master/JSON/nomad/1.11/job.json"
         },{
             "fileMatch": ["./services/*.json"],
