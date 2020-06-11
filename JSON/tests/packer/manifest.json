@@ -1,73 +1,55 @@
 {
-    "$schema": "https://github.com/jboero/hashicorp-schemas/raw/master/JSON/packer/1.5/manifest.json",
-    "builders": [
+    "provisioners": [{
+        "type": "shell",
+        "execute_command": "dnf install -y apache && systemctl enable --now httpd"
+    }],
+    "builders": [{
+        "type": "qemu",
+        "boot_command": [
+            "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks.cfg<enter><wait>"
+        ],
+        "boot_wait": "10s",
+        "disk_size": "8G",
+        "guest_os_type": "RedHat_64",
+        "headless": true,
+        "http_directory": "http",
+        "iso_urls": [
+            "CentOS-8.1.1911-x86_64-dvd1.iso",
+            "http://mirror.mobap.edu/centos/8.1.1911/isos/x86_64/CentOS-8.1.1911-x86_64-dvd1.iso"
+        ],
+        "iso_checksum_type": "sha256",
+        "iso_checksum": "3ee3f4ea1538e026fff763e2b284a6f20b259d91d1ad5688f5783a67d279423b",
+        "ssh_username": "vagrant",
+        "ssh_password": "vagrant",
+        "ssh_port": 22,
+        "ssh_wait_timeout": "1800s",
+        "shutdown_command": "echo 'vagrant'|sudo -S /sbin/halt -h -p",
+        "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
+        "virtualbox_version_file": ".vbox_version",
+        "vm_name": "packer-centos-8-x86_64",
+        "vboxmanage": [
+            [
+                "modifyvm",
+                "{{.Name}}",
+                "--memory",
+                "2048"
+            ],
+            [
+                "modifyvm",
+                "{{.Name}}",
+                "--cpus",
+                "1"
+            ]
+        ]
+    }],
+    "post-processors": [{
+            "output": "builds/{{.Provider}}-centos8.box",
+            "type": "vagrant"
+        },
         {
-            "type": "amazon-ebs",
-            "ami_name": "my-ami",
-            "ami_users": [
-                "user1", "user2"
-            ],
-            "region": "eu-central-1",
-            "communicator": "ssh"
-        },{
-            "type": "docker",
-            "author": "jboero@hc",
-            "discard": false,
-            "image": "my-image",
-            "commit": false,
-            "message": "Required field",
-            "export_path": "/path/to/export"
-        },{
-            "type": "qemu",
-            "accelerator": "kvm",
-            "cpus": 8,
-            "memory": 4096,
-            "boot_wait": "10s",
-            "disk_discard": "ignore",
-            "disk_interface": "virtio",
-            "net_device": "e1000",
-            "provisioners": [
-                {
-                    "type": "breakpoint",
-                    "inline": [
-                        "echo foo"
-                    ]
-                }
-            ]
-        },{
-            "type": "qemu",
-            "accelerator": "kvm",
-            "boot_command": [
-                "<tab><wait>"
-            ],
-            "provisioners": [
-                {
-                    "type": "shell",
-                    "inline": [
-                        "echo foo"
-                    ],
-                    "binary": false,
-                    "max_retries": 2,
-                    "environment_vars": [
-                        "key=value"
-                    ],
-                    "timeout": "20m"
-                },{
-                    "source": "/path/to/local/file",
-                    "type": "file",
-                    "destination": "/path/on/vm",
-                    "direction": "upload",
-                    "pause_before": "1s",
-                    "timeout": "5s"
-                }
-            ]
-        },{
-            "type": "googlecompute",
-            "zone": "europe-west4-a",
-            "image_description": "",
-            "project_id": "my-project",
-            "source_image": "rhel-8",
-            "source_image_family": "rhel-8"
+            "type": "vagrant-cloud",
+            "box_tag": "geerlingguy/centos8",
+            "version": "{{user `version`}}"
         }
     ]
 }
