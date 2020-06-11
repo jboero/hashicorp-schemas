@@ -2695,8 +2695,7 @@
                                 "type": "string",
                                 "description": "The time to wait after booting the initial virtual machine before typing the boot_command. The value of this should be a duration. Examples are 5s and 1m30s which will cause Packer to wait five seconds and one minute 30 seconds, respectively. If this isn't specified, the default is 10s or 10 seconds. To set boot_wait to 0s, use a negative number, such as \"-1s\"",
                                 "default": "5s"
-                            },
-                            "todo": { "$ref": "#/definitions/todo" }
+                            }
                         }
                     },
                     {
