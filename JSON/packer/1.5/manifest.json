@@ -508,12 +508,13 @@
                                 "enum": ["amazon-ebs"]
                             },
                             "communicator": { "$ref": "#/definitions/communicator" },
-
                             "ami_block_device_mappings": {
-                                "$ref": "#/definitions/aws_dev_mapping"
+                                "type": "array",
+                                "items": { "$ref": "#/definitions/aws_dev_mapping" }
                             },
                             "launch_block_device_mappings": {
-                                "type": "object"
+                                "type": "array",
+                                "items": { "$ref": "#/definitions/aws_dev_mapping" }
                             },
                             "run_volume_tags": {
                                 "type": "object",
