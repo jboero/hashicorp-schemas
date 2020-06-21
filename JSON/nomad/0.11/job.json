@@ -2,6 +2,27 @@
     "title": "Job",
     "name": "Job",
     "type": "object",
+    "default": {
+        "Job": {
+            "ID": "example",
+            "Name": "example",
+            "Type": "service",
+            "Priority": 50,
+            "Datacenters": ["dc1"],
+            "TaskGroups": [{
+                "Name": "cache",
+                "Count": 1,
+                "Tasks": [{
+                    "Name": "redis",
+                    "driver": "exec",
+                    "config": {
+                        "command": "my-binary",
+                        "args": ["-flag", "1"]
+                    }
+                }]
+            }]
+        }
+    },
     "definitions": {
         "operator": {
             "type": "string",

@@ -1,0 +1,33 @@
+{
+    "$schema": "../../nomad/0.11/config.json",
+    "acl": {},
+    "addresses": {
+        "http": "127.0.0.1",
+        "rpc": "127.0.0.1",
+        "serf": "127.0.0.1"
+    },
+    "bind_addr": "0.0.0.0",
+    "advertise": {
+        "http": "127.0.0.1",
+        "rpc": "127.0.0.1",
+        "serf": "127.0.0.1"
+    },
+    "audit": {},
+    "client":{
+        "enabled": true,
+        "servers": "127.0.0.1:4647",
+        "options": {
+            "driver.blacklist": "rkt,raw_exec",
+            "env.blacklist": "PASSWORD",
+            "user.blacklist": "root,Administrator"
+        },
+        "reserved": {
+            "cpu": 0,
+            "memory": 0,
+            "disk": 0,
+            "reserved_ports": "3000-8000,9090"
+        },
+        "state_dir": "/var/lib/nomad/client"
+    },
+    server
+}
