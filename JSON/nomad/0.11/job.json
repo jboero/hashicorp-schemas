@@ -521,6 +521,26 @@
                                         }
                                     }
                                 },
+                                "Artifacts": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "GetterSource": {
+                                                "type": "string",
+                                                "default": "https://site/archive.tar.gz"
+                                            },
+                                            "RelativeDest": {
+                                                "type": "string",
+                                                "default": "local/"
+                                            },
+                                            "GetterOptions": {
+                                                "type": "object",
+                                                "default": {}
+                                            }
+                                        }
+                                    }
+                                },
                                 "Leader": {
                                     "type": "boolean",
                                     "default": false
