@@ -466,11 +466,18 @@
                                             "default": 100
                                         },
                                         "Devices": {
+                                            "description": "List of devices to reserve.",
                                             "type": "array"
                                         },
                                         "MemoryMB": {
                                             "type": "number",
+                                            "description": "MB of RAM to reserve.",
                                             "default": 256
+                                        },
+                                        "MBits": {
+                                            "type": "number",
+                                            "description": "MBps of bandwidth capacity to reserve.",
+                                            "default": 10
                                         },
                                         "Networks": {
                                             "type": "array",
