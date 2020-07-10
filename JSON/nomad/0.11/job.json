@@ -56,7 +56,7 @@
             "properties": {
                 "Attribute": {
                     "description": "Specifies a target value of the attribute from a spread stanza.",
-                    "$ref": "#/definitions/node_variables"
+                    "$ref": "#/definitions/NodeVariables"
                 },
                 "Percent": {
                     "type": "integer",
