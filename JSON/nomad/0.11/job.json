@@ -3,28 +3,26 @@
     "name": "Job",
     "type": "object",
     "default": {
-        "Job": {
-            "ID": "example",
+        "ID": "example",
+        "Name": "example",
+        "Type": "service",
+        "Priority": 50,
+        "Datacenters": ["dc1"],
+        "TaskGroups": [{
             "Name": "example",
-            "Type": "service",
-            "Priority": 50,
-            "Datacenters": ["dc1"],
-            "TaskGroups": [{
-                "Name": "cache",
-                "Count": 1,
-                "Tasks": [{
-                    "Name": "redis",
-                    "driver": "exec",
-                    "config": {
-                        "command": "my-binary",
-                        "args": ["-flag", "1"]
-                    }
-                }]
+            "Count": 1,
+            "Tasks": [{
+                "Name": "example",
+                "driver": "exec",
+                "config": {
+                    "command": "my-binary",
+                    "args": ["-flag", "1"]
+                }
             }]
-        }
+        }]
     },
     "definitions": {
-        "operator": {
+        "Operator": {
             "type": "string",
             "description": "Specifies the comparison operator. The ordering is compared lexically.",
             "default": "=",
@@ -32,7 +30,7 @@
                 "set_contains_any", "version"
             ]
         },
-        "node_variables": {
+        "NodeVariables": {
             "type": "string",
             "description": "These attributes are interpreted by both constraints and within the task and driver.",
             "default": "${node.unique.id}",
@@ -53,14 +51,14 @@
                 "${env[NOMAD_PORT_<task>_<label>]}", "OTHER(type your own - ignore warnings)"
             ]
         },
-        "target": {
+        "Target": {
             "type": "object",
             "properties": {
-                "attribute": {
+                "Attribute": {
                     "description": "Specifies a target value of the attribute from a spread stanza.",
                     "$ref": "#/definitions/node_variables"
                 },
-                "percent": {
+                "Percent": {
                     "type": "integer",
                     "description": "Specifies the percentage associated with the target value.",
                     "default": 0,
@@ -69,27 +67,27 @@
                 }
             }
         },
-        "migrate": {
+        "Migrate": {
             "type": "object",
             "description": "The migrate stanza specifies the group's strategy for migrating off of draining nodes. If omitted, a default migration strategy is applied. If specified at the job level, the configuration will apply to all groups within the job. Only service jobs with a count greater than 1 support migrate stanzas.",
             "properties": {
-                "max_parallel": {
+                "MaxParallel": {
                     "type": "integer",
                     "description": "Specifies the number of allocations that can be migrated at the same time. This number must be less than the total count for the group as count - max_parallel will be left running during migrations.",
                     "default": 1
                 },
-                "health_check": {
+                "HealthCheck": {
                     "type": "string",
                     "description": " Specifies the mechanism in which allocations health is determined.",
                     "default": "checks",
                     "enum": ["checks", "task_states"]
                 },
-                "min_healthy_time": {
+                "MinHealthyTime": {
                     "type": "string",
                     "description": "Specifies the minimum time the allocation must be in the healthy state before it is marked as healthy and unblocks further allocations from being migrated. This is specified using a label suffix like \"30s\" or \"15m\".",
                     "default": "10s"
                 },
-                "healthy_deadline": {
+                "HealthyDeadline": {
                     "type": "string",
                     "description": "Specifies the deadline in which the allocation must be marked as healthy after which the allocation is automatically transitioned to unhealthy. This is specified using a label suffix like \"2m\" or \"1h\".",
                     "default": "5m"
@@ -97,17 +95,17 @@
             },
             "default": { "max_parallel": 1, "health_check": "checks", "min_healthy_time": "10s", "healthy_deadline": "5s" }
         },
-        "affinity": {
+        "Affinity": {
             "type": "object",
             "description": "The affinity stanza allows operators to express placement preference for a set of nodes. Affinities may be expressed on attributes or client metadata. Additionally affinities may be specified at the job, group, or task levels for ultimate flexibility.",
             "properties": {
-                "attribute": { "$ref": "#/definitions/node_variables" },
-                "operator": { "#ref": "#/definitions/operator" },
-                "value": {
+                "Attribute": { "$ref": "#/definitions/node_variables" },
+                "Operator": { "#ref": "#/definitions/operator" },
+                "Value": {
                     "type": "string",
                     "description": "Specifies the value to compare the attribute against using the specified operation. This can be a literal value, another attribute, or any Nomad interpolated values."
                 },
-                "weight": {
+                "Weight": {
                     "type": "integer",
                     "description": "Specifies a weight for the affinity. The weight is used during scoring and must be an integer between -100 to 100. Negative weights act as anti affinities, causing nodes that match them to be scored lower. Weights can be used when there is more than one affinity to express relative preference across them.",
                     "default": 50,
@@ -116,38 +114,38 @@
                 }
             }
         },
-        "constraint": {
+        "Constraint": {
             "type": "object",
             "description": "",
             "properties": {
-                "attribute": { "$ref": "#/definitions/node_variables" },
-                "operator": { "$ref": "#/definitions/operator" },
-                "value": { "#ref": "#/definitions/node_variables" }
+                "Attribute": { "$ref": "#/definitions/NodeVariables" },
+                "Operator": { "$ref": "#/definitions/Operator" },
+                "Value": { "#ref": "#/definitions/NodeVariables" }
             }
         },
-        "spread": {
+        "Spread": {
             "type": "object",
             "description": "The spread stanza allows operators to increase the failure tolerance of their applications by specifying a node attribute that allocations should be spread over. This allows operators to spread allocations over attributes such as datacenter, availability zone, or even rack in a physical datacenter. By default, when using spread the scheduler will attempt to place allocations equally among the available values of the given target.",
             "properties": {
-                "attribute": { "$ref": "#/definitions/node_variables" },
-                "target": { "$ref": "#/definitions/target" }
+                "Attribute": { "$ref": "#/definitions/NodeVariables" },
+                "Target": { "$ref": "#/definitions/Target" }
             }
         },
-        "parameterized": {
+        "Parameterized": {
             "type": "object",
             "description": "A parameterized job is used to encapsulate a set of work that can be carried out on various inputs much like a function definition. When the parameterized stanza is added to a job, the job acts as a function to the cluster as a whole.",
             "properties": {
-                "meta_optional": {
+                "MetaOptional": {
                     "type": "array",
                     "description": "Specifies the set of metadata keys that may be provided when dispatching against the job.",
                     "items": { "type": "string" }
                 },
-                "meta_required": {
+                "MetaRequired": {
                     "type": "array",
                     "description": "Specifies the set of metadata keys that may be provided when dispatching against the job.",
                     "items": { "type": "string" }
                 },
-                "payload": {
+                "Payload": {
                     "type": "string",
                     "description": "Specifies the requirement of providing a payload when dispatching against the parameterized job. The maximum size of a payload is 16 KiB. The options for this field are:",
                     "default": "optional",
@@ -155,97 +153,97 @@
                 }
             },
             "default": {
-                "meta_optional": [""],
-                "meta_required": [""],
-                "payload": "optional"
+                "MetaOptional": [""],
+                "MetaRequired": [""],
+                "Payload": "optional"
             }
         },
-        "reschedule": {
+        "Reschedule": {
             "type": "object",
             "description": "The reschedule stanza specifies the group's rescheduling strategy. If specified at the job level, the configuration will apply to all groups within the job. If the reschedule stanza is present on both the job and the group, they are merged with the group stanza taking the highest precedence and then the job.",
             "properties": {
-                "attempts": {
+                "Attempts": {
                     "type": "integer",
                     "description": "Specifies the number of reschedule attempts allowed in the configured interval. Defaults vary by job type, see below for more information.",
                     "default": 1
                 },
-                "interval": {
+                "Interval": {
                     "type": "string",
                     "description": " Specifies the sliding window which begins when the first reschedule attempt starts and ensures that only attempts number of reschedule happen within it. If more than attempts number of failures happen with this interval, Nomad will not reschedule any more.",
                     "default": "5m"
                 },
-                "delay": {
+                "Delay": {
                     "type": "string",
                     "description": "Specifies the duration to wait before attempting to reschedule a failed task. This is specified using a label suffix like \"30s\" or \"1h\".",
                     "default": "30s"
                 },
-                "delay_function": {
+                "Delay_function": {
                     "type": "string",
                     "description": " Specifies the function that is used to calculate subsequent reschedule delays. The initial delay is specified by the delay parameter. delay_function has three possible values which are described below.",
                     "default": "constant",
                     "enum": ["constant", "exponential", "fibonacci"]
                 },
-                "max_delay": {
+                "MaxDelay": {
                     "type": "string",
                     "description": "An upper bound on the delay beyond which it will not increase. This parameter is used when delay_function is exponential or fibonacci, and is ignored when constant delay is used.",
                     "default": "5m"
                 },
-                "unlimited": {
+                "Unlimited": {
                     "type": "boolean",
                     "description": "Enables unlimited reschedule attempts. If this is set to true the attempts and interval fields are not used.",
                     "default": false
                 }
             },
             "default": {
-                "attempts": 1,
-                "interval": "5m",
-                "delay": "30s",
-                "delay_function": "constant",
-                "max_delay": "5m",
-                "unlimited": false
+                "Attempts": 1,
+                "Interval": "5m",
+                "Delay": "30s",
+                "DelayFunction": "constant",
+                "MaxDelay": "5m",
+                "Unlimited": false
             }
         },
-        "update": {
+        "Update": {
             "type": "object",
             "descrioption": "The update stanza specifies the group's update strategy. The update strategy is used to control things like rolling upgrades and canary deployments. If omitted, rolling updates and canaries are disabled. If specified at the job level, the configuration will apply to all groups within the job. If multiple update stanzas are specified, they are merged with the group stanza taking the highest precedence and then the job.",
             "properties": {
-                "maxparallel": {
+                "MaxParallel": {
                     "type": "number",
                     "description": "Specifies the number of allocations within a task group that can be updated at the same time. The task groups themselves are updated in parallel.",
                     "default": 1
                 },
-                "health_check": {
+                "HealthCheck": {
                     "type": "string",
                     "description": "Specifies the mechanism in which allocations health is determined.",
                     "default": "checks",
                     "enum": ["checks", "task_states", "manual"]
                 },
-                "min_healthy_time": {
+                "MinHealthyTime": {
                     "type": "string",
                     "description": "Specifies the minimum time the allocation must be in the healthy state before it is marked as healthy and unblocks further allocations from being updated. This is specified using a label suffix like \"30s\" or \"15m\".",
                     "default": "10s"
                 },
-                "healthy_deadline": {
+                "HealthyDeadline": {
                     "type": "string",
                     "description": "Specifies the deadline in which the allocation must be marked as healthy after which the allocation is automatically transitioned to unhealthy. This is specified using a label suffix like \"2m\" or \"1h\".",
                     "default": "5m"
                 },
-                "progress_deadline": {
+                "ProgressDeadline": {
                     "type": "string",
                     "description": "Specifies the minimum time the allocation must be in the healthy state before it is marked as healthy and unblocks further allocations from being updated. This is specified using a label suffix like \"30s\" or \"15m\".",
                     "default": "10m"
                 },
-                "auto_revert": {
+                "AutoRevert": {
                     "type": "boolean",
                     "description": "Specifies if the job should auto-revert to the last stable job on deployment failure. A job is marked as stable if all the allocations as part of its deployment were marked healthy.",
                     "default": false
                 },
-                "auto_promote": {
+                "AutoPromote": {
                     "type": "boolean",
                     "description": "Specifies if the job should auto-promote to the canary version when all canaries become healthy during a deployment. Defaults to false which means canaries must be manually updated with the nomad deployment promote command.",
                     "default": false
                 },
-                "canary": {
+                "Canary": {
                     "type": "integer",
                     "description": "Specifies that changes to the job that would result in destructive updates should create the specified number of canaries without stopping any previous allocations. Once the operator determines the canaries are healthy, they can be promoted which unblocks a rolling update of the remaining allocations at a rate of max_parallel.",
                     "default": 0
@@ -257,75 +255,75 @@
                 }
             },
             "default": {
-                "max_parallel": 1,
-                "health_check": "checks",
-                "min_healthy_time": "10s",
-                "healthy_deadline": "5m",
-                "progress_deadline": "5m",
-                "auto_revert": false,
-                "auto_promote": false,
-                "canary": 0,
-                "stagger": "30s"
+                "MaxParallel": 1,
+                "HealthCheck": "checks",
+                "MinHealthyTime": "10s",
+                "HealthyDeadline": "5m",
+                "ProgressDeadline": "5m",
+                "AutoRevert": false,
+                "AutoPromote": false,
+                "Canary": 0,
+                "Stagger": "30s"
             }
         },
-        "vault": {
+        "Vault": {
             "type": "object",
             "descrioption": "The vault stanza allows a task to specify that it requires a token from a HashiCorp Vault server. Nomad will automatically retrieve a Vault token for the task and handle token renewal for the task. If specified at the group level, the configuration will apply to all tasks within the group. If specified at the job level, the configuration will apply to all tasks within the job. If multiple vault stanzas are specified, they are merged with the task stanza taking the highest precedence, then the group, then the job.",
             "properties": {
-                "change_mode": {
+                "ChangeMode": {
                     "type": "string",
                     "descriptoin": "",
                     "default": "restart",
                     "enum": ["noop", "restart", "signal"]
                 },
-                "change_signal": {
+                "ChangeSignal": {
                     "type": "string",
                     "description": "Specifies the signal to send to the task as a string like \"SIGUSR1\" or \"SIGINT\". This option is required if the change_mode is signal.",
                     "default": "SIGINT"
                 },
-                "env": {
+                "Env": {
                     "type": "boolean",
                     "description": "Specifies if the VAULT_TOKEN and VAULT_NAMESPACE environment variables should be set when starting the task.",
                     "default": true
                 },
-                "policies": {
+                "Policies": {
                     "type": "array",
                     "description": "Specifies the set of Vault policies that the task requires. The Nomad client will retrieve a Vault token that is limited to those policies.",
                     "default": ["policy1", "policy2"]
                 }
             },
-            "default": { "change_mode": "restart", "change_signal": "SIGINT", "env": true, "policies": ["policy1", "policy2"] }
+            "default": { "ChangeMode": "restart", "ChangeSignal": "SIGINT", "Env": true, "Policies": ["policy1", "policy2"] }
         },
-        "volume": {
+        "Volume": {
             "type": "object",
             "description": "The volume stanza allows the group to specify that it requires a given volume from the cluster.",
             "properties": {
-                "type": {
+                "Type": {
                     "description": "Specifies the type of a given volume.",
                     "enum": ["host", "csi"]
                 },
-                "source": {
+                "Source": {
                     "type": "string",
                     "description": "The name of the volume to request. When using host_volume's this should match the published name of the host volume. When using csi volumes, this should match the ID of the registered volume."
                 },
-                "read_only": {
+                "ReadOnly": {
                     "type": "boolean",
                     "description": "Specifies that the group only requires read only access to a volume and is used as the default value for the volume_mount -> read_only configuration. This value is also used for validating host_volume ACLs and for scheduling when a matching host_volume requires read_only usage.",
                     "default": false
                 }
             },
-            "default": { "type": "host", "source": "/path/on/host", "read_only": false }
+            "default": { "Type": "host", "Source": "/path/on/host", "ReadOnly": false }
         },
-        "volume_mount": {
+        "VolumeMount": {
             "type": "object",
             "description": "The volume_mount stanza allows the task to specify how a group volume should be mounted into the task.",
             "properties": {
-                "volume": { "$ref": "#/definitions/volume" },
-                "destination": {
+                "Volume": { "$ref": "#/definitions/Volume" },
+                "Destination": {
                     "type": "string",
                     "description": "Specifies where the volume should be mounted inside the task's allocation."
                 },
-                "read_only": {
+                "ReadOnly": {
                     "type": "boolean",
                     "description": "When a group volume is writeable, you may specify that it is read_only on a per mount level using the read_only option here.",
                     "default": false
@@ -334,64 +332,64 @@
         }
     },
     "properties": {
-        "all_at_once": {
+        "AllAtOnce": {
             "type": "boolean",
             "description": "Controls whether the scheduler can make partial placements if optimistic scheduling resulted in an oversubscribed node. This does not control whether all allocations for the job, where all would be the desired count for each task group, must be placed atomically. This should only be used for special circumstances.",
             "default": false
         },
-        "constraint": {
+        "Constraint": {
             "type": "object",
             "description": "This can be provided multiple times to define additional constraints. See the Nomad constraint reference for more details.",
             "$ref": "#/definitions/constraint",
             "default": { "attribute": "${attr.kernel.name", "value": "linux" }
         },
-        "affinity": {
+        "Affinities": {
             "type": "object",
             "description": "This can be provided multiple times to define preferred placement criteria. See the Nomad affinity reference for more details.",
             "$ref": "#/definitions/affinity",
             "default": { "attribute": "${meta.rack}", "value": "r1", "weight": 50 }
         },
-        "spread": {
+        "Spreads": {
             "type": "object",
             "description": "This can be provided multiple times to define criteria for spreading allocations across a node attribute or metadata. See the Nomad spread reference for more details.",
             "$ref": "#/definitions/spread",
             "default": { "attribute": "${node.datacenter}" }
         },
-        "datacenters": {
+        "Datacenters": {
             "type": "array",
             "items": {
                 "type": "string",
                 "default": ["dc1"]
             }
         },
-        "taskgroups": {
+        "TaskGroups": {
             "type": "array",
             "items": {
                 "type": "object",
                 "properties": {
-                    "name": {
+                    "Name": {
                         "type": "string",
                         "default": "taskgroup"
                     },
-                    "count": {
+                    "Count": {
                         "type": "number",
                         "description": "How many of these would you like allocated?",
                         "default": 1,
                         "minimum": 0
                     },
-                    "migrate": {
+                    "Migrate": {
                         "$ref": "#/definitions/migrate"
                     },
-                    "tasks": {
+                    "Tasks": {
                         "type": "array",
                         "items": {
                             "type": "object",
                             "properties": {
-                                "name": {
+                                "Name": {
                                     "type": "string",
                                     "default": "task"
                                 },
-                                "driver": {
+                                "Driver": {
                                     "type": "string",
                                     "default": "docker",
                                     "enum": [
@@ -409,11 +407,11 @@
                                         "nspawn"
                                     ]
                                 },
-                                "user": {
+                                "User": {
                                     "type": "string",
                                     "default": ""
                                 },
-                                "config": {
+                                "Config": {
                                     "type": "object",
                                     "properties": {
                                         "image": {
@@ -427,21 +425,21 @@
                                         }
                                     }
                                 },
-                                "services": {
+                                "Services": {
                                     "type": "array",
                                     "items": {
                                         "type": "object",
                                         "properties": {
-                                            "meta": {
+                                            "Meta": {
                                                 "type": "object"
                                             },
-                                            "portlabel": {
+                                            "PortLabel": {
                                                 "type": "string"
                                             },
-                                            "addressmode": {
+                                            "AddressMode": {
                                                 "type": "string"
                                             },
-                                            "checks": {
+                                            "Checks": {
                                                 "type": "array",
                                                 "items": {
                                                     "Type": {
@@ -459,19 +457,22 @@
                                         }
                                     }
                                 },
-                                "resources": {
+                                "Resources": {
                                     "type": "object",
                                     "properties": {
-                                        "cpu": {
+                                        "CPU": {
                                             "type": "number",
                                             "description": "CPU MHZ shares to reserve.",
                                             "default": 100
                                         },
-                                        "memorymb": {
+                                        "Devices": {
+                                            "type": "array"
+                                        },
+                                        "MemoryMB": {
                                             "type": "number",
                                             "default": 256
                                         },
-                                        "networks": {
+                                        "Networks": {
                                             "type": "array",
                                             "items": {
                                                 "type": "object",
@@ -503,7 +504,7 @@
                                         }
                                     }
                                 },
-                                "leader": {
+                                "Leader": {
                                     "type": "boolean",
                                     "default": false
                                 }
@@ -511,33 +512,33 @@
                         }
                     }
                 },
-                "restartpolicy": {
-                    "attempts": {
+                "RestartPolicy": {
+                    "Attempts": {
                         "type": "number",
                         "description": "Number of times to attempt restarts after failure.",
                         "default": 3
                     },
-                    "delay": {
+                    "Delay": {
                         "type": "number",
                         "description": "Delay between restarts in milliseconds er whatever.",
                         "default": 30000000000
                     },
-                    "delayfunction": {
+                    "DelayFunction": {
                         "type": "string",
                         "default": "exponential",
                         "enum": [
                             "exponential"
                         ]
                     },
-                    "interval": {
+                    "Interval": {
                         "type": "number",
                         "default": 0
                     },
-                    "maxdelay": {
+                    "MaxDelay": {
                         "type": "number",
                         "default": 3600000000000
                     },
-                    "unlimited": {
+                    "Unlimited": {
                         "type": "boolean",
                         "default": false
                     }
@@ -553,22 +554,22 @@
                 }
             }
         },
-        "meta": {
+        "Meta": {
             "type": "object",
             "description": "Specifies a key-value map that annotates with user-defined metadata."
         },
-        "migrate": { "$ref": "#/definitions/migrate" },
-        "namespace": {
+        "Migrate": { "$ref": "#/definitions/migrate" },
+        "Namespace": {
             "type": "string",
             "description": "The namespace in which to execute the job. Values other than default are not allowed in non-Enterprise versions of Nomad.",
             "default": "default"
         },
-        "parameterized": { "$ref": "#/definitions/parameterized" },
-        "periodic": {
+        "ParameterizedJob": { "$ref": "#/definitions/parameterized" },
+        "Periodic": {
             "type": "object",
             "description": "The periodic stanza allows a job to run at fixed times, dates, or intervals. The easiest way to think about the periodic scheduler is \"Nomad cron\" or \"distributed cron\".",
             "properties": {
-                "cron": {
+                "Cron": {
                     "type": "string",
                     "description": "",
                     "default": ""
@@ -586,32 +587,32 @@
             },
             "default": { "cron": "@daily", "prohibit_overlap": false, "time_zone": "UTC" }
         },
-        "name": {
+        "Name": {
             "type": "string",
             "description": "Job name.",
             "default": "default"
         },
-        "id": {
+        "ID": {
             "type": "string",
             "description": "ID is assigned by Nomad once a job is scheduled.  No need to specify it.",
             "default": "automatic"
         },
-        "priority": {
+        "Priority": {
             "type": "integer",
             "title": "Priority",
             "default": 50,
             "minimum": 1,
             "maximum": 100
         },
-        "region": {
+        "Region": {
             "type": "string",
             "description": "The region in which to execute the job.",
             "default": "global"
         },
-        "reschedule": {
+        "Reschedule": {
             "$ref": "#/definitions/reschedule"
         },
-        "type": {
+        "Type": {
             "type": "string",
             "default": "service",
             "enum": [
@@ -620,17 +621,17 @@
                 "batch"
             ]
         },
-        "update": { "$ref": "#/definitions/update" },
-        "vault": { "$ref": "#/definitions/vault" },
-        "vault_token": {
+        "Update": { "$ref": "#/definitions/update" },
+        "Vault": { "$ref": "#/definitions/vault" },
+        "VaultToken": {
             "type": "string",
             "description": "DISCOURAGED. Specifies the Vault token that proves the submitter of the job has access to the specified policies in the vault stanza. This field is only used to transfer the token and is not stored after job submission."
         },
-        "consul_token": {
+        "ConsulToken": {
             "type": "string",
             "description": "DISCOURAGED. Specifies the Consul token that proves the submitter of the job has access to the Service Identity policies associated with the job's Consul Connect enabled services. This field is only used to transfer the token and is not stored after job submission."
         },
-        "volume": { "$ref": "#/definitions/volume" },
-        "volume_mount": { "$ref": "#/definitions/volume_mount" }
+        "Volume": { "$ref": "#/definitions/volume" },
+        "VolumeMount": { "$ref": "#/definitions/volume_mount" }
     }
 }
