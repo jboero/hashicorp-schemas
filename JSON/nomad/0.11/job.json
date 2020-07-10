@@ -13,10 +13,10 @@
             "Count": 1,
             "Tasks": [{
                 "Name": "example",
-                "driver": "exec",
-                "config": {
-                    "command": "my-binary",
-                    "args": ["-flag", "1"]
+                "Driver": "exec",
+                "Config": {
+                    "Command": "my-binary",
+                    "Args": ["-flag", "1"]
                 }
             }]
         }]
@@ -414,14 +414,24 @@
                                 "Config": {
                                     "type": "object",
                                     "properties": {
-                                        "image": {
+                                        "Image": {
                                             "type": "string"
                                         },
-                                        "port_map": {
+                                        "PortMap": {
                                             "type": "array",
                                             "items": {
                                                 "type": "object"
                                             }
+                                        },
+                                        "Command": {
+                                            "type": "string",
+                                            "description": "Command to be used with exec, raw_exec types",
+                                        },
+                                        "Args": {
+                                            "type": "array",
+                                            "description": "Args given to Command as array of strings.",
+                                            "default": ["arg1", "arg2"],
+                                            "items": {"type": "string"}
                                         }
                                     }
                                 },
