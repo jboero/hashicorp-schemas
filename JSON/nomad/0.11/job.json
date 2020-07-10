@@ -571,7 +571,7 @@
             "description": "The namespace in which to execute the job. Values other than default are not allowed in non-Enterprise versions of Nomad.",
             "default": "default"
         },
-        "ParameterizedJob": { "$ref": "#/definitions/Parameterized" },
+        "ParameterizedJob": { "$ref": "#/definitions/ParameterizedJob" },
         "Periodic": {
             "type": "object",
             "description": "The periodic stanza allows a job to run at fixed times, dates, or intervals. The easiest way to think about the periodic scheduler is \"Nomad cron\" or \"distributed cron\".",
