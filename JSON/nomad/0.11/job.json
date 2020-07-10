@@ -99,8 +99,8 @@
             "type": "object",
             "description": "The affinity stanza allows operators to express placement preference for a set of nodes. Affinities may be expressed on attributes or client metadata. Additionally affinities may be specified at the job, group, or task levels for ultimate flexibility.",
             "properties": {
-                "Attribute": { "$ref": "#/definitions/node_variables" },
-                "Operator": { "#ref": "#/definitions/operator" },
+                "Attribute": { "$ref": "#/definitions/NodeVariables" },
+                "Operator": { "$ref": "#/definitions/Operator" },
                 "Value": {
                     "type": "string",
                     "description": "Specifies the value to compare the attribute against using the specified operation. This can be a literal value, another attribute, or any Nomad interpolated values."
@@ -120,7 +120,7 @@
             "properties": {
                 "Attribute": { "$ref": "#/definitions/NodeVariables" },
                 "Operator": { "$ref": "#/definitions/Operator" },
-                "Value": { "#ref": "#/definitions/NodeVariables" }
+                "Value": { "$ref": "#/definitions/NodeVariables" }
             }
         },
         "Spread": {
@@ -131,7 +131,7 @@
                 "Target": { "$ref": "#/definitions/Target" }
             }
         },
-        "Parameterized": {
+        "ParameterizedJob": {
             "type": "object",
             "description": "A parameterized job is used to encapsulate a set of work that can be carried out on various inputs much like a function definition. When the parameterized stanza is added to a job, the job acts as a function to the cluster as a whole.",
             "properties": {
@@ -340,19 +340,19 @@
         "Constraint": {
             "type": "object",
             "description": "This can be provided multiple times to define additional constraints. See the Nomad constraint reference for more details.",
-            "$ref": "#/definitions/constraint",
+            "$ref": "#/definitions/Constraint",
             "default": { "attribute": "${attr.kernel.name", "value": "linux" }
         },
         "Affinities": {
             "type": "object",
             "description": "This can be provided multiple times to define preferred placement criteria. See the Nomad affinity reference for more details.",
-            "$ref": "#/definitions/affinity",
+            "$ref": "#/definitions/Affinity",
             "default": { "attribute": "${meta.rack}", "value": "r1", "weight": 50 }
         },
         "Spreads": {
             "type": "object",
             "description": "This can be provided multiple times to define criteria for spreading allocations across a node attribute or metadata. See the Nomad spread reference for more details.",
-            "$ref": "#/definitions/spread",
+            "$ref": "#/definitions/Spread",
             "default": { "attribute": "${node.datacenter}" }
         },
         "Datacenters": {
@@ -378,7 +378,7 @@
                         "minimum": 0
                     },
                     "Migrate": {
-                        "$ref": "#/definitions/migrate"
+                        "$ref": "#/definitions/Migrate"
                     },
                     "Tasks": {
                         "type": "array",
@@ -565,13 +565,13 @@
             "type": "object",
             "description": "Specifies a key-value map that annotates with user-defined metadata."
         },
-        "Migrate": { "$ref": "#/definitions/migrate" },
+        "Migrate": { "$ref": "#/definitions/Migrate" },
         "Namespace": {
             "type": "string",
             "description": "The namespace in which to execute the job. Values other than default are not allowed in non-Enterprise versions of Nomad.",
             "default": "default"
         },
-        "ParameterizedJob": { "$ref": "#/definitions/parameterized" },
+        "ParameterizedJob": { "$ref": "#/definitions/Parameterized" },
         "Periodic": {
             "type": "object",
             "description": "The periodic stanza allows a job to run at fixed times, dates, or intervals. The easiest way to think about the periodic scheduler is \"Nomad cron\" or \"distributed cron\".",
@@ -617,7 +617,7 @@
             "default": "global"
         },
         "Reschedule": {
-            "$ref": "#/definitions/reschedule"
+            "$ref": "#/definitions/Reschedule"
         },
         "Type": {
             "type": "string",
@@ -628,8 +628,8 @@
                 "batch"
             ]
         },
-        "Update": { "$ref": "#/definitions/update" },
-        "Vault": { "$ref": "#/definitions/vault" },
+        "Update": { "$ref": "#/definitions/Update" },
+        "Vault": { "$ref": "#/definitions/Vault" },
         "VaultToken": {
             "type": "string",
             "description": "DISCOURAGED. Specifies the Vault token that proves the submitter of the job has access to the specified policies in the vault stanza. This field is only used to transfer the token and is not stored after job submission."
@@ -638,7 +638,7 @@
             "type": "string",
             "description": "DISCOURAGED. Specifies the Consul token that proves the submitter of the job has access to the Service Identity policies associated with the job's Consul Connect enabled services. This field is only used to transfer the token and is not stored after job submission."
         },
-        "Volume": { "$ref": "#/definitions/volume" },
-        "VolumeMount": { "$ref": "#/definitions/volume_mount" }
+        "Volume": { "$ref": "#/definitions/Volume" },
+        "VolumeMount": { "$ref": "#/definitions/VolumeMount" }
     }
 }

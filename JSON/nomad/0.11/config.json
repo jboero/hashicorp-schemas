@@ -280,9 +280,10 @@
                     }
                 },
                 "servers": {
-                    "type": "string",
+                    "type": "array",
                     "description": "Specifies an array of addresses to the Nomad servers this client should join. This list is used to register the client with the server nodes and advertise the available resources so that the agent can receive work. This may be specified as an IP address or DNS, with or without the port. If the port is omitted, the default port of 4647 is used.",
-                    "default": "127.0.0.1:4647"
+                    "default": ["127.0.0.1:4647"],
+                    "items": { "type": "string" }
                 },
                 "server_join": {
                     "type": "object",
