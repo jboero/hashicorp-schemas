@@ -425,7 +425,7 @@
                                         },
                                         "Command": {
                                             "type": "string",
-                                            "description": "Command to be used with exec, raw_exec types",
+                                            "description": "Command to be used with exec, raw_exec types"
                                         },
                                         "Args": {
                                             "type": "array",
