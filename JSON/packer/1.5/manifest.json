@@ -375,7 +375,18 @@
                         }
                     }, {
                         "type": "object",
-                        "required": ["commit", "discard", "export_path", "image", "message"],
+                        "oneOf": [
+                          {
+                            "required": ["commit"]
+                          },
+                          {
+                            "required": ["discard"]
+                          },
+                          {
+                            "required": ["export_path"]
+                          }
+                        ],
+                        "required": ["image", "message"],
                         "properties": {
                             "type": {
                                 "description": "Type is Docker.",
