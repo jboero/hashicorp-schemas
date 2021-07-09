@@ -546,14 +546,140 @@
                     "description": "Standard TLS listener.  https://www.vaultproject.io/docs/configuration/listener/tcp",
                     "properties": {
                         "address": {
+                            "description": " Specifies the address to bind to for\nlistening.",
                             "type": "string",
-                            "description": "Listener IP:PORT, supports IPv4 and IPv6.",
                             "default": "127.0.0.1:8200"
                         },
+                        "cluster_address": {
+                            "description": " Specifies the address to bind\nto for cluster server-to-server requests. This defaults to one port higher\nthan the value of address. This does not usually need to be set, but can be\nuseful in case Vault servers are isolated from each other in such a way that\nthey need to hop through a TCP load balancer or some other scheme in order to\ntalk.",
+                            "type": "string",
+                            "default": "127.0.0.1:8201"
+                        },
+                        "http_idle_timeout": {
+                            "description": " Specifies the maximum amount of time to\nwait for the next request when keep-alives are enabled. If http_idle_timeout\nis zero, the value of http_read_timeout is used. If both are zero, the value\nof http_read_header_timeout is used. This is specified using a label suffix\nlike \"30s\" or \"1h\".",
+                            "type": "string",
+                            "default": "5m"
+                        },
+                        "http_read_header_timeout": {
+                            "description": " Specifies the amount of time\nallowed to read request headers. This is specified using a label suffix like\n\"30s\" or \"1h\".",
+                            "type": "string",
+                            "default": "10s"
+                        },
+                        "http_read_timeout": {
+                            "description": " Specifies the maximum duration for\nreading the entire request, including the body. This is specified using a\nlabel suffix like \"30s\" or \"1h\".",
+                            "type": "string",
+                            "default": "30s"
+                        },
+                        "http_write_timeout": {
+                            "description": " Specifies the maximum duration before\ntiming out writes of the response and is reset whenever a new request's header\nis read. The default value of \"0\" means inifinity. This is specified using a\nlabel suffix like \"30s\" or \"1h\".",
+                            "type": "string",
+                            "default": "0"
+                        },
+                        "max_request_size": {
+                            "description": " Specifies a hard maximum allowed\nrequest size, in bytes. Defaults to 32 MB if not set or set to 0.\nSpecifying a number less than 0 turns off limiting altogether.",
+                            "type": "int",
+                            "default": "33554432"
+                        },
+                        "max_request_duration": {
+                            "description": "\u00a0Specifies the maximum\nrequest duration allowed before Vault cancels the request. This overrides\ndefault_max_request_duration for this listener.",
+                            "type": "string",
+                            "default": "90s"
+                        },
+                        "proxy_protocol_behavior": {
+                            "description": " When specified, enables a PROXY\nprotocol version 1 behavior for the listener.\nAccepted Values:use_always - The client's IP address will always be used.allow_authorized - If the source IP address is in the\nproxy_protocol_authorized_addrs list, the client's IP address will be used.\nIf the source IP is not in the list, the source IP address will be used.deny_unauthorized - The traffic will be rejected if the source IP\naddress is not in the proxy_protocol_authorized_addrs list.",
+                            "type": "string",
+                            "default": ""
+                        },
+                        "proxy_protocol_authorized_addrs": {
+                            "description": "\nSpecifies the list of allowed source IP addresses to be used with the PROXY protocol.\nNot required if proxy_protocol_behavior is set to use_always. Source IPs should\nbe comma-delimited if provided as a string. At least one source IP must be provided,\nproxy_protocol_authorized_addrs cannot be an empty array or string.",
+                            "type": "string"
+                        },
                         "tls_disable": {
-                            "type": "number",
-                            "description": "A shameful shameful flag for those not using valid TLS certs on Vault. 1 for disable TLS, 0 for enable.",
-                            "default": 0
+                            "description": " Specifies if TLS will be disabled. Vault\nassumes TLS by default, so you must explicitly disable TLS to opt-in to\ninsecure communication.",
+                            "type": "string",
+                            "default": "false"
+                        },
+                        "tls_cert_file": {
+                            "description": "\nSpecifies the path to the certificate for TLS. It requires a PEM-encoded file.\nTo configure the listener to use a CA certificate, concatenate the primary certificate and the CA\ncertificate together. The primary certificate should appear first in the\ncombined file. On SIGHUP, the path set here at Vault startup will be used\nfor reloading the certificate; modifying this value while Vault is running\nwill have no effect for SIGHUPs.",
+                            "type": "string"
+                        },
+                        "tls_key_file": {
+                            "description": "\nSpecifies the path to the private key for the certificate. It requires a PEM-encoded file.\nIf the key file is encrypted, you will be prompted to enter the passphrase on server startup.\nThe passphrase must stay the same between key files when reloading your\nconfiguration using SIGHUP. On SIGHUP, the path set here at Vault\nstartup will be used for reloading the certificate; modifying this value\nwhile Vault is running will have no effect for SIGHUPs.",
+                            "type": "string"
+                        },
+                        "tls_min_version": {
+                            "description": " Specifies the minimum supported\nversion of TLS. Accepted values are \"tls10\", \"tls11\", \"tls12\" or \"tls13\".Warning: TLS 1.1 and lower are generally considered insecure.",
+                            "type": "string",
+                            "default": "tls12"
+                        },
+                        "tls_cipher_suites": {
+                            "description": " Specifies the list of supported\nciphersuites as a comma-separated-list. The list of all available ciphersuites\nis available in the Golang TLS documentation.",
+                            "type": "string",
+                            "default": ""
+                        },
+                        "tls_prefer_server_cipher_suites": {
+                            "description": " Specifies to prefer the\nserver's ciphersuite over the client ciphersuites.",
+                            "type": "string",
+                            "default": "false"
+                        },
+                        "tls_require_and_verify_client_cert": {
+                            "description": " Turns on client\nauthentication for this listener; the listener will require a presented\nclient cert that successfully validates against system CAs.",
+                            "type": "string",
+                            "default": "false"
+                        },
+                        "tls_client_ca_file": {
+                            "description": " PEM-encoded Certificate Authority file\nused for checking the authenticity of client.",
+                            "type": "string",
+                            "default": ""
+                        },
+                        "tls_disable_client_certs": {
+                            "description": " Turns off client\nauthentication for this listener. The default behavior (when this is false)\nis for Vault to request client certificates when available.",
+                            "type": "string",
+                            "default": "false"
+                        },
+                        "x_forwarded_for_authorized_addrs": {
+                            "description": "\nSpecifies the list of source IP CIDRs for which an X-Forwarded-For header\nwill be trusted. Comma-separated list or JSON array. This turns on\nX-Forwarded-For support.",
+                            "type": "string"
+                        },
+                        "x_forwarded_for_hop_skips": {
+                            "description": " The number of addresses that will be\nskipped from the rear of the set of hops. For instance, for a header value\nof 1.2.3.4, 2.3.4.5, 3.4.5.6, if this value is set to \"1\", the address that\nwill be used as the originating client IP is 2.3.4.5.",
+                            "type": "string",
+                            "default": "0"
+                        },
+                        "x_forwarded_for_reject_not_authorized": {
+                            "description": " If set false,\nif there is an X-Forwarded-For header in a connection from an unauthorized\naddress, the header will be ignored and the client connection used as-is,\nrather than the client connection rejected.",
+                            "type": "string",
+                            "default": "true"
+                        },
+                        "x_forwarded_for_reject_not_present": {
+                            "description": " If set false, if\nthere is no X-Forwarded-For header or it is empty, the client address will be\nused as-is, rather than the client connection rejected.",
+                            "type": "string",
+                            "default": "true"
+                        },
+                        "use_always": {
+                            "description": " The client's IP address will always be used.",
+                            "type": "",
+                            "default": ""
+                        },
+                        "allow_authorized": {
+                            "description": " If the source IP address is in the\nproxy_protocol_authorized_addrs list, the client's IP address will be used.\nIf the source IP is not in the list, the source IP address will be used.",
+                            "type": "",
+                            "default": ""
+                        },
+                        "deny_unauthorized": {
+                            "description": " The traffic will be rejected if the source IP\naddress is not in the proxy_protocol_authorized_addrs list.",
+                            "type": "",
+                            "default": ""
+                        },
+                        "unauthenticated_metrics_access": {
+                            "description": " If set to true, allows\nunauthenticated access to the /v1/sys/metrics endpoint.",
+                            "type": "bool",
+                            "default": "false"
+                        },
+                        "unauthenticated_pprof_access": {
+                            "description": " If set to true, allows\nunauthenticated access to the /v1/sys/pprof endpoint.",
+                            "type": "bool",
+                            "default": "false"
                         }
                     }
                 }
